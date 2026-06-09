@@ -74,3 +74,24 @@ export function trackViewItemList(
 export function trackTocClick(target: string, article?: string): void {
   send("toc_click", { target, item_list_id: article });
 }
+
+// 필터 적용(조건 입력) → view_item_list와 select_item 사이의 관심 신호.
+// filter_* 파라미터는 GA4 커스텀 측정기준이라 리포트에 쓰려면 등록 필요.
+export interface FilterEvent {
+  article?: string;
+  budgetMax?: number | null;
+  features?: string[];
+  month?: number | null;
+  topProduct?: string; // 현재 최상위 매칭 제품명
+}
+
+export function trackFilter(d: FilterEvent): void {
+  send("filter_apply", {
+    item_list_id: d.article,
+    filter_budget_max: d.budgetMax ?? undefined,
+    filter_features:
+      d.features && d.features.length > 0 ? d.features.join(",") : undefined,
+    filter_month: d.month ?? undefined,
+    top_item: d.topProduct,
+  });
+}
