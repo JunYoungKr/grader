@@ -1,0 +1,51 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #ffffff;
+  --surface: #f4f5f7;
+  --ink: #18181b;
+  --muted: #5d5f66;
+  --faint: #9598a0;
+  --hairline: rgba(18, 20, 28, 0.16);
+  --brand: #0f6e56;
+  --brand-soft: #e1f5ee;
+  --on-brand: #ffffff;
+}
+
+.dark {
+  --paper: #131318;
+  --surface: #1d1e24;
+  --ink: #ececef;
+  --muted: #a2a4ad;
+  --faint: #6e7079;
+  --hairline: rgba(236, 236, 240, 0.18);
+  --brand: #5dcaa5;
+  --brand-soft: #0f3a2f;
+  --on-brand: #04342c;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  border-color: var(--hairline);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
