@@ -1,4 +1,4 @@
-import type { Product } from "./types";
+import type { Grade, Product } from "./types";
 
 export interface FilterState {
   budgetMax: number | null;
@@ -23,7 +23,8 @@ export interface RankedProduct {
   match: MatchInfo;
 }
 
-const GRADE_RANK: Record<string, number> = { S: 0, A: 1, B: 2, C: 3 };
+// 등급 정렬 가중치 (낮을수록 상위)
+const GRADE_RANK: Record<Grade, number> = { S: 0, A: 1, B: 2, C: 3 };
 
 export function deriveFilters(products: Product[]): DerivedFilters {
   // 예산: 제품이 있으면 항상. priceExample의 min~max.
@@ -59,4 +60,53 @@ export function deriveFilters(products: Product[]): DerivedFilters {
   return { budget, features, age };
 }
 
-// GRADE_RANK is used by rankProducts (next task) — kept intentionally.
+export function rankProducts(
+  products: Product[],
+  state: FilterState,
+): RankedProduct[] {
+  const budgetActive = state.budgetMax !== null;
+  const featuresActive = state.features.length > 0;
+  const monthActive = state.month !== null;
+  const total =
+    (budgetActive ? 1 : 0) + (featuresActive ? 1 : 0) + (monthActive ? 1 : 0);
+
+  const evaluate = (p: Product): MatchInfo => {
+    const missed: string[] = [];
+    if (budgetActive && p.priceExample > (state.budgetMax as number)) {
+      missed.push("예산");
+    }
+    if (featuresActive) {
+      const owned = p.attributes?.features ?? [];
+      if (!state.features.every((f) => owned.includes(f))) missed.push("기능");
+    }
+    if (monthActive) {
+      const r = p.attributes?.ageMonths;
+      const m = state.month as number;
+      if (!(Array.isArray(r) && m >= r[0] && m <= r[1])) missed.push("월령");
+    }
+    return { satisfied: total - missed.length, total, missed };
+  };
+
+  const ranked = products.map((product) => ({ product, match: evaluate(product) }));
+
+  // 조건 0개 → 원본 순서 그대로(현재 화면과 동일).
+  if (total === 0) return ranked;
+
+  // 충족 수 ↓ → 등급 → 추천 → 가격 ↑, 동점은 원본 순서 유지.
+  return ranked
+    .map((r, i) => ({ r, i }))
+    .sort((a, b) => {
+      if (b.r.match.satisfied !== a.r.match.satisfied)
+        return b.r.match.satisfied - a.r.match.satisfied;
+      const ga = GRADE_RANK[a.r.product.grade] ?? 99;
+      const gb = GRADE_RANK[b.r.product.grade] ?? 99;
+      if (ga !== gb) return ga - gb;
+      const ra = a.r.product.recommended ? 0 : 1;
+      const rb = b.r.product.recommended ? 0 : 1;
+      if (ra !== rb) return ra - rb;
+      if (a.r.product.priceExample !== b.r.product.priceExample)
+        return a.r.product.priceExample - b.r.product.priceExample;
+      return a.i - b.i;
+    })
+    .map(({ r }) => r);
+}
