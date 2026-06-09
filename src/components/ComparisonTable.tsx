@@ -33,55 +33,58 @@ export function ComparisonTable({
           </tr>
         </thead>
         <tbody>
-          {products.map((p) => (
-            <tr
-              key={p.id}
-              className="border-b border-hairline align-middle last:border-0"
-            >
-              <td className="px-4 py-3">
-                <GradeBadge grade={p.grade} size="sm" />
-              </td>
-              <td className="px-4 py-3">
-                <div className={p.recommended ? "font-semibold" : "font-medium"}>
-                  {p.name}
-                </div>
-                <div className="text-[13px] text-muted">{p.descriptor}</div>
-                <div className="mt-0.5">
-                  <ProviderTag provider={p.provider} />
-                </div>
-                {matchMap?.[p.id] && (
-                  <div className="mt-1">
-                    <MatchBadge info={matchMap[p.id]} />
-                  </div>
-                )}
-              </td>
-              {p.specs.map((s) => (
-                <td key={s.label} className="px-4 py-3 tabular-nums">
-                  {s.value}
+          {products.map((p) => {
+            const match = matchMap?.[p.id];
+            return (
+              <tr
+                key={p.id}
+                className="border-b border-hairline align-middle last:border-0"
+              >
+                <td className="px-4 py-3">
+                  <GradeBadge grade={p.grade} size="sm" />
                 </td>
-              ))}
-              <td className="px-4 py-3 tabular-nums">
-                {formatPrice(p.priceExample)}
-              </td>
-              <td className="px-4 py-3">
-                <div className="w-28">
-                  <AffiliateButton
-                    href={p.affiliateUrl}
-                    provider={p.provider}
-                    primary={p.recommended}
-                    label="보기"
-                    track={{
-                      article,
-                      product: p.name,
-                      grade: p.grade,
-                      placement: "comparison_table",
-                      recommended: p.recommended,
-                    }}
-                  />
-                </div>
-              </td>
-            </tr>
-          ))}
+                <td className="px-4 py-3">
+                  <div className={p.recommended ? "font-semibold" : "font-medium"}>
+                    {p.name}
+                  </div>
+                  <div className="text-[13px] text-muted">{p.descriptor}</div>
+                  <div className="mt-0.5">
+                    <ProviderTag provider={p.provider} />
+                  </div>
+                  {match && (
+                    <div className="mt-1">
+                      <MatchBadge info={match} />
+                    </div>
+                  )}
+                </td>
+                {p.specs.map((s) => (
+                  <td key={s.label} className="px-4 py-3 tabular-nums">
+                    {s.value}
+                  </td>
+                ))}
+                <td className="px-4 py-3 tabular-nums">
+                  {formatPrice(p.priceExample)}
+                </td>
+                <td className="px-4 py-3">
+                  <div className="w-28">
+                    <AffiliateButton
+                      href={p.affiliateUrl}
+                      provider={p.provider}
+                      primary={p.recommended}
+                      label="보기"
+                      track={{
+                        article,
+                        product: p.name,
+                        grade: p.grade,
+                        placement: "comparison_table",
+                        recommended: p.recommended,
+                      }}
+                    />
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
