@@ -9,6 +9,12 @@ export interface Spec {
   value: string;
 }
 
+export interface ProductAttributes {
+  ageMonths?: [number, number]; // 적정 월령 범위 [min, max]
+  features?: string[];          // 기능 태그 — "기내반입","한 손 접이" 등 (표시 라벨 그대로)
+  // 예산 필터는 기존 priceExample을 사용 (중복 필드 안 만듦)
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -20,6 +26,7 @@ export interface Product {
   provider: Provider;
   affiliateUrl: string;
   recommended?: boolean;
+  attributes?: ProductAttributes; // 선택적 — 없으면 정적 표로 폴백
 }
 
 export interface Axis {
