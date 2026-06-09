@@ -56,7 +56,7 @@ export function ComparisonExplorer({
     <div>
       <FilterPanel filters={filters} state={state} onChange={setState} />
       {hasActive && (
-        <p className="mt-3 text-[13px] text-muted">
+        <p role="status" aria-live="polite" className="mt-3 text-[13px] text-muted">
           조건에 가까운 순서로 정렬했습니다. 맨 위가 지금 조건에 가장 맞는 제품입니다.
         </p>
       )}
