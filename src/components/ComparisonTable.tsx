@@ -1,15 +1,19 @@
 import type { Product } from "@/lib/types";
+import type { MatchInfo } from "@/lib/explorer";
 import { formatPrice } from "@/lib/grade";
 import { GradeBadge } from "./GradeBadge";
 import { AffiliateButton } from "./AffiliateButton";
 import { ProviderTag } from "./ProviderTag";
+import { MatchBadge } from "./MatchBadge";
 
 export function ComparisonTable({
   products,
   article,
+  matchMap,
 }: {
   products: Product[];
   article?: string;
+  matchMap?: Record<string, MatchInfo>;
 }) {
   const specLabels = products[0]?.specs.map((s) => s.label) ?? [];
   return (
@@ -45,6 +49,11 @@ export function ComparisonTable({
                 <div className="mt-0.5">
                   <ProviderTag provider={p.provider} />
                 </div>
+                {matchMap?.[p.id] && (
+                  <div className="mt-1">
+                    <MatchBadge info={matchMap[p.id]} />
+                  </div>
+                )}
               </td>
               {p.specs.map((s) => (
                 <td key={s.label} className="px-4 py-3 tabular-nums">
