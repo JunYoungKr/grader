@@ -12,8 +12,14 @@ export function FilterPanel({
   state: FilterState;
   onChange: (next: FilterState) => void;
 }) {
-  const showBudget = filters.budget !== null && filters.budget.min < filters.budget.max;
-  const budgetValue = state.budgetMax ?? filters.budget?.max ?? 0;
+  const budget = filters.budget;
+  const showBudget = budget !== null && budget.min < budget.max;
+  const budgetValue = state.budgetMax ?? budget?.max ?? 0;
+
+  const age = filters.age;
+  const monthOptions = age
+    ? Array.from({ length: age.max - age.min + 1 }, (_, i) => age.min + i)
+    : [];
 
   return (
     <div className="rounded-lg border border-hairline bg-surface p-4">
@@ -21,6 +27,7 @@ export function FilterPanel({
         <h3 className="text-sm font-medium">내 조건으로 좁히기</h3>
         <button
           type="button"
+          aria-label="필터 초기화"
           className="text-[13px] text-muted underline-offset-2 hover:underline"
           onClick={() => onChange({ budgetMax: null, features: [], month: null })}
         >
@@ -29,7 +36,7 @@ export function FilterPanel({
       </div>
 
       <div className="mt-4 space-y-5">
-        {showBudget && filters.budget && (
+        {showBudget && budget && (
           <div>
             <div className="flex items-center justify-between text-[13px]">
               <label htmlFor="filter-budget" className="text-muted">
@@ -42,20 +49,21 @@ export function FilterPanel({
             <input
               id="filter-budget"
               type="range"
-              min={filters.budget.min}
-              max={filters.budget.max}
+              min={budget.min}
+              max={budget.max}
               step={1000}
               value={budgetValue}
-              onChange={(e) =>
-                onChange({ ...state, budgetMax: Number(e.target.value) })
-              }
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                onChange({ ...state, budgetMax: v >= budget.max ? null : v });
+              }}
               className="mt-2 w-full accent-brand"
             />
           </div>
         )}
 
         {filters.features.length > 0 && (
-          <div>
+          <div role="group" aria-label="필요 기능">
             <span className="text-[13px] text-muted">필요 기능</span>
             <div className="mt-2 flex flex-wrap gap-2">
               {filters.features.map((f) => {
@@ -87,7 +95,7 @@ export function FilterPanel({
           </div>
         )}
 
-        {filters.age && (
+        {age && (
           <div>
             <label htmlFor="filter-month" className="text-[13px] text-muted">
               우리 아이 개월수
@@ -104,10 +112,7 @@ export function FilterPanel({
               className="mt-2 block w-full rounded-md border border-hairline bg-paper px-3 py-2 text-sm"
             >
               <option value="">선택 안 함</option>
-              {Array.from(
-                { length: filters.age.max - filters.age.min + 1 },
-                (_, i) => filters.age!.min + i,
-              ).map((m) => (
+              {monthOptions.map((m) => (
                 <option key={m} value={m}>
                   {m}개월
                 </option>
