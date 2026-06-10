@@ -56,7 +56,7 @@ export default function HomePage() {
 
       <section className="mt-10">
         <h2 className="text-lg font-semibold">카테고리</h2>
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((c) => (
             <Link
               key={c.slug}
@@ -72,13 +72,19 @@ export default function HomePage() {
 
       <section className="mt-12">
         <h2 className="text-lg font-semibold">최신 글</h2>
-        <ul className="mt-4 divide-y divide-hairline border-y border-hairline">
-          {articles.map((a) => (
-            <li key={a.slug}>
-              <ArticleRow article={a} />
-            </li>
-          ))}
-        </ul>
+        {articles.length === 0 ? (
+          <p className="mt-4 text-[15px] text-muted">
+            아직 등록된 글이 없습니다. 카테고리별 비교 글을 준비 중입니다.
+          </p>
+        ) : (
+          <ul className="mt-4 divide-y divide-hairline border-y border-hairline">
+            {articles.map((a) => (
+              <li key={a.slug}>
+                <ArticleRow article={a} />
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </div>
   );

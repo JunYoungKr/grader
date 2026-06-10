@@ -1,19 +1,19 @@
 import type { Article } from "./types";
 import { categories } from "@/content/categories";
-import { strollerArticle } from "@/content/products/stroller";
-import { lotionArticle } from "@/content/products/lotion";
-import { newbornDiaperArticle } from "@/content/products/newborn-diaper";
-import { newbornPrepQuantityGuide } from "@/content/guides/newborn-prep-quantity";
-import { kcCertificationGuide } from "@/content/guides/kc-certification";
-import { newbornEssentialsHub } from "@/content/hubs/newborn-essentials";
+import { pantsHemClipArticle } from "@/content/products/pants-hem-clip";
+import { pepsiZeroLimeArticle } from "@/content/products/pepsi-zero-lime";
+import { harimChickenBreastArticle } from "@/content/products/harim-chicken-breast";
+import { kelloggsRealGranolaArticle } from "@/content/products/kelloggs-real-granola";
+import { mynormalAlluloseArticle } from "@/content/products/mynormal-allulose";
 
+// 글 등록처 — src/content/{products,guides,hubs}/<slug>.ts 작성 후 여기에 import 추가.
+// 쿠팡 파트너스 API 발급 후에는 scripts/build-from-coupang.ts로 자동 생성·분류 예정.
 const articles: Article[] = [
-  strollerArticle,
-  lotionArticle,
-  newbornDiaperArticle,
-  newbornPrepQuantityGuide,
-  kcCertificationGuide,
-  newbornEssentialsHub,
+  pantsHemClipArticle,
+  pepsiZeroLimeArticle,
+  harimChickenBreastArticle,
+  kelloggsRealGranolaArticle,
+  mynormalAlluloseArticle,
 ];
 
 export function getAllArticles(): Article[] {
