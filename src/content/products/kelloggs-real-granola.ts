@@ -31,8 +31,8 @@ export const kelloggsRealGranolaArticle: Article = {
       grade: "B", // 잠정값 — 단일 제품 시드, 실측 전
       priceExample: 15000, // 350g 3개 세트가(조회 시점)
       provider: "coupang",
-      // 켈로그 리얼 그래놀라 오리지널 350g 3개 — 실제 쿠팡 파트너스 추적링크
-      affiliateUrl: "https://link.coupang.com/a/etn3wfr4ua",
+      // 켈로그 리얼 그래놀라 오리지널 350g 3개 — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
+      affiliateUrl: "https://link.coupang.com/a/etn3N43F7s",
       specs: [
         { label: "용량", value: "350g × 3개" },
         { label: "종류", value: "오리지널" },

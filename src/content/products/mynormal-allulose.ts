@@ -31,8 +31,8 @@ export const mynormalAlluloseArticle: Article = {
       grade: "B", // 잠정값 — 단일 제품 시드, 실측 전
       priceExample: 12800, // 500g 1팩 조회 시점가
       provider: "coupang",
-      // 마이노멀 저당 저칼로리 알룰로스 500g — 실제 쿠팡 파트너스 추적링크
-      affiliateUrl: "https://link.coupang.com/a/etn4SXNark",
+      // 마이노멀 저당 저칼로리 알룰로스 500g — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
+      affiliateUrl: "https://link.coupang.com/a/etn5rUeb4m",
       specs: [
         { label: "용량", value: "500g" },
         { label: "특징", value: "저당·저칼로리" },
