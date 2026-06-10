@@ -3,6 +3,7 @@ import { categories } from "@/content/categories";
 import { strollerArticle } from "@/content/products/stroller";
 import { lotionArticle } from "@/content/products/lotion";
 import { newbornDiaperArticle } from "@/content/products/newborn-diaper";
+import { lowSugarStarterArticle } from "@/content/products/low-sugar-starter";
 import { newbornPrepQuantityGuide } from "@/content/guides/newborn-prep-quantity";
 import { kcCertificationGuide } from "@/content/guides/kc-certification";
 import { newbornEssentialsHub } from "@/content/hubs/newborn-essentials";
@@ -11,6 +12,7 @@ const articles: Article[] = [
   strollerArticle,
   lotionArticle,
   newbornDiaperArticle,
+  lowSugarStarterArticle,
   newbornPrepQuantityGuide,
   kcCertificationGuide,
   newbornEssentialsHub,

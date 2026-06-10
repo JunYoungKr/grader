@@ -7,4 +7,6 @@ export const categories: Category[] = [
   { slug: "infant", name: "영아", blurb: "이유식·외출·놀이 단계 용품 비교" },
   { slug: "toddler", name: "유아", blurb: "위생·식기·활동기 용품 비교" },
   { slug: "safety", name: "안전", blurb: "KC 인증·성분 안전 기준 가이드" },
+  // 생애주기 외 첫 확장 카테고리 — 저당·고단백 식단 관리 식품
+  { slug: "diet", name: "식단 관리", blurb: "저당·고단백 식단 관리 식품 비교" },
 ];
