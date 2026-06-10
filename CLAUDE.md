@@ -39,7 +39,7 @@ Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저
 src/
   app/
     layout.tsx                 공통 헤더/푸터·메타데이터(SITE_URL 기반)·다크모드 초기화 스크립트
-    page.tsx                   홈(생애주기 카테고리 + 최신 글)
+    page.tsx                   홈(제품 카테고리 + 최신 글)
     [slug]/page.tsx            글 페이지 — type별 렌더 + 답-우선 레이아웃 + 데스크톱 우측 사이드바(목차·최근 본 제품)
     about/page.tsx             소개·평가 방법론·운영자 정보 (E-E-A-T)
     privacy/page.tsx           개인정보 처리방침
@@ -68,10 +68,10 @@ src/
     gtag.ts       GA4 이벤트 헬퍼 (전환=select_item, no-op 가드)
     jsonld.tsx    구조화 데이터
   content/
-    categories.ts          생애주기 카테고리(maternity/newborn/infant/toddler/safety)
-    products/*.ts          comparison 글 (stroller, lotion, newborn-diaper)
-    guides/*.ts            guide 글 (kc-certification, newborn-prep-quantity)
-    hubs/*.ts              hub 글 (newborn-essentials)
+    categories.ts          제품 대분류(baby/daily-life/digital/food/beauty/sports) — API 발급 전 임시 수동 분류
+    products/*.ts          comparison 글 (pants-hem-clip, pepsi-zero-lime ...)
+    guides/*.ts            guide 글
+    hubs/*.ts              hub 글
 scripts/
   analytics-insights.ts    GA4 Data API → Claude 퍼널 진단·개선안 (npm run insights)
 docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔진, 프로모 배너)
@@ -102,7 +102,7 @@ docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔
 ## 콘텐츠 추가 방법
 
 1. **비교 글(comparison)**: `src/content/products/<slug>.ts`에 `Article`(type: "comparison") 작성
-   → `lib/content.ts`의 `articles` 배열에 import 등록. `category`는 생애주기 slug.
+   → `lib/content.ts`의 `articles` 배열에 import 등록. `category`는 대분류 slug(`src/content/categories.ts`).
 2. **가이드(guide)**: `src/content/guides/<slug>.ts` (type: "guide", `sections` 사용) → 동일하게 등록.
 3. **허브(hub)**: `src/content/hubs/<slug>.ts` (type: "hub", `related`로 스포크 글 연결) → 등록.
 - 새 제휴처 추가: `lib/types.ts`의 `Provider`와 `lib/providers.ts`의 `PROVIDERS`에 항목 추가.
@@ -125,7 +125,8 @@ docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔
 
 1. **`scripts/build-from-coupang.ts`** — 키워드 → `searchProducts()`/`createDeeplinks()` → `Product` JSON 자동 생성.
 2. **실제 데이터로 플레이스홀더 교체** + 첫 카테고리 글 5~10개 실측 작성(사람 검수).
-3. **콘텐츠 확장** — 생애주기별 비교/가이드/허브. 허브-스포크 내부링크 촘촘히.
+3. **콘텐츠 확장** — 카테고리별 비교/가이드/허브. 허브-스포크 내부링크 촘촘히.
+   (카테고리는 API 발급 전 임시 수동 분류 — 발급 후 상품 자동 분류로 재정비 예정.)
 4. **배포** — Netlify/Vercel/Cloudflare Pages. 후 구글 서치콘솔 + 네이버 서치어드바이저에 `/sitemap.xml` 제출.
    (네이버는 외부 사이트 상위 노출이 어려우니 구글을 주력으로.)
 

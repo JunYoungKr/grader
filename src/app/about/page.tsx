@@ -46,8 +46,9 @@ export default function AboutPage() {
       <p className="mt-3 text-[15px] leading-relaxed text-muted">
         {SITE_NAME}는 사야 할지 망설여지는 제품을 <strong className="font-medium text-ink">안전성·성능·성분·가격</strong>으로
         등급화(S/A/B/C)해 비교하는 사이트입니다. 처음 사는 제품처럼 한 번에 여러 개를 골라야 하는
-        순간, 광고가 아닌 근거로 빠르게 결정하도록 돕는 것을 목표로 합니다. 현재는 육아용품을
-        시작점으로 다루고 있으며, 이후 생활·가전·건강 등 다른 제품 카테고리로 확장합니다.
+        순간, 광고가 아닌 근거로 빠르게 결정하도록 돕는 것을 목표로 합니다. 육아·출산을
+        시작점으로 생활·주방, 가전·디지털, 식품·건강, 뷰티 등 생활 전반의 제품으로 넓혀가고
+        있습니다.
       </p>
 
       <section className="mt-12">

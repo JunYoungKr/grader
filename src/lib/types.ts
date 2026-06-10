@@ -68,7 +68,7 @@ export interface RelatedLink {
 
 export interface Article {
   slug: string;
-  category: string; // 생애주기 카테고리 slug
+  category: string; // 카테고리 slug (src/content/categories.ts)
   type: ArticleType;
   title: string;
   description: string;
