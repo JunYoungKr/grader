@@ -11,3 +11,5 @@ next-env.d.ts
 # GA4 서비스 계정 키 (절대 커밋 금지)
 ga-service-account.json
 *-service-account.json
+# TypeScript 증분 빌드 캐시
+tsconfig.tsbuildinfo
