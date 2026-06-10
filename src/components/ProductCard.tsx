@@ -1,15 +1,19 @@
 import type { Product } from "@/lib/types";
+import type { MatchInfo } from "@/lib/explorer";
 import { formatPrice } from "@/lib/grade";
 import { GradeBadge } from "./GradeBadge";
 import { AffiliateButton } from "./AffiliateButton";
 import { ProviderTag } from "./ProviderTag";
+import { MatchBadge } from "./MatchBadge";
 
 export function ProductCard({
   product,
   article,
+  match,
 }: {
   product: Product;
   article?: string;
+  match?: MatchInfo;
 }) {
   const ring = product.recommended
     ? "border-2 border-brand"
@@ -29,6 +33,11 @@ export function ProductCard({
       <p className="mt-0.5 text-[13px] leading-relaxed text-muted">
         {product.descriptor}
       </p>
+      {match && (
+        <div className="mt-2">
+          <MatchBadge info={match} />
+        </div>
+      )}
       <dl className="mt-3 space-y-1.5 border-t border-hairline pt-2.5 text-[13px]">
         {product.specs.map((s) => (
           <div key={s.label} className="flex justify-between">

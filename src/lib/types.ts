@@ -9,6 +9,12 @@ export interface Spec {
   value: string;
 }
 
+export interface ProductAttributes {
+  ageMonths?: [number, number]; // 적정 월령 범위 [min, max]
+  features?: string[];          // 기능 태그 — "기내반입","한 손 접이" 등 (표시 라벨 그대로)
+  // 예산 필터는 기존 priceExample을 사용 (중복 필드 안 만듦)
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -20,11 +26,22 @@ export interface Product {
   provider: Provider;
   affiliateUrl: string;
   recommended?: boolean;
+  attributes?: ProductAttributes; // 선택적 — 없으면 정적 표로 폴백
 }
 
 export interface Axis {
   label: string;
   desc: string;
+}
+
+// 제휴처 공식 배너(예: 쿠팡 파트너스 creative). 등급표와 별개로 노출.
+export interface PromoBanner {
+  provider: Provider;
+  href: string;
+  imageUrl: string;
+  imageAlt: string;
+  width: number;
+  height: number;
 }
 
 export interface Section {
@@ -60,6 +77,7 @@ export interface Article {
   medical?: boolean; // 의료 면책 표시 여부 (YMYL)
   axes?: Axis[]; // comparison
   products?: Product[]; // comparison
+  promoBanner?: PromoBanner; // 제휴처 공식 배너(선택)
   sections?: Section[]; // guide / hub 본문
   checklist?: { caption?: string; items: ChecklistItem[] }; // 품목별 수량 표(funnel)
   related?: RelatedLink[]; // 내부 링크(클러스터/관련 글)

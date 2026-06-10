@@ -72,6 +72,7 @@ scripts/
 
 - **전환(북극성) = 제휴 클릭(`select_item`).** 실제 구매는 GA로 못 잡음(쿠팡 측 발생) → 쿠팡 파트너스 대시보드와 대조.
 - **퍼널**: `page_view` → `scroll`(90%, GA4 자동) → `view_item_list`(등급표 도달) → `select_item`(제휴 클릭). `toc_click`은 관심 신호.
+- **관심 신호 `filter_apply`**: 인터랙티브 비교 엔진에서 조건(예산·기능·월령) 적용 시 전송(`view_item_list`→`select_item` 사이). `filter_budget_max`/`filter_features`/`filter_month`/`top_item` 파라미터는 GA4 **커스텀** 측정기준이라 리포트에 쓰려면 등록 필요. 구현: `lib/explorer.ts`(순수 함수) + `components/ComparisonExplorer.tsx`(island) + `lib/gtag.ts`의 `trackFilter`.
 - `select_item` 파라미터: `item_brand`(제휴처)·`item_category`(등급)·`item_list_id`(글 slug)·`item_name`(제품)은 GA4 **표준** 측정기준이라 등록 없이 리포트에 잡힘. `placement`(comparison_table/sticky_cta/product_card)만 커스텀 → 필요 시 GA4 맞춤 측정기준 등록.
 - 구현: `lib/gtag.ts`(헬퍼, GA_ID 미설정 시 no-op) · `components/Analytics.tsx`(gtag 로더 + SPA 페이지뷰 + `a[data-ga]` 클릭 위임) · `ViewItemList.tsx`(IntersectionObserver). `AffiliateButton`/`TableOfContents`는 `data-ga-*` 속성만 달고 서버 컴포넌트 유지.
 - **켜는 법**: `NEXT_PUBLIC_GA_ID=G-XXXX` 설정 후 재빌드(클라이언트 inline 변수). GA4에서 `select_item`을 **주요 이벤트**로 표시 + 향상된 측정(스크롤) 켜기.

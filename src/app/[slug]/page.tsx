@@ -9,6 +9,8 @@ import { TableOfContents } from "@/components/TableOfContents";
 import { MetricCard } from "@/components/MetricCard";
 import { ComparisonCards } from "@/components/ComparisonCards";
 import { ComparisonTable } from "@/components/ComparisonTable";
+import { ComparisonExplorer } from "@/components/ComparisonExplorer";
+import { PromoBanner } from "@/components/PromoBanner";
 import { ChecklistTable } from "@/components/ChecklistTable";
 import { ViewItemList } from "@/components/ViewItemList";
 import { StickyCta } from "@/components/StickyCta";
@@ -54,6 +56,7 @@ export default async function ArticlePage({
   const products = article.products ?? [];
   const providers = uniqueProviders(products.map((p) => p.provider));
   const recommended = products.find((p) => p.recommended) ?? products[0];
+  const hasAttributes = products.some((p) => p.attributes);
 
   const toc: { id: string; label: string }[] = [
     { id: "summary", label: "한눈에 요약" },
@@ -125,12 +128,21 @@ export default async function ArticlePage({
                     grade: p.grade,
                   }))}
                 />
-                <div className="hidden md:block">
-                  <ComparisonTable products={products} article={slug} />
-                </div>
-                <div className="md:hidden">
-                  <ComparisonCards products={products} article={slug} />
-                </div>
+                {hasAttributes ? (
+                  <ComparisonExplorer products={products} article={slug} />
+                ) : (
+                  <>
+                    <div className="hidden md:block">
+                      <ComparisonTable products={products} article={slug} />
+                    </div>
+                    <div className="md:hidden">
+                      <ComparisonCards products={products} article={slug} />
+                    </div>
+                  </>
+                )}
+                {article.promoBanner && (
+                  <PromoBanner banner={article.promoBanner} article={slug} />
+                )}
               </section>
 
               {article.axes?.length ? (

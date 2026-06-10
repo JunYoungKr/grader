@@ -35,6 +35,10 @@ export const strollerArticle: Article = {
         { label: "안전인증", value: "KC · EN1888" },
         { label: "접이", value: "한 손 가능" },
       ],
+      attributes: {
+        ageMonths: [1, 48], // 데모값 — 신생아부터 사용 가능한 디럭스형
+        features: ["한 손 접이", "양대면 시트"],
+      },
     },
     {
       id: "stroller-a",
@@ -50,6 +54,10 @@ export const strollerArticle: Article = {
         { label: "안전인증", value: "KC" },
         { label: "접이", value: "두 손" },
       ],
+      attributes: {
+        ageMonths: [6, 48], // 데모값
+        features: [],
+      },
     },
     {
       id: "stroller-b",
@@ -65,6 +73,10 @@ export const strollerArticle: Article = {
         { label: "안전인증", value: "KC" },
         { label: "접이", value: "한 손 가능" },
       ],
+      attributes: {
+        ageMonths: [6, 36], // 데모값
+        features: ["한 손 접이", "기내반입"],
+      },
     },
     {
       id: "stroller-c",
@@ -80,6 +92,10 @@ export const strollerArticle: Article = {
         { label: "안전인증", value: "KC" },
         { label: "접이", value: "두 손" },
       ],
+      attributes: {
+        ageMonths: [6, 36], // 데모값
+        features: [],
+      },
     },
   ],
   related: [

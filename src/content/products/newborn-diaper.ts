@@ -104,6 +104,16 @@ export const newbornDiaperArticle: Article = {
       ],
     },
   ],
+  // 쿠팡 파트너스 공식 배너(팸퍼스 터치 오브 네이처 2단계, 156매) — 실제 추적 링크/creative
+  promoBanner: {
+    provider: "coupang",
+    href: "https://link.coupang.com/a/etiAOFN7p6",
+    imageUrl:
+      "https://image10.coupangcdn.com/image/affiliate/banner/61868e8e6c4810f8103113a19460f9d7@2x.jpg",
+    imageAlt: "팸퍼스 터치 오브 네이처 밴드형 기저귀 아동공용, 2단계, 156매",
+    width: 120,
+    height: 240,
+  },
   related: [
     { slug: "newborn-essentials-hub-2026", title: "신생아 용품 종합 가이드 — 우선순위 체크리스트" },
     { slug: "kc-certification-2026", title: "KC 인증이란 — 어린이제품 안전 3단계" },
