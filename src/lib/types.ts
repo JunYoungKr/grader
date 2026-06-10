@@ -34,6 +34,16 @@ export interface Axis {
   desc: string;
 }
 
+// 제휴처 공식 배너(예: 쿠팡 파트너스 creative). 등급표와 별개로 노출.
+export interface PromoBanner {
+  provider: Provider;
+  href: string;
+  imageUrl: string;
+  imageAlt: string;
+  width: number;
+  height: number;
+}
+
 export interface Section {
   heading: string;
   paragraphs: string[];
@@ -67,6 +77,7 @@ export interface Article {
   medical?: boolean; // 의료 면책 표시 여부 (YMYL)
   axes?: Axis[]; // comparison
   products?: Product[]; // comparison
+  promoBanner?: PromoBanner; // 제휴처 공식 배너(선택)
   sections?: Section[]; // guide / hub 본문
   checklist?: { caption?: string; items: ChecklistItem[] }; // 품목별 수량 표(funnel)
   related?: RelatedLink[]; // 내부 링크(클러스터/관련 글)

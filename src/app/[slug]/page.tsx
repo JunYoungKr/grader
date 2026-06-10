@@ -10,6 +10,7 @@ import { MetricCard } from "@/components/MetricCard";
 import { ComparisonCards } from "@/components/ComparisonCards";
 import { ComparisonTable } from "@/components/ComparisonTable";
 import { ComparisonExplorer } from "@/components/ComparisonExplorer";
+import { PromoBanner } from "@/components/PromoBanner";
 import { ChecklistTable } from "@/components/ChecklistTable";
 import { ViewItemList } from "@/components/ViewItemList";
 import { StickyCta } from "@/components/StickyCta";
@@ -138,6 +139,9 @@ export default async function ArticlePage({
                       <ComparisonCards products={products} article={slug} />
                     </div>
                   </>
+                )}
+                {article.promoBanner && (
+                  <PromoBanner banner={article.promoBanner} article={slug} />
                 )}
               </section>
 
