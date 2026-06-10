@@ -9,9 +9,10 @@ Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저
 
 ## 스택 & 명령어
 
-- Next.js 15 (App Router) · React 19 · TypeScript(strict) · Tailwind 3
+- Next.js 15 (App Router) · React 19 · TypeScript(strict) · Tailwind 3 · Vitest
 - Node 18.18+ (권장 20+)
 - `npm install` → `npm run dev`(localhost:3000) → `npm run build`(정적 생성 검증)
+- `npm run test` — Vitest 단위 테스트 (현재 `lib/explorer.ts` 순수 함수 커버)
 - 폰트: Pretendard (런타임에 jsDelivr CDN 로드, `app/globals.css`의 @import)
 - 환경변수: `.env.local` (예시는 `.env.local.example`)
   - `NEXT_PUBLIC_SITE_URL` — 배포 도메인 (미설정 시 https://grader.co.kr)
@@ -37,35 +38,43 @@ Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저
 ```
 src/
   app/
-    layout.tsx                 공통 헤더/푸터·메타데이터(SITE_URL 기반)
+    layout.tsx                 공통 헤더/푸터·메타데이터(SITE_URL 기반)·다크모드 초기화 스크립트
     page.tsx                   홈(제품 카테고리 + 최신 글)
-    [slug]/page.tsx            글 페이지 — type별 렌더 + 답-우선 레이아웃
+    [slug]/page.tsx            글 페이지 — type별 렌더 + 답-우선 레이아웃 + 데스크톱 우측 사이드바(목차·최근 본 제품)
+    about/page.tsx             소개·평가 방법론·운영자 정보 (E-E-A-T)
+    privacy/page.tsx           개인정보 처리방침
     category/[category]/page.tsx  카테고리 목록
     sitemap.ts / robots.ts     전 URL 자동 사이트맵 + robots
     globals.css                디자인 토큰(CSS 변수)·다크모드
   components/
     GradeBadge ProductCard ComparisonTable/Cards   등급·비교 UI
+    ComparisonExplorer FilterPanel MatchBadge       인터랙티브 비교 엔진(예산·기능·월령 필터 island)
     AffiliateButton ProviderTag DisclosureNote      제휴 링크·출처·고지
+    PromoBanner                                     제휴처 공식 배너(쿠팡 creative + 필수 고지문구)
     SummaryBox TableOfContents StickyCta            답-우선 레이아웃
     SourceList RelatedLinks MedicalDisclaimer       E-E-A-T(출처·내부링크·면책)
-    MethodologyStrip MetricCard Header Footer
+    ChecklistTable                                  품목별 권장 수량 표(guide → 비교글 퍼널)
+    RecentlyViewed ThemeToggle                      최근 본 제품(localStorage)·다크모드 토글
+    MethodologyStrip MetricCard Header Footer ExternalIcon
     Analytics ViewItemList                          GA4 로더·SPA 페이지뷰·클릭 위임·등급표 도달 추적
   lib/
-    types.ts      데이터 모델 (Article/Product/Grade/Provider/ArticleType ...)
+    types.ts      데이터 모델 (Article/Product/Grade/Provider/ProductAttributes/PromoBanner ...)
     grade.ts      등급 색·라벨, 가격 포맷
+    explorer.ts   비교 엔진 순수 함수(deriveFilters·rankProducts) — explorer.test.ts(Vitest)
     providers.ts  제휴처 설정·고지문 빌더
     content.ts    글/카테고리 로더 (정적 import — 늘면 CMS/DB로)
-    site.ts       SITE_URL·날짜 파서
+    site.ts       SITE_URL·SITE_NAME·OPERATOR_NAME·CONTACT_EMAIL·날짜 파서
     coupang.ts    쿠팡 파트너스 Open API 클라이언트 (서버 전용)
     gtag.ts       GA4 이벤트 헬퍼 (전환=select_item, no-op 가드)
     jsonld.tsx    구조화 데이터
-scripts/
-  analytics-insights.ts    GA4 Data API → Claude 퍼널 진단·개선안 (npm run insights)
   content/
     categories.ts          제품 대분류(baby/daily-life/digital/food/beauty/sports) — API 발급 전 임시 수동 분류
-    products/*.ts          comparison 글 (pants-hem-clip ...)
+    products/*.ts          comparison 글 (pants-hem-clip, pepsi-zero-lime ...)
     guides/*.ts            guide 글
     hubs/*.ts              hub 글
+scripts/
+  analytics-insights.ts    GA4 Data API → Claude 퍼널 진단·개선안 (npm run insights)
+docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔진, 프로모 배너)
 ```
 
 ## 애널리틱스 (GA4) — 이탈·전환 추적
@@ -84,8 +93,10 @@ scripts/
   - comparison: `products` + `axes` (등급표)
   - guide: `sections` (설명형, 예: 인증 안내)
   - hub: `sections` + `related` (토픽 클러스터 허브, 스포크로 내부링크)
-- 공통: `summary`(요약), `sources`(출처), `related`(관련 글), `medical`(의료 면책)
-- `Product`: `provider` + `affiliateUrl` (제휴처 분리), `grade`, `specs`, `priceExample`, `recommended`
+- 공통: `summary`(요약), `sources`(출처), `related`(관련 글), `medical`(의료 면책),
+  `promoBanner`(제휴처 공식 배너, 선택), `checklist`(품목·권장 수량 표 — guide에서 비교글로 퍼널, 선택)
+- `Product`: `provider` + `affiliateUrl` (제휴처 분리), `grade`, `specs`, `priceExample`, `recommended`,
+  `attributes?`(월령 범위·기능 태그 — 있으면 글이 `ComparisonExplorer`로 렌더, 없으면 정적 표 폴백)
 - `Provider = "coupang" | "iherb" | "linkprice" | "tenping"`
 
 ## 콘텐츠 추가 방법
@@ -98,20 +109,25 @@ scripts/
 
 ## 교체해야 할 플레이스홀더
 
-- 모든 `affiliateUrl: "#"` → 실제 추적 링크 (쿠팡은 `createDeeplinks()`로 생성)
+- 모든 `affiliateUrl: "#"` → 실제 추적 링크 (쿠팡은 `createDeeplinks()`로 생성). 현재 stroller/lotion/newborn-diaper 11곳.
 - `priceExample` → 실제 가격(조회 시점 명시)
+- `OPERATOR_NAME`(`lib/site.ts`) → 운영자 실명 (about 페이지에 노출, E-E-A-T)
+- `CONTACT_EMAIL`(`lib/site.ts`) → 실제 문의 메일 (푸터·about·privacy에서 공용)
 - 브랜드명은 `Grader`(`lib/site.ts`) · 기본 도메인은 `https://grader.co.kr`
-- 푸터 문의 메일(`components/Footer.tsx`)
+
+## 완료된 백로그 (2026-06 기준)
+
+- ~~`/about`·`/privacy` 페이지~~ — 평가 방법론·등급 기준·면책·처리방침 구현. **운영자 실명(`OPERATOR_NAME`)만 교체 남음.**
+- ~~인터랙티브 비교 엔진~~ — `lib/explorer.ts`(순수 함수+테스트) + `ComparisonExplorer`/`FilterPanel`/`MatchBadge`.
+  `attributes` 있는 글만 적용(현재 stroller 글이 데모). **lotion·newborn-diaper에 attributes 백필 필요.**
 
 ## 작업 백로그 (우선순위)
 
-1. **`/about`·`/privacy` 페이지** — 평가 방법론·운영자 실명·의료 면책. E-E-A-T 필수, 가장 먼저.
-2. **인터랙티브 비교 엔진** — 조건(월령·예산·기능) 입력 → 제품 필터. 이 사이트의 차별점(정적 경쟁사 대비 우위).
-3. **`scripts/build-from-coupang.ts`** — 키워드 → `searchProducts()`/`createDeeplinks()` → `Product` JSON 자동 생성.
-4. **실제 데이터로 플레이스홀더 교체** + 첫 카테고리 글 5~10개 실측 작성(사람 검수).
-5. **콘텐츠 확장** — 카테고리별 비교/가이드/허브. 허브-스포크 내부링크 촘촘히.
+1. **`scripts/build-from-coupang.ts`** — 키워드 → `searchProducts()`/`createDeeplinks()` → `Product` JSON 자동 생성.
+2. **실제 데이터로 플레이스홀더 교체** + 첫 카테고리 글 5~10개 실측 작성(사람 검수).
+3. **콘텐츠 확장** — 카테고리별 비교/가이드/허브. 허브-스포크 내부링크 촘촘히.
    (카테고리는 API 발급 전 임시 수동 분류 — 발급 후 상품 자동 분류로 재정비 예정.)
-6. **배포** — Netlify/Vercel/Cloudflare Pages. 후 구글 서치콘솔 + 네이버 서치어드바이저에 `/sitemap.xml` 제출.
+4. **배포** — Netlify/Vercel/Cloudflare Pages. 후 구글 서치콘솔 + 네이버 서치어드바이저에 `/sitemap.xml` 제출.
    (네이버는 외부 사이트 상위 노출이 어려우니 구글을 주력으로.)
 
 ## 컨벤션
