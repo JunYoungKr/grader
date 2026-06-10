@@ -31,8 +31,8 @@ export const pepsiZeroLimeArticle: Article = {
       grade: "B", // 잠정값 — 단일 제품 시드, 실측 전
       priceExample: 14440, // 210ml 30캔 세트가(조회 시점)
       provider: "coupang",
-      // 펩시 제로슈거 라임향 210ml 30개 — 실제 쿠팡 파트너스 추적링크
-      affiliateUrl: "https://link.coupang.com/a/etnKywDH76",
+      // 펩시 제로슈거 라임향 210ml 30개 — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
+      affiliateUrl: "https://link.coupang.com/a/etnVlEmlRk",
       specs: [
         { label: "용량", value: "210ml × 30캔" },
         { label: "당·칼로리", value: "제로" },

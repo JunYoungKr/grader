@@ -33,8 +33,8 @@ export const pantsHemClipArticle: Article = {
       recommended: true,
       priceExample: 8000, // 10개입 세트가(조회 시점)
       provider: "coupang",
-      // 픽셀로그 바지 밑단 고정 클립 10개(투명) — 실제 쿠팡 파트너스 추적링크
-      affiliateUrl: "https://link.coupang.com/a/etoBS7xTDo",
+      // 픽셀로그 바지 밑단 고정 클립 10개(투명) — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
+      affiliateUrl: "https://link.coupang.com/a/etoClK2QeW",
       specs: [
         { label: "구성", value: "10개입" },
         { label: "색상", value: "투명" },

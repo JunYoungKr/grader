@@ -31,8 +31,8 @@ export const harimChickenBreastArticle: Article = {
       grade: "B", // 잠정값 — 단일 제품 시드, 실측 전
       priceExample: 11400, // 1kg 1팩 조회 시점가
       provider: "coupang",
-      // 하림 닭가슴살(냉장) 1kg — 실제 쿠팡 파트너스 추적링크
-      affiliateUrl: "https://link.coupang.com/a/etn1pPPchE",
+      // 하림 닭가슴살(냉장) 1kg — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
+      affiliateUrl: "https://link.coupang.com/a/etn1VURuMu",
       specs: [
         { label: "중량", value: "1kg" },
         { label: "보관", value: "냉장" },
