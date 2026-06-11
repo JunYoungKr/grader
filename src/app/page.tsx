@@ -47,11 +47,11 @@ export default async function HomePage() {
       <section className="max-w-2xl">
         <MethodologyStrip />
         <h1 className="mt-3 text-4xl font-medium leading-tight tracking-tight">
-          사야 할 제품, 등급으로 빠르게 비교하세요
+          쿠팡에서 뭘 살지<br className="sm:hidden" /> 30분째 고민 중이라면
         </h1>
         <p className="mt-3 text-[15px] leading-relaxed text-muted">
-          안전성·성능·성분·가격을 카테고리별 기준으로 평가해 S/A/B/C 등급을
-          매깁니다. 리뷰 데이터와 1차 출처로 검증하고, 등급은 광고비와 분리합니다.
+          검색하면 쏟아지는 비슷한 제품들 — 그 비교 노동을 대신 해뒀습니다. 안전성·성능·성분·가격
+          기준으로 S/A/B/C 등급을 매기고, 1차 출처로 검증합니다. 등급은 광고비와 분리됩니다.
         </p>
       </section>
 

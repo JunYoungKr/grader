@@ -44,9 +44,10 @@ export default function AboutPage() {
         {SITE_NAME} 소개
       </h1>
       <p className="mt-3 text-[15px] leading-relaxed text-muted">
-        {SITE_NAME}는 사야 할지 망설여지는 제품을 <strong className="font-medium text-ink">안전성·성능·성분·가격</strong>으로
-        등급화(S/A/B/C)해 비교하는 사이트입니다. 처음 사는 제품처럼 한 번에 여러 개를 골라야 하는
-        순간, 광고가 아닌 근거로 빠르게 결정하도록 돕는 것을 목표로 합니다. 육아·출산을
+        {SITE_NAME}는 <strong className="font-medium text-ink">쿠팡 같은 쇼핑몰에서 뭘 살지 막막한 순간</strong>을
+        위한 사이트입니다. 검색하면 쏟아지는 비슷한 제품들을{" "}
+        <strong className="font-medium text-ink">안전성·성능·성분·가격</strong> 기준으로
+        등급화(S/A/B/C)해, 광고가 아닌 근거로 빠르게 결정하도록 돕습니다. 육아·출산을
         시작점으로 생활·주방, 가전·디지털, 식품·건강, 뷰티 등 생활 전반의 제품으로 넓혀가고
         있습니다.
       </p>

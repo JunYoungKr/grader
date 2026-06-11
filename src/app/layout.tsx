@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     template: `%s · ${SITE_NAME}`,
   },
   description:
-    "생활 제품을 안전성·성능·가격 등 같은 기준으로 등급화해 비교합니다. 광고비와 분리된 객관 평가.",
+    "쿠팡에서 뭘 살지 고민될 때 — 비슷한 제품들을 안전성·성능·성분·가격 기준으로 등급화(S/A/B/C)해 비교합니다. 광고비와 분리된 평가.",
   openGraph: {
     type: "website",
     locale: "ko_KR",
