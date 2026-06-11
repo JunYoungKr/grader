@@ -28,8 +28,9 @@ Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저
    분량 채우기용 패딩 금지 — 길이는 실제 비교 깊이로만.
 4. **제휴 고지 유지.** 글에 쓰인 제휴처에 맞는 공정위 고지 자동 노출(`DisclosureNote`).
    모든 제휴 링크는 `rel="sponsored nofollow noopener"` (`AffiliateButton`이 처리).
-5. **디자인 토큰 일원화.** 색은 `app/globals.css`의 CSS 변수 + `tailwind.config.ts` 토큰,
-   등급색은 `lib/grade.ts`, 제휴처 설정은 `lib/providers.ts`에서만 관리. 하드코딩 금지.
+5. **디자인 토큰 일원화.** 색은 `app/globals.css`의 CSS 변수(시맨틱 9색 + 등급 `--grade-*`, 라이트/다크 두 벌)
+   + `tailwind.config.ts` 토큰. `lib/grade.ts`는 등급 토큰 참조·라벨만, 제휴처 설정은 `lib/providers.ts`. 하드코딩 금지.
+   (2026.06 Claude Design 핸드오프 기준 — 브랜드 네이비, 폰트 굵기 400/500만, 그림자는 고정 CTA 전용)
 6. **답-우선 레이아웃 유지.** 글 상단 요약(SummaryBox) → 목차(TOC) → 등급표, 상세는 아래로.
    모바일 하단 고정 CTA(StickyCta) 유지.
 

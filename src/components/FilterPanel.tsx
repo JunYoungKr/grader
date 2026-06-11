@@ -22,13 +22,13 @@ export function FilterPanel({
     : [];
 
   return (
-    <div className="rounded-lg border border-hairline bg-surface p-4">
+    <div className="rounded-lg border border-hairline bg-paper p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium">내 조건으로 좁히기</h3>
         <button
           type="button"
           aria-label="필터 초기화"
-          className="text-[13px] text-muted underline-offset-2 hover:underline"
+          className="text-[13px] text-brand transition-opacity hover:opacity-80"
           onClick={() => onChange({ budgetMax: null, features: [], month: null })}
         >
           초기화
@@ -81,10 +81,10 @@ export function FilterPanel({
                           : [...state.features, f],
                       })
                     }
-                    className={`rounded-full border px-3 py-1 text-[13px] transition-colors ${
+                    className={`rounded-full border px-3 py-1.5 text-[13px] transition-colors ${
                       on
-                        ? "border-brand bg-brand-soft text-brand"
-                        : "border-hairline text-muted hover:bg-paper"
+                        ? "border-[color-mix(in_srgb,var(--brand)_35%,transparent)] bg-brand-soft text-brand"
+                        : "border-hairline bg-paper text-muted hover:bg-surface"
                     }`}
                   >
                     {f}

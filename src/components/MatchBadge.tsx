@@ -6,7 +6,9 @@ export function MatchBadge({ info }: { info: MatchInfo }) {
   return (
     <span
       className={`inline-flex flex-wrap items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${
-        full ? "bg-brand-soft text-brand" : "bg-surface text-muted"
+        full
+          ? "bg-brand-soft text-brand"
+          : "border border-hairline bg-surface text-muted"
       }`}
     >
       조건 {info.total}개 중 {info.satisfied}개 충족

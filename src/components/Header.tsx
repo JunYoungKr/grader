@@ -3,21 +3,31 @@ import { getCategories } from "@/lib/content";
 import { SITE_NAME } from "@/lib/site";
 import { ThemeToggle } from "./ThemeToggle";
 
+// sticky 헤더 — 반투명 paper + blur(시스템에서 유일한 블러), 하단 헤어라인.
 export function Header() {
   const categories = getCategories();
   return (
-    <header className="border-b border-hairline">
-      <div className="mx-auto flex max-w-content items-center justify-between px-5 py-4">
-        <Link href="/" className="text-lg font-medium tracking-tight">
-          {SITE_NAME}
+    <header
+      className="sticky top-0 z-20 border-b border-hairline backdrop-blur-[8px]"
+      style={{ background: "color-mix(in srgb, var(--paper) 88%, transparent)" }}
+    >
+      <div className="mx-auto flex max-w-content items-center justify-between px-5 py-3">
+        <Link href="/" className="inline-flex items-center gap-2">
+          <span
+            aria-hidden="true"
+            className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-ink text-base font-medium leading-none text-paper"
+          >
+            G
+          </span>
+          <span className="text-lg font-medium tracking-tight">{SITE_NAME}</span>
         </Link>
         <div className="flex items-center gap-4">
-          <nav className="flex gap-4 text-sm text-muted">
+          <nav className="hidden gap-1 text-sm text-muted sm:flex">
             {categories.map((c) => (
               <Link
                 key={c.slug}
                 href={`/category/${c.slug}`}
-                className="transition-colors hover:text-ink"
+                className="rounded-md px-2.5 py-1.5 transition-colors hover:bg-brand-soft hover:text-brand"
               >
                 {c.name}
               </Link>

@@ -10,63 +10,69 @@ export function ProductCard({
   product,
   article,
   match,
+  rank,
 }: {
   product: Product;
   article?: string;
   match?: MatchInfo;
+  rank?: number;
 }) {
-  const ring = product.recommended
-    ? "border-2 border-brand"
-    : "border border-hairline";
   return (
-    <div className={`relative rounded-lg bg-surface p-[1.1rem] ${ring}`}>
-      {product.recommended && (
-        <span className="absolute -top-3 left-3.5 rounded-md bg-brand-soft px-2.5 py-[3px] text-xs font-medium text-brand">
-          종합 추천
-        </span>
-      )}
-      <div className="mb-2.5 flex items-center justify-between">
+    <div className="flex flex-col gap-3 rounded-xl border border-hairline bg-paper p-4">
+      <div className="flex items-start gap-3">
         <GradeBadge grade={product.grade} />
-        <span className="text-xs text-faint">{product.type}</span>
-      </div>
-      <p className="text-base font-medium">{product.name}</p>
-      <p className="mt-0.5 text-[13px] leading-relaxed text-muted">
-        {product.descriptor}
-      </p>
-      {match && (
-        <div className="mt-2">
-          <MatchBadge info={match} />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5 text-xs text-faint">
+            <span>{product.type}</span>
+            {product.recommended && (
+              <span className="rounded-md bg-brand-soft px-2 py-px font-medium text-brand">
+                에디터 PICK
+              </span>
+            )}
+          </div>
+          <p className="mt-0.5 text-lg font-medium leading-snug">{product.name}</p>
         </div>
-      )}
-      <dl className="mt-3 space-y-1.5 border-t border-hairline pt-2.5 text-[13px]">
+        {rank !== undefined && (
+          <span className="shrink-0 rounded-full bg-ink px-2 py-0.5 text-xs font-medium leading-relaxed text-paper">
+            {rank}위
+          </span>
+        )}
+      </div>
+
+      {match && <MatchBadge info={match} />}
+
+      <p className="text-sm leading-relaxed text-muted">{product.descriptor}</p>
+
+      <dl className="space-y-1.5 border-t border-hairline pt-2.5 text-xs text-faint">
         {product.specs.map((s) => (
-          <div key={s.label} className="flex justify-between">
-            <dt className="text-muted">{s.label}</dt>
-            <dd className="tabular-nums">{s.value}</dd>
+          <div key={s.label} className="flex justify-between gap-3">
+            <dt>{s.label}</dt>
+            <dd className="text-right tabular-nums text-muted">{s.value}</dd>
           </div>
         ))}
-        <div className="flex justify-between">
-          <dt className="text-muted">예시가</dt>
-          <dd className="tabular-nums">{formatPrice(product.priceExample)}</dd>
-        </div>
       </dl>
-      <div className="mt-3 flex items-center justify-between">
+
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <div className="text-lg font-medium tabular-nums leading-tight">
+            {formatPrice(product.priceExample)}
+          </div>
+          <div className="text-xs text-faint">예시가 · 조회 시점 기준</div>
+        </div>
         <ProviderTag provider={product.provider} />
       </div>
-      <div className="mt-1.5">
-        <AffiliateButton
-          href={product.affiliateUrl}
-          provider={product.provider}
-          primary={product.recommended}
-          track={{
-            article,
-            product: product.name,
-            grade: product.grade,
-            placement: "product_card",
-            recommended: product.recommended,
-          }}
-        />
-      </div>
+
+      <AffiliateButton
+        href={product.affiliateUrl}
+        provider={product.provider}
+        track={{
+          article,
+          product: product.name,
+          grade: product.grade,
+          placement: "product_card",
+          recommended: product.recommended,
+        }}
+      />
     </div>
   );
 }

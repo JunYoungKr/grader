@@ -53,9 +53,11 @@ export function RecentlyViewed({
   return (
     <nav
       aria-label="최근 본 제품"
-      className={`rounded-lg border border-hairline bg-surface p-4 text-sm ${className}`}
+      className={`rounded-lg border border-hairline bg-paper p-4 text-sm ${className}`}
     >
-      <p className="mb-2 font-semibold">최근 본 제품</p>
+      <p className="mb-2.5 text-xs font-medium tracking-[0.04em] text-faint">
+        최근 본 제품
+      </p>
       <ul className="space-y-1.5">
         {items.map((i) => (
           <li key={i.slug}>

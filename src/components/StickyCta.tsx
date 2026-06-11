@@ -1,4 +1,6 @@
 import { AffiliateButton } from "./AffiliateButton";
+import { GradeBadge } from "./GradeBadge";
+import { formatPrice } from "@/lib/grade";
 import type { Product } from "@/lib/types";
 
 export function StickyCta({
@@ -9,18 +11,29 @@ export function StickyCta({
   article?: string;
 }) {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-hairline bg-paper p-3 md:hidden">
+    <div
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-hairline bg-paper px-4 pt-3 md:hidden"
+      style={{
+        boxShadow: "var(--shadow-lg)",
+        paddingBottom: "max(12px, env(safe-area-inset-bottom))",
+      }}
+    >
       <div className="mx-auto flex max-w-content items-center gap-3">
+        <GradeBadge grade={product.grade} />
         <div className="min-w-0 flex-1">
-          <div className="text-[11px] text-faint">1순위 추천</div>
-          <div className="truncate text-sm font-semibold">{product.name}</div>
+          <div className="truncate text-sm text-muted">
+            1순위 추천 · <span className="font-medium text-ink">{product.name}</span>
+          </div>
+          <div className="text-lg font-medium tabular-nums leading-tight">
+            {formatPrice(product.priceExample)}
+          </div>
         </div>
-        <div className="w-36 shrink-0">
+        <div className="w-32 shrink-0">
           <AffiliateButton
             href={product.affiliateUrl}
             provider={product.provider}
-            primary
-            label="추천 보기"
+            size="sm"
+            label="최저가 보기"
             track={{
               article,
               product: product.name,
