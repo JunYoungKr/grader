@@ -18,6 +18,7 @@ import { pepsiZeroLimeArticle } from "../src/content/products/pepsi-zero-lime";
 import { harimChickenBreastArticle } from "../src/content/products/harim-chicken-breast";
 import { kelloggsRealGranolaArticle } from "../src/content/products/kelloggs-real-granola";
 import { mynormalAlluloseArticle } from "../src/content/products/mynormal-allulose";
+import { ganongEggArticle } from "../src/content/products/ganong-egg";
 
 // .env.local 간이 로더 (의존성 없이)
 const envPath = resolve(import.meta.dirname ?? __dirname, "../.env.local");
@@ -35,6 +36,7 @@ const articles: Article[] = [
   harimChickenBreastArticle,
   kelloggsRealGranolaArticle,
   mynormalAlluloseArticle,
+  ganongEggArticle,
 ];
 
 const rows = articles.map((a, i) => ({
