@@ -23,8 +23,13 @@ import { DisclosureNote } from "@/components/DisclosureNote";
 import { RecordView, RecentlyViewed } from "@/components/RecentlyViewed";
 import { ArticleJsonLd } from "@/lib/jsonld";
 
-export function generateStaticParams() {
-  return getAllArticleSlugs().map((slug) => ({ slug }));
+// DB(ISR) — 어드민 저장 시 revalidatePath로 즉시 갱신. 새 slug도 빌드 없이 서빙.
+export const revalidate = 300;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const slugs = await getAllArticleSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -33,7 +38,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await getArticle(slug);
   if (!article) return {};
   return {
     title: article.title,
@@ -52,7 +57,7 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await getArticle(slug);
   if (!article) notFound();
 
   const category = getCategory(article.category);
