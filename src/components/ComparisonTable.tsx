@@ -20,8 +20,8 @@ export function ComparisonTable({
     <div className="overflow-hidden rounded-lg border border-hairline">
       <table className="w-full border-collapse text-sm">
         <thead>
-          <tr className="border-b border-hairline bg-surface text-left text-[13px] text-muted">
-            <th className="px-4 py-3 font-medium">등급</th>
+          <tr className="border-b border-hairline text-left text-xs text-faint">
+            <th className="px-4 py-3 font-medium">종합</th>
             <th className="px-4 py-3 font-medium">제품</th>
             {specLabels.map((l) => (
               <th key={l} className="px-4 py-3 font-medium">
@@ -44,8 +44,13 @@ export function ComparisonTable({
                   <GradeBadge grade={p.grade} size="sm" />
                 </td>
                 <td className="px-4 py-3">
-                  <div className={p.recommended ? "font-semibold" : "font-medium"}>
-                    {p.name}
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-medium">{p.name}</span>
+                    {p.recommended && (
+                      <span className="rounded-md bg-brand-soft px-1.5 py-px text-[11px] font-medium text-brand">
+                        PICK
+                      </span>
+                    )}
                   </div>
                   <div className="text-[13px] text-muted">{p.descriptor}</div>
                   <div className="mt-0.5">
@@ -58,19 +63,19 @@ export function ComparisonTable({
                   )}
                 </td>
                 {p.specs.map((s) => (
-                  <td key={s.label} className="px-4 py-3 tabular-nums">
+                  <td key={s.label} className="px-4 py-3 tabular-nums text-muted">
                     {s.value}
                   </td>
                 ))}
-                <td className="px-4 py-3 tabular-nums">
+                <td className="px-4 py-3 font-medium tabular-nums">
                   {formatPrice(p.priceExample)}
                 </td>
                 <td className="px-4 py-3">
-                  <div className="w-28">
+                  <div className="w-24">
                     <AffiliateButton
                       href={p.affiliateUrl}
                       provider={p.provider}
-                      primary={p.recommended}
+                      size="sm"
                       label="보기"
                       track={{
                         article,
