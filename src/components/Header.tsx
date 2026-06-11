@@ -21,8 +21,8 @@ export function Header() {
           </span>
           <span className="text-lg font-medium tracking-tight">{SITE_NAME}</span>
         </Link>
-        <div className="flex items-center gap-4">
-          <nav className="hidden gap-1 text-sm text-muted sm:flex">
+        <div className="flex min-w-0 items-center gap-4">
+          <nav className="flex gap-1 overflow-x-auto whitespace-nowrap text-sm text-muted">
             {categories.map((c) => (
               <Link
                 key={c.slug}

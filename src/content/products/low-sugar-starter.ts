@@ -8,7 +8,7 @@ import type { Article } from "@/lib/types";
 // 등급: 운영자 확정값(2026.06) — 역할 기준 평가, 펩시 S(추천)·나머지 A.
 export const lowSugarStarterArticle: Article = {
   slug: "low-sugar-pantry-starter-2026",
-  category: "diet",
+  category: "food",
   type: "comparison",
   medical: true,
   title: "저당·고단백 장보기 스타터 4종",
@@ -119,6 +119,12 @@ export const lowSugarStarterArticle: Article = {
         "당류·칼로리 등 구체적인 영양성분 수치는 제품 페이지의 영양성분표가 기준입니다. 이 글에는 제품명에 표기된 표시(제로 슈거, 저당·저칼로리)와 구성·가격만 기재했습니다.",
       ],
     },
+  ],
+  related: [
+    { slug: "pepsi-zero-lime", title: "펩시 제로슈거 라임향 — 칼로리 제로 탄산" },
+    { slug: "harim-chicken-breast", title: "하림 닭가슴살 냉장 1kg — 손질 닭가슴살" },
+    { slug: "kelloggs-real-granola", title: "켈로그 리얼 그래놀라 오리지널 — 그래놀라 시리얼" },
+    { slug: "mynormal-allulose", title: "마이노멀 저당 저칼로리 알룰로스 — 대체 감미료" },
   ],
   sources: [
     {
