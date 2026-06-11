@@ -36,9 +36,12 @@ function ArticleRow({ article }: { article: Article }) {
   );
 }
 
-export default function HomePage() {
+// DB(ISR) — 어드민 저장 시 revalidatePath로 즉시 갱신, 그 외 5분 주기
+export const revalidate = 300;
+
+export default async function HomePage() {
   const categories = getCategories();
-  const articles = getAllArticles();
+  const articles = await getAllArticles();
   return (
     <div className="mx-auto max-w-content px-5 py-12">
       <section className="max-w-2xl">

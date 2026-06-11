@@ -9,14 +9,29 @@ Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저
 
 ## 스택 & 명령어
 
-- Next.js 15 (App Router) · React 19 · TypeScript(strict) · Tailwind 3 · Vitest
+- Next.js 15 (App Router) · React 19 · TypeScript(strict) · Tailwind 3 · Vitest · **Supabase(콘텐츠 DB·어드민 인증)**
 - Node 18.18+ (권장 20+)
-- `npm install` → `npm run dev`(localhost:3000) → `npm run build`(정적 생성 검증)
+- `npm install` → `npm run dev`(localhost:3000) → `npm run build`
 - `npm run test` — Vitest 단위 테스트 (현재 `lib/explorer.ts` 순수 함수 커버)
+- `npm run seed:articles` — 코드 콘텐츠(src/content) → Supabase 시드 (`-- --dry`로 검증)
 - 폰트: Pretendard (런타임에 jsDelivr CDN 로드, `app/globals.css`의 @import)
 - 환경변수: `.env.local` (예시는 `.env.local.example`)
+  - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — 콘텐츠 읽기(RLS: published만)
+  - `SUPABASE_SERVICE_ROLE_KEY` — 어드민 쓰기·시드 (서버 전용, NEXT_PUBLIC 금지)
+  - `ADMIN_EMAILS` — `/admin` 허용 이메일(콤마 구분, Supabase Auth 계정 필요)
   - `NEXT_PUBLIC_SITE_URL` — 배포 도메인 (미설정 시 https://grader.co.kr)
   - `COUPANG_ACCESS_KEY` / `COUPANG_SECRET_KEY` — 쿠팡 파트너스 API
+
+## 콘텐츠 아키텍처 (2026-06 전환)
+
+- **글 = Supabase `articles` 테이블** (스키마: `supabase/schema.sql`, jsonb로 Article 1:1 매핑).
+  카테고리는 코드(`src/content/categories.ts`) — 거의 안 바뀜.
+- 공개 페이지는 ISR(`revalidate = 300`) + **어드민 저장 시 `revalidatePath`로 즉시 반영**.
+  새 slug도 빌드 없이 서빙(`dynamicParams`).
+- **어드민 `/admin`** — Supabase Auth(email/password) + `ADMIN_EMAILS` 허용 목록.
+  글 목록/편집/생성/삭제, 제품(가격·링크·등급) 구조화 편집. 쓰기는 service role(서버 액션)만, robots에서 차단.
+- `src/content/products/*.ts`는 **시드 원본**으로만 유지 — 앱이 직접 import하지 않음. 운영 데이터의 원천은 DB.
+- env 미설정 시 빈 목록 폴백(빌드는 통과) — 배포 전 Vercel에 env 4종 설정 필수.
 
 ## 반드시 지킬 원칙 (위반 시 사이트가 죽거나 신뢰를 잃음)
 
@@ -102,11 +117,11 @@ docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔
 
 ## 콘텐츠 추가 방법
 
-1. **비교 글(comparison)**: `src/content/products/<slug>.ts`에 `Article`(type: "comparison") 작성
-   → `lib/content.ts`의 `articles` 배열에 import 등록. `category`는 대분류 slug(`src/content/categories.ts`).
-2. **가이드(guide)**: `src/content/guides/<slug>.ts` (type: "guide", `sections` 사용) → 동일하게 등록.
-3. **허브(hub)**: `src/content/hubs/<slug>.ts` (type: "hub", `related`로 스포크 글 연결) → 등록.
-- 새 제휴처 추가: `lib/types.ts`의 `Provider`와 `lib/providers.ts`의 `PROVIDERS`에 항목 추가.
+- **기본: `/admin`에서 작성** — 새 글/수정/삭제 모두 어드민에서. 저장 즉시 사이트 반영.
+  comparison은 제품 필드(등급·가격·실링크) 구조화 입력, 섹션·배너 등은 JSON 입력.
+- 대량 작업·마이그레이션은 `scripts/seed-supabase.ts` 패턴으로 service role 업서트.
+- 새 제휴처 추가: `lib/types.ts`의 `Provider`와 `lib/providers.ts`의 `PROVIDERS`에 항목 추가
+  (어드민 폼의 셀렉트는 자동 반영 안 됨 — `ArticleForm.tsx`의 `PROVIDERS` 배열도 갱신).
 
 ## 교체해야 할 플레이스홀더
 
