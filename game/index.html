@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Centipede Express — 코어 물리 프로토타입</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0e1726; }
+    body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #dfe7f0; }
+    #stage { display: block; }
+
+    #title {
+      position: fixed; top: 14px; right: 18px; text-align: right;
+      pointer-events: none; user-select: none;
+    }
+    #title h1 { font-size: 15px; font-weight: 500; letter-spacing: 0.5px; }
+    #title p { font-size: 11px; opacity: 0.6; margin-top: 2px; }
+
+    #help {
+      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(8, 14, 24, 0.78); backdrop-filter: blur(3px); z-index: 10;
+    }
+    #help .card {
+      max-width: 620px; width: calc(100% - 48px); background: #16233a;
+      border: 1px solid #2a3b58; border-radius: 14px; padding: 28px 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    #help h2 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+    #help .sub { font-size: 13px; opacity: 0.6; margin-bottom: 18px; }
+    #help table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    #help td { padding: 5px 8px; vertical-align: top; }
+    #help td:first-child { white-space: nowrap; color: #ffd166; font-weight: 500; width: 42%; }
+    #help .goal { font-size: 13px; line-height: 1.6; opacity: 0.85; margin: 4px 0 18px; }
+    #help .close {
+      margin-top: 20px; display: inline-block; font-size: 13px; opacity: 0.6;
+    }
+    kbd {
+      background: #24344f; border: 1px solid #38507a; border-bottom-width: 2px;
+      border-radius: 5px; padding: 1px 6px; font-size: 12px; font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stage"></canvas>
+
+  <div id="title">
+    <h1>CENTIPEDE EXPRESS · 지네특급</h1>
+    <p>코어 물리 프로토타입 v0.1 — H 키로 도움말</p>
+  </div>
+
+  <div id="help">
+    <div class="card">
+      <h2>🐛 한 몸, 여러 뇌</h2>
+      <div class="sub">기획서 3.1 조종 구조 검증 — "몸이 하나로 묶여 있다"는 느낌이 재밌는지 확인</div>
+      <div class="goal">
+        지네의 마디들은 관절로 연결돼 서로를 물리적으로 당깁니다.
+        내 마디가 가려는 방향과 나머지 마디가 가려는 방향이 어긋나면
+        지네는 꼬이고, 뒤집히고, 등 위 화물은 날아갑니다.
+        <b>계단을 넘고 낭떠러지를 건너 오른쪽 도착 바닥까지</b> 화물을 지켜 가보세요.
+        혼자면 한 마디를 조종하고 나머지는 봇이 따라옵니다. <kbd>P</kbd>로 2인 로컬 협동.
+      </div>
+      <table>
+        <tr><td>P1 이동 / 점프 / 그립</td><td><kbd>A</kbd> <kbd>D</kbd> · <kbd>W</kbd>/<kbd>Space</kbd> · <kbd>S</kbd></td></tr>
+        <tr><td>P2 이동 / 점프 / 그립</td><td><kbd>←</kbd> <kbd>→</kbd> · <kbd>↑</kbd> · <kbd>↓</kbd> (<kbd>P</kbd>로 켜기)</td></tr>
+        <tr><td>P1이 조종할 마디</td><td><kbd>1</kbd> ~ <kbd>8</kbd></td></tr>
+        <tr><td>P2가 조종할 마디</td><td><kbd>[</kbd> <kbd>]</kbd></td></tr>
+        <tr><td>지네 길이 (2~8)</td><td><kbd>+</kbd> <kbd>-</kbd></td></tr>
+        <tr><td>리셋 / 화물 재배치</td><td><kbd>R</kbd> · <kbd>C</kbd></td></tr>
+        <tr><td>전원 자동주행 / 자가충돌</td><td><kbd>B</kbd> · <kbd>X</kbd> (카오스)</td></tr>
+      </table>
+      <div class="close">아무 키나 눌러 시작 · 언제든 <kbd>H</kbd></div>
+    </div>
+  </div>
+
+  <script src="vendor/matter.min.js"></script>
+  <script src="centipede.js"></script>
+  <script>
+    // 첫 입력 시 도움말 닫기
+    window.addEventListener('keydown', function once() {
+      document.getElementById('help').style.display = 'none';
+      window.removeEventListener('keydown', once);
+    });
+  </script>
+</body>
+</html>
