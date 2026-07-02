@@ -1,9 +1,9 @@
-# 사내 메신저 기획서 (v0.3)
+# 사내 메신저 기획서 (v0.4)
 
 > 작성일: 2026-07-02 · 상태: **전략 확정** (잔여 확인 항목 — [§12](#12-착수-전-확인-필요-사항) 참조)
 >
-> **확정 입력값(2026-07-02)**: 인원 **100~120명** · 개발·운영 리소스 **1인** · **Google Workspace 미보유** · 주력 사내 메일 = **메일플러그**.
-> → **최종 결정: 루트 C — 직접 개발 (사용자 결정)**. 클라이언트는 단일 React + Electron + Capacitor(§5), 백엔드는 §6, 3개 릴리스 단계 출시(§10). Zulip 안은 일정 지연 시 폴백(§10-B).
+> **확정 입력값(2026-07-02)**: 인원 **100~120명** · 개발·운영 리소스 **1인** · 주력 스택 **React + Spring Boot + MySQL** · **Google Workspace 미보유** · 주력 사내 메일 = **메일플러그**.
+> → **최종 결정: 루트 C — 직접 개발 (사용자 결정)**. 클라이언트는 단일 React + Electron + Capacitor(§5), 백엔드는 Spring Boot + MySQL(§6), 3개 릴리스 단계 출시(§10). Zulip 안은 일정 지연 시 폴백(§10-B).
 > Gmail 연동은 후순위로 강등(§7), SSO 기본안은 Authentik 자가호스팅, 조직도 마스터는 메일플러그/인트라넷.
 >
 > 이 문서의 모든 가격·정책·제한 수치는 2026-07-02 기준 웹 리서치로 수집하고,
@@ -14,7 +14,7 @@
 
 - **무엇을**: Slack/Discord를 벤치마크하되 **한국형 요구(읽음 확인·조직도·필독 공지)** 를 1급 기능으로 갖춘 사내 메신저.
   데스크톱(Electron)·모바일·태블릿 지원, **Gmail·메일플러그·인트라넷 연동**이 차별점.
-- **어떻게 (v0.3 확정)**: **직접 개발 — 루트 C (사용자 결정)**. 1인 개발이므로 UI를 한 벌만 만드는 **단일 React 웹 + Electron 데스크톱 + Capacitor 모바일/태블릿** 스택(§5)과 **Node WebSocket + PostgreSQL(+PGroonga 한국어 검색) + Cloudflare R2 + 자체 푸시(FCM v1·APNs)** 백엔드(§6)로, MVP를 **3개 릴리스(v1.0 웹·데스크톱 파일럿 → v1.1 모바일·푸시 → v1.2 한국형·연동)** 로 쪼개 출시한다(§10). 전사 오픈까지 전담 약 4~6개월, 병행 8~12개월.
+- **어떻게 (v0.4 확정)**: **직접 개발 — 루트 C (사용자 결정)**. 1인 개발이므로 UI를 한 벌만 만드는 **단일 React 웹 + Electron 데스크톱 + Capacitor 모바일/태블릿** 스택(§5)과 주력 스택 기준의 **Spring Boot(WebSocket/STOMP) + MySQL(ngram 한국어 검색) + Cloudflare R2 + 자체 푸시(FCM v1·APNs)** 백엔드(§6)로, MVP를 **3개 릴리스(v1.0 웹·데스크톱 파일럿 → v1.1 모바일·푸시 → v1.2 한국형·연동)** 로 쪼개 출시한다(§10). 전사 오픈까지 전담 약 4~6개월, 병행 8~12개월.
 - **비용**: 110명 기준 월 운영비 약 5~11만 원(서버+스토리지+도메인+애플 연회비 월할) + 연 고정비(애플 $99 + Windows OV 인증서 $220~320) 약 48~62만 원. 푸시는 자체 발송이라 변동비 0원.
 - **최대 리스크**: 1인이 전사 필수 인프라의 개발·운영을 겸임 — **스코프 가드레일(§10)**, 자동 백업·복구 리허설·운영 런북·관리자 2인 체계, 일정 지연 시 Zulip 임시 투입 폴백(§10-B)을 필수 항목으로 포함했다.
 
@@ -206,9 +206,9 @@ flowchart LR
   end
 
   subgraph vm1[앱 서버 VM — 서울 리전]
-    API[REST API + WebSocket<br/>Node.js]
-    PG[(PostgreSQL<br/>+ PGroonga)]
-    PUSH[푸시 프록시<br/>FCM v1 / APNs .p8]
+    API[REST API + WebSocket/STOMP<br/>Spring Boot]
+    PG[(MySQL 8<br/>+ ngram FTS)]
+    PUSH[푸시 발송<br/>FCM v1 / APNs .p8]
   end
 
   subgraph vm2[통화 서버 VM — Phase 2]
@@ -221,7 +221,7 @@ flowchart LR
   D & M & W <-->|WSS| API
   API --> PG
   API -->|사전서명 URL| R2
-  PG -->|pgBackRest| B2
+  PG -->|XtraBackup| B2
   API --> PUSH --> FCMAPNS[FCM / APNs]
   FCMAPNS -.-> M
   M & D & W <--> LK
@@ -238,16 +238,19 @@ flowchart LR
 
 ### 6-2. 스택 선정 근거
 
+> **v0.4 변경 — 주력 스택(React + Spring + MySQL) 확정 반영.** 이 규모에서 성능은 어떤 스택이든 남아돌므로(아래 근거), 1인 개발의 최우선 기준은 "제일 잘 다루고 장애 시 제일 빨리 고칠 수 있는 것" — 백엔드를 Spring Boot + MySQL로 확정한다. 프론트(TS)↔백엔드(Java) 타입 공유 단절은 **springdoc-openapi → openapi-generator로 TS API 클라이언트 코드젠**으로 메꾼다. JVM 메모리 특성상 앱 서버는 처음부터 4GB로 잡는다.
+
 | 계층 | 선택 | 근거(리서치 검증) |
 |---|---|---|
-| 실시간 | **자가 WebSocket(Node ws/Socket.IO)**, 단일 노드 | 300명 동시 접속은 Phoenix 단일 서버 벤치마크(200만 연결)의 0.02% — 성능이 아니라 운영 단순성이 기준. 단일 노드에서는 Redis 어댑터·스티키 세션 불필요(공식 문서). 관리형(Ably $29~/월, Pusher $49~/월)은 이 규모에서 비용만 추가 |
-| DB | **PostgreSQL 단일** | 300명 × 일 수천 건 = 연 수백만 행 — 단일 인스턴스로 충분. Redis는 서버 2대 확장 시점에 도입 |
-| 한국어 검색 | **PGroonga**(1순위) 또는 pg_bigm | **Postgres 기본 FTS는 한국어 형태소 미지원(검증됨)** — 처음부터 스키마에 반영. 별도 검색 서버(Meilisearch) 없이 DB 안에서 해결해 운영비 최소화 |
+| 실시간 | **Spring WebSocket(+STOMP)**, 단일 노드 | 300명 동시 접속은 Phoenix 단일 서버 벤치마크(200만 연결)의 0.02% — 성능이 아니라 운영 단순성·주력 스택이 기준. STOMP의 구독/브로드캐스트 모델이 채널 구조와 정합. Java 21 가상 스레드로 블로킹 모델도 충분. 관리형(Ably $29~/월, Pusher $49~/월)은 이 규모에서 비용만 추가 |
+| DB | **MySQL 8.x 단일** | 300명 × 일 수천 건 = 연 수백만 행 — 단일 인스턴스로 충분. utf8mb4 기본(이모지 반응 저장). Redis는 서버 2대 확장 시점에 도입 |
+| 한국어 검색 | **MySQL 내장 ngram 전문검색 파서** | Postgres 기본 FTS와 달리 MySQL은 CJK용 ngram 파서를 **내장**(5.7+) — 확장 설치 없이 한국어 바이그램 검색 가능. 단 형태소 분석은 아님(pg_bigm 동급) — 검색 품질 요구가 높아지면 Meilisearch를 추가하는 2단계 전략 |
 | 파일 | **Cloudflare R2** 원본 + **B2** 백업 | R2 이그레스 전량 무료·10GB 무료·$0.015/GB(검증됨) — 이미지 미리보기·다운로드 트래픽 걱정 제거. 사전서명 URL로 서버 대역폭 우회. **MinIO는 2025년 커뮤니티판 관리 콘솔 제거로 비권장(검증됨)** |
 | 푸시 | 자체 푸시 발송(FCM HTTP v1 서비스 계정 JSON + APNs .p8) | 변동비 0원 + Apple 연 $99 고정비(검증·정정됨 — FCM 레거시 서버 키는 폐지). 보안 옵션: **ID-only 푸시**(FCM/APNs에는 메시지 ID만, 본문은 앱이 사내 서버에서 조회) |
 | 음성/화상 | **LiveKit** self-host(앱 내장형이므로 SDK 중심인 LiveKit > 완성형 UI인 Jitsi) + **coturn** | 기업 방화벽/대칭 NAT에서 TURN 릴레이 의존이 높아 coturn 사실상 필수. 4코어/8GB에서 시작, Phase 2 |
 | 호스팅 | **서울 리전 VPS**(Lightsail·Vultr·iwinv) | Hetzner는 서울 리전 없음(RTT 문제)·2026년 30%+ 인상. NCP는 동급 대비 4~8배. **Oracle Always Free는 프로덕션 비권장**(2026-06 한도 반토막 2 OCPU/12GB + 유휴 회수 정책 — 검증됨) — 스테이징·외부 모니터링 노드로만 |
-| 운영 | pgBackRest→B2(증분·암호화·PITR) · Uptime Kuma(무료, 별도 위치) · Let's Encrypt | 전부 0원 |
+| 메일 연동 | **Jakarta Mail**(IMAP IDLE·POP3·SMTP) | Java의 메일 프로토콜 생태계가 가장 성숙 — 핵심 연동인 메일플러그 알림 봇(§7)에 유리 |
+| 운영 | XtraBackup(또는 mysqldump)→B2 · Uptime Kuma(무료, 별도 위치) · Let's Encrypt | 전부 0원 |
 
 ### 6-3. 데이터 모델 골격 (MVP)
 
@@ -257,7 +260,7 @@ org_units(id, parent_id, name, order)            -- 조직도(외부 동기화)
 channels(id, type: public|private|dm|group_dm|announce, name, ...)
 channel_members(channel_id, user_id, role, last_read_message_id)  -- 읽음 확인의 원천
 messages(id, channel_id, user_id, thread_root_id, content, created_at, ...)
-  + PGroonga 인덱스(content)
+  + FULLTEXT 인덱스(content) WITH PARSER ngram  -- MySQL 내장 한국어 바이그램
 reactions(message_id, user_id, emoji)
 files(id, message_id, r2_key, name, size, mime)
 announcements(id, message_id, must_read: bool)   -- 필독
@@ -339,6 +342,7 @@ audit_logs(actor, action, target, at)
 | **합계** | **약 3.0~4.7만 원** | **약 4.8만(통합)~11만(분리)** | **약 14.2~19만 원** |
 
 연 고정비 별도: Apple $99 + Windows OV 인증서 $220~320 + Play Console $25(일회성) ≈ **연 48~62만 원**.
+(v0.4: 백엔드가 Spring/JVM이므로 인원과 무관하게 앱 서버는 최소 4GB 권장 — 100~120명 기준 비용 변화 없음.)
 
 ### 8-2. SaaS 대비 (연간 결제 인당 월, 검증된 2026 가격)
 
@@ -379,10 +383,10 @@ audit_logs(actor, action, target, at)
 
 | 주차 | 작업 |
 |---|---|
-| 1~2 | 모노레포 셋업(pnpm + TypeScript), 백엔드 골격(Node — Fastify/NestJS + Socket.IO + PostgreSQL), 인증(이메일+비밀번호로 시작, OIDC는 v1.2), 데이터 모델(§6-3) 마이그레이션 |
+| 1~2 | 프론트 모노레포 셋업(pnpm + TypeScript) + 백엔드 골격(Spring Boot 3 + WebSocket/STOMP + MySQL), springdoc-openapi → TS API 클라이언트 코드젠 파이프라인, 인증(이메일+비밀번호로 시작, OIDC는 v1.2), 데이터 모델(§6-3) 마이그레이션(Flyway) |
 | 3~5 | 실시간 메시징 코어 — 전송·수신·**오프라인 캐치업(서버 부여 단조 증가 id + since_id 동기화)**, 채널(공개/비공개)/DM/그룹 DM UI, 멘션, 이모지 반응 |
 | 6~7 | 읽음 확인(last_read 포인터 + 명단 조회), 파일 업로드(R2 사전서명)+이미지 미리보기, 조직도 프로필(부서·직급 — 관리자 CSV 업로드로 시작) |
-| 8~10 | 검색(PGroonga), 인바운드 웹훅(인트라넷용), 관리자 v0(초대·비활성화·권한 3단계), **Electron 셸**(트레이·데스크톱 알림·딥링크·electron-updater 자동업데이트), 파일럿 1팀 오픈 |
+| 8~10 | 검색(MySQL ngram FULLTEXT), 인바운드 웹훅(인트라넷용), 관리자 v0(초대·비활성화·권한 3단계), **Electron 셸**(트레이·데스크톱 알림·딥링크·electron-updater 자동업데이트), 파일럿 1팀 오픈 |
 
 완료 기준: 파일럿 1팀(10명)이 데스크톱으로 상시 사용.
 
@@ -416,7 +420,7 @@ audit_logs(actor, action, target, at)
 4. 멀티테넌트·국제화·테마 같은 "언젠가 쓸" 일반화 금지 — 단일 조직 전용으로 하드코딩해도 된다.
 5. 매 릴리스를 실사용자에게 — **파일럿 없이 3개월 이상 개발만 하는 구간을 만들지 않는다.**
 
-**1인 운영 리스크 대응(필수)**: 자동 백업(pgBackRest→B2) + 복구 리허설 분기 1회 · 운영 런북(배포·복구·롤백 절차) 문서화 · 관리자 권한 2인 이상 부여(비개발자라도) · 서버 상태 페이지(Uptime Kuma, 외부 노드).
+**1인 운영 리스크 대응(필수)**: 자동 백업(XtraBackup→B2) + 복구 리허설 분기 1회 · 운영 런북(배포·복구·롤백 절차) 문서화 · 관리자 권한 2인 이상 부여(비개발자라도) · 서버 상태 페이지(Uptime Kuma, 외부 노드).
 
 ### §10-B. 폴백 — 일정이 밀리면
 
