@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Centipede Express — 3D 코어 물리 프로토타입</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #dff0f7; }
+    body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #23364d; }
+    #stage { display: block; }
+
+    #title {
+      position: fixed; top: 14px; right: 18px; text-align: right;
+      pointer-events: none; user-select: none;
+    }
+    #title h1 { font-size: 15px; font-weight: 500; letter-spacing: 0.5px; }
+    #title p { font-size: 11px; opacity: 0.65; margin-top: 2px; }
+
+    #hud {
+      position: fixed; top: 16px; left: 20px; pointer-events: none; user-select: none;
+    }
+    #hud .label { font-size: 12.5px; margin-bottom: 4px; opacity: 0.85; }
+    #synergy-track {
+      width: 220px; height: 14px; background: rgba(35, 54, 77, 0.15);
+      border-radius: 7px; overflow: hidden;
+    }
+    #synergy-bar { height: 100%; width: 0; border-radius: 7px; transition: width 80ms linear; }
+    #status { font-size: 13px; margin-top: 8px; }
+
+    #toast {
+      position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
+      background: rgba(35, 54, 77, 0.88); color: #f2f7fb; font-size: 15px;
+      padding: 10px 20px; border-radius: 10px; opacity: 0;
+      transition: opacity 300ms ease; pointer-events: none; white-space: nowrap;
+    }
+
+    #hint {
+      position: fixed; bottom: 12px; left: 0; right: 0; text-align: center;
+      font-size: 12px; opacity: 0.7; pointer-events: none; user-select: none;
+    }
+
+    #help {
+      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(20, 32, 48, 0.55); backdrop-filter: blur(3px); z-index: 10;
+    }
+    #help .card {
+      max-width: 660px; width: calc(100% - 48px); background: #ffffff;
+      border-radius: 16px; padding: 28px 32px;
+      box-shadow: 0 24px 70px rgba(15, 30, 50, 0.35);
+    }
+    #help h2 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+    #help .sub { font-size: 13px; opacity: 0.6; margin-bottom: 16px; }
+    #help table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    #help td { padding: 5px 8px; vertical-align: top; }
+    #help td:first-child { white-space: nowrap; color: #b07716; font-weight: 500; width: 40%; }
+    #help .goal { font-size: 13px; line-height: 1.65; opacity: 0.9; margin: 4px 0 16px; }
+    #help .close { margin-top: 18px; display: inline-block; font-size: 13px; opacity: 0.6; }
+    kbd {
+      background: #eef3f8; border: 1px solid #c8d6e4; border-bottom-width: 2px;
+      border-radius: 5px; padding: 1px 6px; font-size: 12px; font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stage"></canvas>
+
+  <div id="title">
+    <h1>CENTIPEDE EXPRESS · 지네특급</h1>
+    <p>3D 코어 물리 프로토타입 v0.2 — H 키로 도움말</p>
+  </div>
+
+  <div id="hud">
+    <div class="label">시너지(정렬)</div>
+    <div id="synergy-track"><div id="synergy-bar"></div></div>
+    <div id="status"></div>
+  </div>
+
+  <div id="toast"></div>
+
+  <div id="hint">
+    P1: WASD 이동 · Space 점프 · L-Shift 그립 · Q 웅크리기 &nbsp;|&nbsp;
+    P2: 방향키 · Enter · R-Shift · . (P로 켜기) &nbsp;|&nbsp;
+    1~8 P1마디 · [ ] P2마디 · +/- 길이 · R 리셋 · C 화물 · B 자동 · X 자가충돌 · H 도움말
+  </div>
+
+  <div id="help">
+    <div class="card">
+      <h2>🐛 한 몸, 여러 뇌 — 이제 3D</h2>
+      <div class="sub">기획서 3.1 조종 구조 검증 — "몸이 하나로 묶여 있다"는 느낌이 재밌는지 확인</div>
+      <div class="goal">
+        지네의 마디들은 관절로 연결돼 서로를 물리적으로 당깁니다.
+        내 마디가 가려는 방향과 나머지가 어긋나면 지네는 꼬이고, 뒤집히고, 등 위 화물은 날아갑니다.
+        <b>계단을 오르고, 낭떠러지를 달려 점프하고, 좁은 외나무 다리를 건너 깃발까지</b> 화물을 지켜 가보세요.
+        옆이나 아래로 떨어지면 즉시 재배송. 혼자면 한 마디만 조종하고 나머지는 봇이 협력합니다.
+        <kbd>P</kbd>로 2인 로컬 협동.
+      </div>
+      <table>
+        <tr><td>P1 이동 / 점프</td><td><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> · <kbd>Space</kbd></td></tr>
+        <tr><td>P1 그립(앵커) / 웅크리기</td><td><kbd>L-Shift</kbd> · <kbd>Q</kbd></td></tr>
+        <tr><td>P2 이동 / 점프</td><td><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> · <kbd>Enter</kbd> (<kbd>P</kbd>로 켜기)</td></tr>
+        <tr><td>P2 그립 / 웅크리기</td><td><kbd>R-Shift</kbd> · <kbd>.</kbd></td></tr>
+        <tr><td>P1 / P2가 조종할 마디</td><td><kbd>1</kbd>~<kbd>8</kbd> / <kbd>[</kbd> <kbd>]</kbd></td></tr>
+        <tr><td>지네 길이 (2~8)</td><td><kbd>+</kbd> <kbd>-</kbd></td></tr>
+        <tr><td>리셋 / 화물 재배치</td><td><kbd>R</kbd> · <kbd>C</kbd></td></tr>
+        <tr><td>자동주행 데모 / 자가충돌</td><td><kbd>B</kbd> · <kbd>X</kbd></td></tr>
+      </table>
+      <div class="close">아무 키나 눌러 시작 · 언제든 <kbd>H</kbd></div>
+    </div>
+  </div>
+
+  <script src="vendor/libs.js"></script>
+  <script src="centipede3d.js"></script>
+  <script>
+    window.addEventListener('keydown', function once() {
+      document.getElementById('help').style.display = 'none';
+      window.removeEventListener('keydown', once);
+    });
+  </script>
+</body>
+</html>
