@@ -1,11 +1,8 @@
 "use client";
 
-import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import {
-  GA_ID,
-  GA_DEBUG,
   gaEnabled,
   trackSelectItem,
   trackSelectPromotion,
@@ -50,17 +47,5 @@ export function Analytics() {
     return () => document.removeEventListener("click", onClick, { capture: true });
   }, [isAdmin]);
 
-  if (!gaEnabled || isAdmin) return null;
-
-  return (
-    <>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-        strategy="afterInteractive"
-      />
-      <Script id="ga-init" strategy="afterInteractive">
-        {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${GA_ID}',{debug_mode:${GA_DEBUG}});`}
-      </Script>
-    </>
-  );
+  return null;
 }
