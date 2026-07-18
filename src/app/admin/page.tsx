@@ -119,7 +119,7 @@ function Login({ error }: { error?: string }) {
             비밀번호가 올바르지 않습니다.
           </p>
         )}
-        <form action="/admin/login" method="post" className="mt-6 space-y-4">
+        <form action="/admin/session" method="post" className="mt-6 space-y-4">
           <label className="block text-sm font-medium" htmlFor="admin-password">
             비밀번호
           </label>
@@ -407,6 +407,12 @@ function Dashboard({
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <a
+            href="/admin/content"
+            className="rounded-lg border border-hairline px-3 py-2 text-sm font-medium"
+          >
+            글 관리
+          </a>
           <form method="get" action="/admin" className="flex gap-2">
             <select name="range" defaultValue={String(range)} className="rounded-lg border border-hairline bg-paper px-3 py-2 text-sm">
               <option value="7">최근 7일</option>

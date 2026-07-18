@@ -9,14 +9,30 @@ Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저
 
 ## 스택 & 명령어
 
-- Next.js 15 (App Router) · React 19 · TypeScript(strict) · Tailwind 3 · Vitest
+- Next.js 15 (App Router) · React 19 · TypeScript(strict) · Tailwind 3 · Vitest · **Supabase(콘텐츠 DB·어드민 인증)**
 - Node 18.18+ (권장 20+)
-- `npm install` → `npm run dev`(localhost:3000) → `npm run build`(정적 생성 검증)
-- `npm run test` — Vitest 단위 테스트 (`lib/explorer.ts`, `lib/coupang.ts` 커버)
+- `npm install` → `npm run dev`(localhost:3000) → `npm run build`
+- `npm run test` — Vitest 단위 테스트 (`explorer`, `coupang`, `popular-products`, `admin-auth`, `ga4-admin`)
+- `npm run seed:articles` — 코드 콘텐츠(src/content) → Supabase 시드 (`-- --dry`로 검증)
+- `npm run build:coupang` / `npm run sync:coupang` — 쿠팡 초안 생성·인기 상품 스냅샷 갱신
 - 폰트: Pretendard (런타임에 jsDelivr CDN 로드, `app/globals.css`의 @import)
 - 환경변수: `.env.local` (예시는 `.env.local.example`)
+  - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — 콘텐츠 읽기(RLS: published만)
+  - `SUPABASE_SERVICE_ROLE_KEY` — 어드민 쓰기·시드 (서버 전용, NEXT_PUBLIC 금지)
+  - `ADMIN_EMAILS` — `/admin/content` 허용 이메일(콤마 구분, Supabase Auth 계정 필요)
   - `NEXT_PUBLIC_SITE_URL` — 배포 도메인 (미설정 시 https://grader.co.kr)
   - `COUPANG_ACCESS_KEY` / `COUPANG_SECRET_KEY` — 쿠팡 파트너스 API
+
+## 콘텐츠 아키텍처 (2026-06 전환)
+
+- **글 = Supabase `articles` 테이블** (스키마: `supabase/schema.sql`, jsonb로 Article 1:1 매핑).
+  카테고리는 코드(`src/content/categories.ts`) — 거의 안 바뀜.
+- 공개 페이지는 ISR(`revalidate = 300`) + **어드민 저장 시 `revalidatePath`로 즉시 반영**.
+  새 slug도 빌드 없이 서빙(`dynamicParams`).
+- **콘텐츠 어드민 `/admin/content`** — Supabase Auth(email/password) + `ADMIN_EMAILS` 허용 목록.
+  글 목록/편집/생성/삭제, 제품(가격·링크·등급) 구조화 편집. 쓰기는 service role(서버 액션)만, robots에서 차단.
+- `src/content/products/*.ts`는 **시드 원본**으로만 유지 — 앱이 직접 import하지 않음. 운영 데이터의 원천은 DB.
+- env 미설정 시 빈 목록 폴백(빌드는 통과) — 배포 전 Vercel에 env 4종 설정 필수.
 
 ## 반드시 지킬 원칙 (위반 시 사이트가 죽거나 신뢰를 잃음)
 
@@ -28,8 +44,9 @@ Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저
    분량 채우기용 패딩 금지 — 길이는 실제 비교 깊이로만.
 4. **제휴 고지 유지.** 글에 쓰인 제휴처에 맞는 공정위 고지 자동 노출(`DisclosureNote`).
    모든 제휴 링크는 `rel="sponsored nofollow noopener"` (`AffiliateButton`이 처리).
-5. **디자인 토큰 일원화.** 색은 `app/globals.css`의 CSS 변수 + `tailwind.config.ts` 토큰,
-   등급색은 `lib/grade.ts`, 제휴처 설정은 `lib/providers.ts`에서만 관리. 하드코딩 금지.
+5. **디자인 토큰 일원화.** 색은 `app/globals.css`의 CSS 변수(시맨틱 9색 + 등급 `--grade-*`, 라이트/다크 두 벌)
+   + `tailwind.config.ts` 토큰. `lib/grade.ts`는 등급 토큰 참조·라벨만, 제휴처 설정은 `lib/providers.ts`. 하드코딩 금지.
+   (2026.06 Claude Design 핸드오프 기준 — 브랜드 네이비, 폰트 굵기 400/500만, 그림자는 고정 CTA 전용)
 6. **답-우선 레이아웃 유지.** 글 상단 요약(SummaryBox) → 목차(TOC) → 등급표, 상세는 아래로.
    모바일 하단 고정 CTA(StickyCta) 유지.
 
@@ -105,17 +122,15 @@ docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔
 
 ## 콘텐츠 추가 방법
 
-1. **비교 글(comparison)**: `src/content/products/<slug>.ts`에 `Article`(type: "comparison") 작성
-   → `lib/content.ts`의 `articles` 배열에 import 등록. `category`는 대분류 slug(`src/content/categories.ts`).
-   쿠팡 검색 결과로 안전한 초안을 만들 때는 `npm run build:coupang -- --slug <slug> --category <category> --keyword "<키워드>"` 실행
-   → 생성된 `<slug>.draft.ts`의 등급·스펙·설명을 1차 출처로 검수한 뒤 파일명 변경 및 수동 등록.
-2. **가이드(guide)**: `src/content/guides/<slug>.ts` (type: "guide", `sections` 사용) → 동일하게 등록.
-3. **허브(hub)**: `src/content/hubs/<slug>.ts` (type: "hub", `related`로 스포크 글 연결) → 등록.
-- 새 제휴처 추가: `lib/types.ts`의 `Provider`와 `lib/providers.ts`의 `PROVIDERS`에 항목 추가.
+- **기본: `/admin/content`에서 작성** — 새 글/수정/삭제 모두 어드민에서. 저장 즉시 사이트 반영.
+  comparison은 제품 필드(등급·가격·실링크) 구조화 입력, 섹션·배너 등은 JSON 입력.
+- 대량 작업·마이그레이션은 `scripts/seed-supabase.ts` 패턴으로 service role 업서트.
+- 새 제휴처 추가: `lib/types.ts`의 `Provider`와 `lib/providers.ts`의 `PROVIDERS`에 항목 추가
+  (어드민 폼의 셀렉트는 자동 반영 안 됨 — `ArticleForm.tsx`의 `PROVIDERS` 배열도 갱신).
 
 ## 교체해야 할 플레이스홀더
 
-- 모든 `affiliateUrl: "#"` → 실제 추적 링크 (쿠팡은 `createDeeplinks()`로 생성). 현재 stroller/lotion/newborn-diaper 11곳.
+- `affiliateUrl: "#"` 금지 — 현재 등록 글은 전부 실제 파트너스 추적 링크. 새 글도 실링크만(쿠팡은 대시보드 또는 `createDeeplinks()`).
 - `priceExample` → 실제 가격(조회 시점 명시)
 - `OPERATOR_NAME`(`lib/site.ts`) → 운영자 실명 (about 페이지에 노출, E-E-A-T)
 - `CONTACT_EMAIL`(`lib/site.ts`) → 실제 문의 메일 (푸터·about·privacy에서 공용)
@@ -125,7 +140,7 @@ docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔
 
 - ~~`/about`·`/privacy` 페이지~~ — 평가 방법론·등급 기준·면책·처리방침 구현. **운영자 실명(`OPERATOR_NAME`)만 교체 남음.**
 - ~~인터랙티브 비교 엔진~~ — `lib/explorer.ts`(순수 함수+테스트) + `ComparisonExplorer`/`FilterPanel`/`MatchBadge`.
-  `attributes` 있는 글만 적용(현재 stroller 글이 데모). **lotion·newborn-diaper에 attributes 백필 필요.**
+  `attributes` 있는 글만 적용 — 현재 대상 글이 없어 휴면 상태. 비교 글 작성 시 attributes 백필로 활성화.
 - ~~쿠팡 상품 초안 생성기~~ — `scripts/build-from-coupang.ts`. 공식 검색 API 결과의 상품명·이미지·가격·배송·제휴 URL만
   반영하며 등급·스펙은 `TODO`로 남긴다. 기본 출력은 `.draft.ts`이고 자동 발행/등록하지 않는다.
 - ~~상품 전환 UI 보강~~ — 이미지·가격 조회일·로켓/무료배송 표시, 필터 결과 1위와 연동되는 모바일 고정 CTA.

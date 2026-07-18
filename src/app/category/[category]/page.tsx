@@ -21,6 +21,9 @@ const TYPE_LABEL: Record<Article["type"], string> = {
   hub: "종합 가이드",
 };
 
+// DB(ISR) — 어드민 저장 시 revalidatePath로 즉시 갱신
+export const revalidate = 300;
+
 export function generateStaticParams() {
   return getCategories().map((c) => ({ category: c.slug }));
 }
@@ -44,7 +47,7 @@ export default async function CategoryPage({
   const { category } = await params;
   const cat = getCategory(category);
   if (!cat) notFound();
-  const articles = getArticlesByCategory(category);
+  const articles = await getArticlesByCategory(category);
   const popularProducts = getPopularProducts(category);
   const generatedAt = getPopularProductsGeneratedAt();
   const checkedAt = popularProducts[0]?.priceCheckedAt;

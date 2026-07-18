@@ -13,12 +13,13 @@ export function ComparisonCards({
 }) {
   return (
     <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-      {products.map((p) => (
+      {products.map((p, i) => (
         <ProductCard
           key={p.id}
           product={p}
           article={article}
           match={matchMap?.[p.id]}
+          rank={i + 1}
         />
       ))}
     </div>

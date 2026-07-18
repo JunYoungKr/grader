@@ -36,14 +36,17 @@ function ArticleRow({ article }: { article: Article }) {
   );
 }
 
-export default function HomePage() {
+// DB(ISR) — 어드민 저장 시 revalidatePath로 즉시 갱신, 그 외 5분 주기
+export const revalidate = 300;
+
+export default async function HomePage() {
   const categories = getCategories();
-  const articles = getAllArticles();
+  const articles = await getAllArticles();
   return (
     <div className="mx-auto max-w-content px-5 py-12">
       <section className="max-w-2xl">
         <MethodologyStrip />
-        <h1 className="mt-3 text-4xl font-semibold leading-tight tracking-tight">
+        <h1 className="mt-3 text-4xl font-medium leading-tight tracking-tight">
           사야 할 제품, 등급으로 빠르게 비교하세요
         </h1>
         <p className="mt-3 text-[15px] leading-relaxed text-muted">
@@ -55,7 +58,7 @@ export default function HomePage() {
       <RecentlyViewed className="mt-10" />
 
       <section className="mt-10">
-        <h2 className="text-lg font-semibold">카테고리</h2>
+        <h2 className="text-lg font-medium">카테고리</h2>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((c) => (
             <Link
@@ -71,7 +74,7 @@ export default function HomePage() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-lg font-semibold">최신 글</h2>
+        <h2 className="text-lg font-medium">최신 글</h2>
         {articles.length === 0 ? (
           <p className="mt-4 text-[15px] text-muted">
             아직 등록된 글이 없습니다. 카테고리별 비교 글을 준비 중입니다.

@@ -9,7 +9,9 @@ export function DisclosureNote({
   className?: string;
 }) {
   return (
-    <p className={`text-xs leading-relaxed text-faint ${className}`}>
+    <p
+      className={`rounded-lg bg-surface p-4 text-xs leading-relaxed text-faint ${className}`}
+    >
       {buildDisclosure(providers)}
     </p>
   );

@@ -5,6 +5,7 @@ import {
   verifyAdminPassword,
 } from "@/lib/admin-auth";
 
+// Password session for the GA4 dashboard (separate from Supabase content auth).
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const password = String(formData.get("password") ?? "");

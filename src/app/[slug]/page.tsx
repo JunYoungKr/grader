@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getArticle, getAllArticleSlugs, getCategory } from "@/lib/content";
 import { uniqueProviders } from "@/lib/providers";
+import { formatPrice } from "@/lib/grade";
+import { GradeBadge } from "@/components/GradeBadge";
+import { AffiliateButton } from "@/components/AffiliateButton";
 import { MethodologyStrip } from "@/components/MethodologyStrip";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 import { SummaryBox } from "@/components/SummaryBox";
@@ -20,8 +23,13 @@ import { DisclosureNote } from "@/components/DisclosureNote";
 import { RecordView, RecentlyViewed } from "@/components/RecentlyViewed";
 import { ArticleJsonLd } from "@/lib/jsonld";
 
-export function generateStaticParams() {
-  return getAllArticleSlugs().map((slug) => ({ slug }));
+// DB(ISR) — 어드민 저장 시 revalidatePath로 즉시 갱신. 새 slug도 빌드 없이 서빙.
+export const revalidate = 300;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const slugs = await getAllArticleSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -30,7 +38,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await getArticle(slug);
   if (!article) return {};
   return {
     title: article.title,
@@ -49,7 +57,7 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await getArticle(slug);
   if (!article) notFound();
 
   const category = getCategory(article.category);
@@ -81,18 +89,21 @@ export default async function ArticlePage({
         <div className="min-w-0">
           <MethodologyStrip />
           {category && <p className="mt-3 text-sm text-muted">{category.name}</p>}
-          <h1 className="mt-1 text-3xl font-semibold leading-tight tracking-tight">
+          <h1 className="mt-1 text-3xl font-medium leading-tight tracking-tight">
             {article.title}
           </h1>
           <p className="mt-3 text-[15px] leading-relaxed text-muted">
             {article.description}
+          </p>
+          <p className="mt-2 text-xs text-faint">
+            {article.updated} 기준{providers.length > 0 && " · 제휴 링크 포함"}
           </p>
           {providers.length > 0 && (
             <DisclosureNote providers={providers} className="mt-3 max-w-3xl" />
           )}
 
           {article.type === "comparison" && (
-            <div className="mt-6 grid grid-cols-3 gap-3">
+            <div className="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-hairline bg-hairline">
               <MetricCard label="비교 제품" value={`${products.length}종`} />
               <MetricCard label="평가 축" value={`${article.axes?.length ?? 0}개`} />
               <MetricCard label="갱신" value={article.updated} />
@@ -112,7 +123,7 @@ export default async function ArticlePage({
 
           {article.checklist && (
             <section id="checklist" className="mt-10 scroll-mt-24">
-              <h2 className="text-lg font-semibold">품목별 권장 수량</h2>
+              <h2 className="text-lg font-medium">품목별 권장 수량</h2>
               <div className="mt-3">
                 <ChecklistTable items={article.checklist.items} />
               </div>
@@ -151,7 +162,7 @@ export default async function ArticlePage({
 
               {article.axes?.length ? (
                 <section id="axes" className="mt-12 scroll-mt-24">
-                  <h2 className="text-lg font-semibold">평가 기준</h2>
+                  <h2 className="text-lg font-medium">평가 기준</h2>
                   <dl className="mt-3 divide-y divide-hairline border-y border-hairline">
                     {article.axes.map((a) => (
                       <div key={a.label} className="flex gap-4 py-3">
@@ -169,7 +180,7 @@ export default async function ArticlePage({
 
           {(article.sections ?? []).map((s, i) => (
             <section key={i} id={`sec-${i}`} className="mt-12 scroll-mt-24">
-              <h2 className="text-lg font-semibold">{s.heading}</h2>
+              <h2 className="text-lg font-medium">{s.heading}</h2>
               {s.paragraphs.map((p, j) => (
                 <p key={j} className="mt-3 text-[15px] leading-relaxed">
                   {p}
@@ -188,10 +199,39 @@ export default async function ArticlePage({
 
         </div>
 
-        {/* 데스크톱: 우측 sticky 사이드바 — 목차 + 최근 본 제품 */}
+        {/* 데스크톱: 우측 sticky 사이드바 — 목차 + 1순위 추천 + 최근 본 제품 */}
         <aside className="hidden lg:block">
-          <div className="sticky top-8 space-y-6">
+          <div className="sticky top-[76px] space-y-4">
             <TableOfContents items={toc} article={slug} />
+            {article.type === "comparison" && recommended && (
+              <div className="rounded-lg border border-hairline bg-paper p-4">
+                <p className="text-xs font-medium tracking-[0.04em] text-faint">
+                  1순위 추천
+                </p>
+                <div className="mt-2.5 flex items-center gap-2.5">
+                  <GradeBadge grade={recommended.grade} />
+                  <span className="min-w-0 truncate text-sm font-medium">
+                    {recommended.name}
+                  </span>
+                </div>
+                <p className="mt-2 text-lg font-medium tabular-nums">
+                  {formatPrice(recommended.priceExample)}
+                </p>
+                <div className="mt-3">
+                  <AffiliateButton
+                    href={recommended.affiliateUrl}
+                    provider={recommended.provider}
+                    track={{
+                      article: slug,
+                      product: recommended.name,
+                      grade: recommended.grade,
+                      placement: "sidebar_cta",
+                      recommended: true,
+                    }}
+                  />
+                </div>
+              </div>
+            )}
             <RecentlyViewed currentSlug={slug} />
           </div>
         </aside>

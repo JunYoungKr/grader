@@ -18,49 +18,55 @@ export function ProductCard({
   product,
   article,
   match,
+  rank,
 }: {
   product: Product;
   article?: string;
   match?: MatchInfo;
+  rank?: number;
 }) {
-  const ring = product.recommended
-    ? "border-2 border-brand"
-    : "border border-hairline";
   const priceCheckedLabel = checkedAtLabel(product.priceCheckedAt);
   return (
-    <div className={`relative rounded-lg bg-surface p-[1.1rem] ${ring}`}>
-      {product.recommended && (
-        <span className="absolute -top-3 left-3.5 rounded-md bg-brand-soft px-2.5 py-[3px] text-xs font-medium text-brand">
-          종합 추천
-        </span>
-      )}
-      <div className="mb-2.5 flex items-center justify-between">
+    <div className="flex flex-col gap-3 rounded-xl border border-hairline bg-paper p-4">
+      <div className="flex items-start gap-3">
         <GradeBadge grade={product.grade} />
-        <span className="text-xs text-faint">{product.type}</span>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5 text-xs text-faint">
+            <span>{product.type}</span>
+            {product.recommended && (
+              <span className="rounded-md bg-brand-soft px-2 py-px font-medium text-brand">
+                에디터 PICK
+              </span>
+            )}
+          </div>
+          <p className="mt-0.5 text-lg font-medium leading-snug">{product.name}</p>
+        </div>
+        {rank !== undefined && (
+          <span className="shrink-0 rounded-full bg-ink px-2 py-0.5 text-xs font-medium leading-relaxed text-paper">
+            {rank}위
+          </span>
+        )}
       </div>
+
       {product.imageUrl && (
-        <div className="mb-3 flex justify-center">
+        <div className="flex justify-center rounded-lg bg-surface p-2">
           <ProductImage product={product} size={180} />
         </div>
       )}
-      <p className="text-base font-medium">{product.name}</p>
-      <p className="mt-0.5 text-[13px] leading-relaxed text-muted">
-        {product.descriptor}
-      </p>
-      {match && (
-        <div className="mt-2">
-          <MatchBadge info={match} />
-        </div>
-      )}
-      <dl className="mt-3 space-y-1.5 border-t border-hairline pt-2.5 text-[13px]">
+
+      {match && <MatchBadge info={match} />}
+
+      <p className="text-sm leading-relaxed text-muted">{product.descriptor}</p>
+
+      <dl className="space-y-1.5 border-t border-hairline pt-2.5 text-xs text-faint">
         {product.specs.map((s) => (
-          <div key={s.label} className="flex justify-between">
-            <dt className="text-muted">{s.label}</dt>
-            <dd className="tabular-nums">{s.value}</dd>
+          <div key={s.label} className="flex justify-between gap-3">
+            <dt>{s.label}</dt>
+            <dd className="text-right tabular-nums text-muted">{s.value}</dd>
           </div>
         ))}
         <div className="flex justify-between">
-          <dt className="text-muted">조회 가격</dt>
+          <dt>조회 가격</dt>
           <dd className="text-right tabular-nums">
             <span>{formatPrice(product.priceExample)}</span>
             {priceCheckedLabel && (
@@ -71,7 +77,8 @@ export function ProductCard({
           </dd>
         </div>
       </dl>
-      <div className="mt-3 flex flex-wrap items-center gap-1.5">
+
+      <div className="flex flex-wrap items-center gap-1.5">
         <ProviderTag provider={product.provider} />
         {product.isRocket && (
           <span className="rounded-md bg-brand-soft px-2 py-0.5 text-[11px] font-medium text-brand">
@@ -84,23 +91,21 @@ export function ProductCard({
           </span>
         )}
       </div>
-      <div className="mt-1.5">
-        <AffiliateButton
-          href={product.affiliateUrl}
-          provider={product.provider}
-          primary={product.recommended}
-          track={{
-            article,
-            productId: product.coupangProductId ?? product.id,
-            product: product.name,
-            grade: product.grade,
-            price: product.priceExample,
-            placement: "product_card",
-            recommended: product.recommended,
-          }}
-        />
-      </div>
-      <p className="mt-2 text-[11px] leading-relaxed text-faint">
+
+      <AffiliateButton
+        href={product.affiliateUrl}
+        provider={product.provider}
+        track={{
+          article,
+          productId: product.coupangProductId ?? product.id,
+          product: product.name,
+          grade: product.grade,
+          price: product.priceExample,
+          placement: "product_card",
+          recommended: product.recommended,
+        }}
+      />
+      <p className="text-[11px] leading-relaxed text-faint">
         가격과 재고는 쿠팡에서 변경될 수 있습니다.
       </p>
     </div>
