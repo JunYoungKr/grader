@@ -1,32 +1,25 @@
 "use client";
 
 import Script from "next/script";
-import { usePathname, useSearchParams } from "next/navigation";
-import { Suspense, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import {
   GA_ID,
+  GA_DEBUG,
   gaEnabled,
-  pageview,
   trackSelectItem,
+  trackSelectPromotion,
   trackTocClick,
 } from "@/lib/gtag";
 import type { Grade, Provider } from "@/lib/types";
 
-// 라우트 변경마다 페이지뷰 전송 (App Router는 수동). useSearchParams는 Suspense 필요.
-function PageviewTracker() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    const qs = searchParams?.toString();
-    pageview(qs ? `${pathname}?${qs}` : pathname);
-  }, [pathname, searchParams]);
-  return null;
-}
-
 export function Analytics() {
+  const pathname = usePathname();
+  const isAdmin = pathname.startsWith("/admin");
+
   // 클릭 위임: data-ga 속성이 달린 링크 하나만 듣는다 → 컴포넌트는 서버로 유지.
   useEffect(() => {
-    if (!gaEnabled) return;
+    if (!gaEnabled || isAdmin) return;
     function onClick(e: MouseEvent) {
       const el = (e.target as Element | null)?.closest?.("a[data-ga]");
       if (!(el instanceof HTMLElement)) return;
@@ -34,11 +27,20 @@ export function Analytics() {
       if (d.ga === "affiliate") {
         trackSelectItem({
           article: d.gaArticle,
+          productId: d.gaProductId,
           product: d.gaProduct,
           grade: d.gaGrade as Grade | undefined,
+          category: d.gaCategory,
+          price: d.gaPrice ? Number(d.gaPrice) : undefined,
           provider: d.gaProvider as Provider | undefined,
           placement: d.gaPlacement,
           recommended: d.gaRecommended === "true",
+        });
+      } else if (d.ga === "promotion") {
+        trackSelectPromotion({
+          article: d.gaArticle,
+          name: d.gaPromotionName,
+          provider: d.gaProvider as Provider | undefined,
         });
       } else if (d.ga === "toc") {
         trackTocClick(d.gaTarget ?? "", d.gaArticle);
@@ -46,9 +48,9 @@ export function Analytics() {
     }
     document.addEventListener("click", onClick, { capture: true });
     return () => document.removeEventListener("click", onClick, { capture: true });
-  }, []);
+  }, [isAdmin]);
 
-  if (!gaEnabled) return null;
+  if (!gaEnabled || isAdmin) return null;
 
   return (
     <>
@@ -57,11 +59,8 @@ export function Analytics() {
         strategy="afterInteractive"
       />
       <Script id="ga-init" strategy="afterInteractive">
-        {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:false});`}
+        {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${GA_ID}',{debug_mode:${GA_DEBUG}});`}
       </Script>
-      <Suspense fallback={null}>
-        <PageviewTracker />
-      </Suspense>
     </>
   );
 }

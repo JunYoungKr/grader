@@ -3,7 +3,7 @@ import type { Article } from "@/lib/types";
 // 식품·건강(food) 시드 글. 비교 대상이 1종뿐이라 grade·axes는 "잠정값" —
 // 같은 종류(제로 탄산음료) 제품이 모이면 실측·재평가 후 확정할 것.
 // 지어낸 영양/시험 수치는 넣지 않음 — specs는 공개 정보(용량·구성·맛)만.
-// priceExample 14440은 210ml 30캔 세트가(조회 시점) → 발행 전 실측가로 교체.
+// 가격·이미지·배송·제휴 URL은 쿠팡 파트너스 검색 API 조회값(2026-07-18).
 export const pepsiZeroLimeArticle: Article = {
   slug: "pepsi-zero-lime",
   category: "food",
@@ -11,7 +11,7 @@ export const pepsiZeroLimeArticle: Article = {
   title: "펩시 제로슈거 라임향 — 칼로리 제로 탄산",
   description:
     "설탕·칼로리 0의 라임향 제로 콜라. 210ml 슬림캔 30개입을 개당 단가와 맛으로 봅니다.",
-  updated: "2026.06",
+  updated: "2026.07",
   summary: [
     "설탕을 뺀 제로 탄산음료로, 라임향을 더해 단맛 없이 청량감을 원하는 분께 맞습니다.",
     "210ml 슬림캔 30개입 묶음이라 개당 단가가 낮은 편 — 자주 마신다면 가성비가 좋습니다.",
@@ -25,14 +25,21 @@ export const pepsiZeroLimeArticle: Article = {
   products: [
     {
       id: "pepsi-zero-lime",
+      coupangProductId: 8279872054,
       name: "펩시 제로슈거 라임향",
+      imageUrl:
+        "https://ads-partners.coupang.com/image1/wsWxGYvnhifXgpKIwn5a0d6vOYI6JfqXjAmKKMzh5A-7TXFDjC9UN0GgpCBcC8Ju0kdG43Rsa92denn0yDGvA9u9xFyCsPvqPzlzeYbQymccDo2JgIxoxS8h2x1hEdPcImJfksbGDTEGEraVLJvi7RlwJdN3eUIGLNCwGm2RDprTSNO_LFbfahI6-6nmHH_2tUSz5fUZbZlbYYxZwM6aCgzz01Hrdg9VEI2Ugb-mirgJ6taCm4pZEIq4weDZQjwvdiPVE63_4hNenKgpfS6k8UokKeQx4l5o4cYD-XEYgeIuIxL8tOsE83ty8jLPh-UHDrglg-AW5I4hN_EyEayhtcJQdenw",
       type: "제로 탄산음료",
       descriptor: "라임향 · 210ml 30캔",
       grade: "B", // 잠정값 — 단일 제품 시드, 실측 전
-      priceExample: 14440, // 210ml 30캔 세트가(조회 시점)
+      priceExample: 14450,
+      priceCheckedAt: "2026-07-18",
       provider: "coupang",
-      // 펩시 제로슈거 라임향 210ml 30개 — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
-      affiliateUrl: "https://link.coupang.com/a/etnVlEmlRk",
+      affiliateUrl:
+        "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&pageKey=8279872054&itemId=23665748009&vendorItemId=74157319832&traceid=V0-153-106b39a48805de27&requestid=20260718222733227316986244&token=31850C%7CMIXED",
+      isRocket: true,
+      isFreeShipping: false,
+      recommended: true,
       specs: [
         { label: "용량", value: "210ml × 30캔" },
         { label: "당·칼로리", value: "제로" },
@@ -43,7 +50,8 @@ export const pepsiZeroLimeArticle: Article = {
   // 쿠팡 파트너스 공식 배너 — 실제 추적 링크/creative
   promoBanner: {
     provider: "coupang",
-    href: "https://link.coupang.com/a/etnVlEmlRk",
+    href:
+      "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&pageKey=8279872054&itemId=23665748009&vendorItemId=74157319832&traceid=V0-153-106b39a48805de27&requestid=20260718222733227316986244&token=31850C%7CMIXED",
     imageUrl:
       "https://image4.coupangcdn.com/image/affiliate/banner/0a8c5f969a1287853cae92cff6ccf7e7@2x.jpg",
     imageAlt: "펩시 제로슈거 라임향, 210ml, 30개",

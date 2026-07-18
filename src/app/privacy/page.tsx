@@ -19,7 +19,8 @@ const SECTIONS = [
   {
     heading: "2. 쿠키",
     paragraphs: [
-      "방문 분석과 제휴 링크의 성과 측정을 위해 쿠키가 사용될 수 있습니다. 쿠키는 브라우저 설정에서 차단·삭제할 수 있으며, 차단해도 콘텐츠 이용에는 제한이 없습니다.",
+      "방문 통계를 위해 Google Analytics 4를 사용합니다. Google은 페이지 방문, 접속 환경, 대략적인 위치, 사이트 내 클릭 이벤트 등을 처리하며, 이용자와 세션을 구분하기 위해 _ga 등의 1자 쿠키를 사용할 수 있습니다.",
+      "쿠키는 브라우저 설정에서 차단·삭제할 수 있으며, 차단해도 콘텐츠 이용에는 제한이 없습니다. Google의 데이터 처리 세부 내용은 Google 개인정보처리방침에서 확인할 수 있습니다.",
     ],
   },
   {
@@ -72,7 +73,7 @@ export default function PrivacyPage() {
       ))}
 
       <DisclosureNote className="mt-12" />
-      <p className="mt-4 text-xs text-faint">시행일: 2026.06</p>
+      <p className="mt-4 text-xs text-faint">시행일: 2026.07</p>
     </div>
   );
 }

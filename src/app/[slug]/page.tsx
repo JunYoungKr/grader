@@ -87,6 +87,9 @@ export default async function ArticlePage({
           <p className="mt-3 text-[15px] leading-relaxed text-muted">
             {article.description}
           </p>
+          {providers.length > 0 && (
+            <DisclosureNote providers={providers} className="mt-3 max-w-3xl" />
+          )}
 
           {article.type === "comparison" && (
             <div className="mt-6 grid grid-cols-3 gap-3">
@@ -122,10 +125,11 @@ export default async function ArticlePage({
                 <ViewItemList
                   article={slug}
                   items={products.map((p) => ({
-                    id: p.id,
+                    id: String(p.coupangProductId ?? p.id),
                     name: p.name,
                     provider: p.provider,
                     grade: p.grade,
+                    price: p.priceExample,
                   }))}
                 />
                 {hasAttributes ? (
@@ -182,9 +186,6 @@ export default async function ArticlePage({
             <SourceList sources={article.sources} />
           ) : null}
 
-          {providers.length > 0 && (
-            <DisclosureNote providers={providers} className="mt-12" />
-          )}
         </div>
 
         {/* 데스크톱: 우측 sticky 사이드바 — 목차 + 최근 본 제품 */}
@@ -196,7 +197,7 @@ export default async function ArticlePage({
         </aside>
       </div>
 
-      {article.type === "comparison" && recommended && (
+      {article.type === "comparison" && recommended && !hasAttributes && (
         <StickyCta product={recommended} article={slug} />
       )}
     </article>

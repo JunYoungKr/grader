@@ -12,7 +12,7 @@ Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저
 - Next.js 15 (App Router) · React 19 · TypeScript(strict) · Tailwind 3 · Vitest
 - Node 18.18+ (권장 20+)
 - `npm install` → `npm run dev`(localhost:3000) → `npm run build`(정적 생성 검증)
-- `npm run test` — Vitest 단위 테스트 (현재 `lib/explorer.ts` 순수 함수 커버)
+- `npm run test` — Vitest 단위 테스트 (`lib/explorer.ts`, `lib/coupang.ts` 커버)
 - 폰트: Pretendard (런타임에 jsDelivr CDN 로드, `app/globals.css`의 @import)
 - 환경변수: `.env.local` (예시는 `.env.local.example`)
   - `NEXT_PUBLIC_SITE_URL` — 배포 도메인 (미설정 시 https://grader.co.kr)
@@ -47,7 +47,7 @@ src/
     sitemap.ts / robots.ts     전 URL 자동 사이트맵 + robots
     globals.css                디자인 토큰(CSS 변수)·다크모드
   components/
-    GradeBadge ProductCard ComparisonTable/Cards   등급·비교 UI
+    GradeBadge ProductCard ComparisonTable/Cards ProductImage   등급·비교 UI
     ComparisonExplorer FilterPanel MatchBadge       인터랙티브 비교 엔진(예산·기능·월령 필터 island)
     AffiliateButton ProviderTag DisclosureNote      제휴 링크·출처·고지
     PromoBanner                                     제휴처 공식 배너(쿠팡 creative + 필수 고지문구)
@@ -73,6 +73,8 @@ src/
     guides/*.ts            guide 글
     hubs/*.ts              hub 글
 scripts/
+  build-from-coupang.ts    쿠팡 키워드 검색 → 사람 검수용 비교글 초안 생성 (npm run build:coupang)
+  sync-coupang-bestsellers.ts  카테고리별 베스트 20개 정적 스냅샷 갱신 (npm run sync:coupang)
   analytics-insights.ts    GA4 Data API → Claude 퍼널 진단·개선안 (npm run insights)
 docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔진, 프로모 배너)
 ```
@@ -85,6 +87,7 @@ docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔
 - `select_item` 파라미터: `item_brand`(제휴처)·`item_category`(등급)·`item_list_id`(글 slug)·`item_name`(제품)은 GA4 **표준** 측정기준이라 등록 없이 리포트에 잡힘. `placement`(comparison_table/sticky_cta/product_card)만 커스텀 → 필요 시 GA4 맞춤 측정기준 등록.
 - 구현: `lib/gtag.ts`(헬퍼, GA_ID 미설정 시 no-op) · `components/Analytics.tsx`(gtag 로더 + SPA 페이지뷰 + `a[data-ga]` 클릭 위임) · `ViewItemList.tsx`(IntersectionObserver). `AffiliateButton`/`TableOfContents`는 `data-ga-*` 속성만 달고 서버 컴포넌트 유지.
 - **켜는 법**: `NEXT_PUBLIC_GA_ID=G-XXXX` 설정 후 재빌드(클라이언트 inline 변수). GA4에서 `select_item`을 **주요 이벤트**로 표시 + 향상된 측정(스크롤) 켜기.
+- 상세 설정·DebugView·맞춤 정의·퍼널: `docs/ga4-setup.md`.
 - **AI 인사이트 루프**: `npm run insights` → `scripts/analytics-insights.ts`가 GA4 Data API로 퍼널/글별/등급/제휴처 지표를 끌어와 Claude에게 진단·우선순위 액션을 받음. 필요 env: `GA4_PROPERTY_ID`(숫자)·`GOOGLE_APPLICATION_CREDENTIALS`(서비스 계정 JSON, 속성에 뷰어 권한)·`ANTHROPIC_API_KEY`. 데이터 1~2주 쌓인 뒤 실행. 스크립트 deps는 `npm install` 필요(앱 빌드와 분리, tsconfig `exclude`).
 
 ## 데이터 모델 (lib/types.ts)
@@ -96,6 +99,7 @@ docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔
 - 공통: `summary`(요약), `sources`(출처), `related`(관련 글), `medical`(의료 면책),
   `promoBanner`(제휴처 공식 배너, 선택), `checklist`(품목·권장 수량 표 — guide에서 비교글로 퍼널, 선택)
 - `Product`: `provider` + `affiliateUrl` (제휴처 분리), `grade`, `specs`, `priceExample`, `recommended`,
+  `coupangProductId?`, `imageUrl?`, `priceCheckedAt?`, `isRocket?`, `isFreeShipping?`,
   `attributes?`(월령 범위·기능 태그 — 있으면 글이 `ComparisonExplorer`로 렌더, 없으면 정적 표 폴백)
 - `Provider = "coupang" | "iherb" | "linkprice" | "tenping"`
 
@@ -103,6 +107,8 @@ docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔
 
 1. **비교 글(comparison)**: `src/content/products/<slug>.ts`에 `Article`(type: "comparison") 작성
    → `lib/content.ts`의 `articles` 배열에 import 등록. `category`는 대분류 slug(`src/content/categories.ts`).
+   쿠팡 검색 결과로 안전한 초안을 만들 때는 `npm run build:coupang -- --slug <slug> --category <category> --keyword "<키워드>"` 실행
+   → 생성된 `<slug>.draft.ts`의 등급·스펙·설명을 1차 출처로 검수한 뒤 파일명 변경 및 수동 등록.
 2. **가이드(guide)**: `src/content/guides/<slug>.ts` (type: "guide", `sections` 사용) → 동일하게 등록.
 3. **허브(hub)**: `src/content/hubs/<slug>.ts` (type: "hub", `related`로 스포크 글 연결) → 등록.
 - 새 제휴처 추가: `lib/types.ts`의 `Provider`와 `lib/providers.ts`의 `PROVIDERS`에 항목 추가.
@@ -115,19 +121,21 @@ docs/superpowers/          설계 스펙·구현 플랜 아카이브 (비교 엔
 - `CONTACT_EMAIL`(`lib/site.ts`) → 실제 문의 메일 (푸터·about·privacy에서 공용)
 - 브랜드명은 `Grader`(`lib/site.ts`) · 기본 도메인은 `https://grader.co.kr`
 
-## 완료된 백로그 (2026-06 기준)
+## 완료된 백로그 (2026-07 기준)
 
 - ~~`/about`·`/privacy` 페이지~~ — 평가 방법론·등급 기준·면책·처리방침 구현. **운영자 실명(`OPERATOR_NAME`)만 교체 남음.**
 - ~~인터랙티브 비교 엔진~~ — `lib/explorer.ts`(순수 함수+테스트) + `ComparisonExplorer`/`FilterPanel`/`MatchBadge`.
   `attributes` 있는 글만 적용(현재 stroller 글이 데모). **lotion·newborn-diaper에 attributes 백필 필요.**
+- ~~쿠팡 상품 초안 생성기~~ — `scripts/build-from-coupang.ts`. 공식 검색 API 결과의 상품명·이미지·가격·배송·제휴 URL만
+  반영하며 등급·스펙은 `TODO`로 남긴다. 기본 출력은 `.draft.ts`이고 자동 발행/등록하지 않는다.
+- ~~상품 전환 UI 보강~~ — 이미지·가격 조회일·로켓/무료배송 표시, 필터 결과 1위와 연동되는 모바일 고정 CTA.
 
 ## 작업 백로그 (우선순위)
 
-1. **`scripts/build-from-coupang.ts`** — 키워드 → `searchProducts()`/`createDeeplinks()` → `Product` JSON 자동 생성.
-2. **실제 데이터로 플레이스홀더 교체** + 첫 카테고리 글 5~10개 실측 작성(사람 검수).
-3. **콘텐츠 확장** — 카테고리별 비교/가이드/허브. 허브-스포크 내부링크 촘촘히.
+1. **실제 데이터로 플레이스홀더 교체** + 첫 카테고리 글 5~10개 실측 작성(사람 검수).
+2. **콘텐츠 확장** — 카테고리별 비교/가이드/허브. 허브-스포크 내부링크 촘촘히.
    (카테고리는 API 발급 전 임시 수동 분류 — 발급 후 상품 자동 분류로 재정비 예정.)
-4. **배포** — Netlify/Vercel/Cloudflare Pages. 후 구글 서치콘솔 + 네이버 서치어드바이저에 `/sitemap.xml` 제출.
+3. **배포** — Netlify/Vercel/Cloudflare Pages. 후 구글 서치콘솔 + 네이버 서치어드바이저에 `/sitemap.xml` 제출.
    (네이버는 외부 사이트 상위 노출이 어려우니 구글을 주력으로.)
 
 ## 컨벤션

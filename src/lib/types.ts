@@ -17,7 +17,9 @@ export interface ProductAttributes {
 
 export interface Product {
   id: string;
+  coupangProductId?: number; // 쿠팡 API productId (실적 리포트 결합용)
   name: string;
+  imageUrl?: string; // 쿠팡 API 상품 이미지
   type: string;
   descriptor: string;
   grade: Grade;
@@ -25,8 +27,32 @@ export interface Product {
   priceExample: number;
   provider: Provider;
   affiliateUrl: string;
+  priceCheckedAt?: string; // ISO 날짜(YYYY-MM-DD), 가격 조회 시점
+  isRocket?: boolean;
+  isFreeShipping?: boolean;
   recommended?: boolean;
   attributes?: ProductAttributes; // 선택적 — 없으면 정적 표로 폴백
+}
+
+export interface PopularProduct {
+  id: string;
+  coupangProductId: number;
+  name: string;
+  imageUrl: string;
+  price: number;
+  priceCheckedAt: string;
+  affiliateUrl: string;
+  isRocket: boolean;
+  isFreeShipping: boolean;
+  categoryName: string;
+  sourceCategoryId: number;
+  sourceCategoryLabel: string;
+  position: number;
+}
+
+export interface PopularProductSnapshot {
+  generatedAt: string;
+  categories: Record<string, PopularProduct[]>;
 }
 
 export interface Axis {

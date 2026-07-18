@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
+    "build:coupang": "tsx scripts/build-from-coupang.ts",
+    "sync:coupang": "tsx scripts/sync-coupang-bestsellers.ts",
     "insights": "tsx scripts/analytics-insights.ts"
   },
   "dependencies": {

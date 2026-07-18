@@ -3,7 +3,8 @@
 import type { Grade, Provider } from "./types";
 
 export const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
-export const gaEnabled = GA_ID.length > 0;
+export const GA_DEBUG = process.env.NEXT_PUBLIC_GA_DEBUG === "true";
+export const gaEnabled = /^G-[A-Z0-9]+$/.test(GA_ID);
 
 type GtagParams = Record<string, unknown>;
 
@@ -19,18 +20,16 @@ function send(event: string, params: GtagParams = {}): void {
   window.gtag("event", event, params);
 }
 
-// SPA 라우트 변경 시 수동 페이지뷰 (config는 send_page_view:false로 초기화).
-export function pageview(path: string): void {
-  send("page_view", { page_path: path, page_location: typeof window !== "undefined" ? window.location.href : path });
-}
-
 // 제휴 링크 클릭 = 이 사이트의 전환(북극성). GA4 표준 select_item으로 전송.
 // item_brand/item_category/item_list_id는 GA4 표준 측정기준이라 별도 등록 없이 리포트에 잡힘.
 // placement는 커스텀 → 필요 시 GA4에서 맞춤 측정기준으로 등록.
 export interface AffiliateItem {
   article?: string; // 글 slug
+  productId?: string | number; // 쿠팡 productId 또는 내부 ID
   product?: string; // 제품명
   grade?: Grade; // 등급 S/A/B/C
+  category?: string; // 등급 없는 카탈로그의 사이트 카테고리
+  price?: number;
   provider?: Provider; // 제휴처
   placement?: string; // comparison_table | sticky_cta | product_card
   recommended?: boolean; // 1순위 추천 여부
@@ -39,15 +38,17 @@ export interface AffiliateItem {
 export function trackSelectItem(d: AffiliateItem): void {
   send("select_item", {
     item_list_id: d.article,
+    currency: "KRW",
     placement: d.placement,
     recommended: d.recommended === true,
     items: [
       {
-        item_id: d.product,
+        item_id: d.productId ?? d.product,
         item_name: d.product,
         item_brand: d.provider, // 제휴처
-        item_category: d.grade, // 등급
+        item_category: d.category ?? d.grade,
         item_list_id: d.article,
+        price: d.price,
       },
     ],
   });
@@ -56,17 +57,40 @@ export function trackSelectItem(d: AffiliateItem): void {
 // 등급표가 화면에 보일 때(view_item_list) → 유입 대비 "등급표 도달" 단계.
 export function trackViewItemList(
   article: string,
-  items: { id: string; name: string; provider: Provider; grade: Grade }[],
+  items: {
+    id: string;
+    name: string;
+    provider: Provider;
+    grade?: Grade;
+    category?: string;
+    price?: number;
+  }[],
 ): void {
   send("view_item_list", {
     item_list_id: article,
+    currency: "KRW",
     items: items.map((p) => ({
       item_id: p.id,
       item_name: p.name,
       item_brand: p.provider,
-      item_category: p.grade,
+      item_category: p.category ?? p.grade,
       item_list_id: article,
+      price: p.price,
     })),
+  });
+}
+
+// 제품 단위가 아닌 제휴 프로모션 배너 클릭.
+export function trackSelectPromotion(d: {
+  article?: string;
+  name?: string;
+  provider?: Provider;
+}): void {
+  send("select_promotion", {
+    promotion_id: d.article,
+    promotion_name: d.name,
+    creative_slot: "promo_banner",
+    creative_name: d.provider,
   });
 }
 

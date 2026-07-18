@@ -7,6 +7,7 @@ import { trackFilter } from "@/lib/gtag";
 import { FilterPanel } from "./FilterPanel";
 import { ComparisonTable } from "./ComparisonTable";
 import { ComparisonCards } from "./ComparisonCards";
+import { StickyCta } from "./StickyCta";
 
 export function ComparisonExplorer({
   products,
@@ -33,6 +34,9 @@ export function ComparisonExplorer({
   );
 
   const sorted = ranked.map((r) => r.product);
+  const stickyProduct = hasActive
+    ? sorted[0]
+    : products.find((product) => product.recommended) ?? products[0];
   const matchMap = hasActive
     ? Object.fromEntries(ranked.map((r) => [r.product.id, r.match]))
     : undefined;
@@ -66,6 +70,7 @@ export function ComparisonExplorer({
       <div className="mt-4 md:hidden">
         <ComparisonCards products={sorted} article={article} matchMap={matchMap} />
       </div>
+      {stickyProduct && <StickyCta product={stickyProduct} article={article} />}
     </div>
   );
 }

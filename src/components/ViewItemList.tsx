@@ -11,7 +11,14 @@ export function ViewItemList({
   items,
 }: {
   article: string;
-  items: { id: string; name: string; provider: Provider; grade: Grade }[];
+  items: {
+    id: string;
+    name: string;
+    provider: Provider;
+    grade?: Grade;
+    category?: string;
+    price?: number;
+  }[];
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const fired = useRef(false);

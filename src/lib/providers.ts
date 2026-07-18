@@ -6,7 +6,7 @@ export const PROVIDERS: Record<
 > = {
   coupang: {
     label: "쿠팡",
-    cta: "쿠팡 최저가 보기",
+    cta: "쿠팡 현재가 확인",
     disclosure: "쿠팡 파트너스",
   },
   iherb: {
