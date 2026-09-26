@@ -26,6 +26,7 @@ function revalidateSite(slug: string) {
   revalidatePath(`/${slug}`);
   for (const c of getCategories()) revalidatePath(`/category/${c.slug}`);
   revalidatePath("/sitemap.xml");
+  revalidatePath("/feed.xml");
 }
 
 function validate(a: Article & { published: boolean; sort_order: number }): string | null {

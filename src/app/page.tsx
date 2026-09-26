@@ -4,6 +4,12 @@ import { GradeBadge } from "@/components/GradeBadge";
 import { MethodologyStrip } from "@/components/MethodologyStrip";
 import { RecentlyViewed } from "@/components/RecentlyViewed";
 import type { Article } from "@/lib/types";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = {
+  ...pageMetadata({ title: "Grader — 제품 등급 비교", path: "/" }),
+  title: { absolute: "Grader — 제품 등급 비교" },
+};
 
 const TYPE_LABEL: Record<Article["type"], string> = {
   comparison: "등급표",

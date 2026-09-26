@@ -7,11 +7,13 @@ import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 import { SourceList } from "@/components/SourceList";
 import { DisclosureNote } from "@/components/DisclosureNote";
 import type { Grade } from "@/lib/types";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "소개 · 평가 방법론",
   description: `${SITE_NAME}는 제품을 안전성·성능·성분·가격으로 등급화해 비교합니다. 평가 방법, 객관성 원칙, 운영자 정보를 안내합니다.`,
-};
+  path: "/about",
+});
 
 const GRADES: Grade[] = ["S", "A", "B", "C"];
 

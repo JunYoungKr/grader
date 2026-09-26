@@ -14,6 +14,9 @@ import {
   getPopularProductsGeneratedAt,
 } from "@/lib/popular-products";
 import type { Article } from "@/lib/types";
+import { pageMetadata } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { BreadcrumbJsonLd } from "@/lib/jsonld";
 
 const TYPE_LABEL: Record<Article["type"], string> = {
   comparison: "등급표",
@@ -36,7 +39,7 @@ export async function generateMetadata({
   const { category } = await params;
   const cat = getCategory(category);
   if (!cat) return {};
-  return { title: `${cat.name} 등급 비교`, description: cat.blurb };
+  return pageMetadata({ title: `${cat.name} 등급 비교`, description: cat.blurb, path: `/category/${cat.slug}` });
 }
 
 export default async function CategoryPage({
@@ -54,6 +57,8 @@ export default async function CategoryPage({
 
   return (
     <div className="mx-auto max-w-content px-5 py-10">
+      <BreadcrumbJsonLd items={[{ name: "홈", href: "/" }, { name: cat.name, href: `/category/${cat.slug}` }]} />
+      <Breadcrumbs items={[{ name: "홈", href: "/" }, { name: cat.name, href: `/category/${cat.slug}` }]} />
       <h1 className="text-3xl font-medium tracking-tight">{cat.name}</h1>
       <p className="mt-2 text-[15px] text-muted">{cat.blurb}</p>
       <DisclosureNote providers={["coupang"]} className="mt-3 max-w-3xl" />

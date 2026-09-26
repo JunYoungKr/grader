@@ -22,6 +22,9 @@ import { RelatedLinks } from "@/components/RelatedLinks";
 import { DisclosureNote } from "@/components/DisclosureNote";
 import { RecordView, RecentlyViewed } from "@/components/RecentlyViewed";
 import { ArticleJsonLd } from "@/lib/jsonld";
+import { pageMetadata } from "@/lib/seo";
+import { parseUpdated, SITE_NAME } from "@/lib/site";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 // DB(ISR) — 어드민 저장 시 revalidatePath로 즉시 갱신. 새 slug도 빌드 없이 서빙.
 export const revalidate = 300;
@@ -40,15 +43,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const article = await getArticle(slug);
   if (!article) return {};
-  return {
+  return pageMetadata({
     title: article.title,
     description: article.description,
-    openGraph: {
-      title: article.title,
-      description: article.description,
-      type: "article",
-    },
-  };
+    path: `/${article.slug}`,
+    type: "article",
+    modifiedTime: parseUpdated(article.modifiedAt)?.toISOString(),
+  });
 }
 
 export default async function ArticlePage({
@@ -82,7 +83,12 @@ export default async function ArticlePage({
 
   return (
     <article className="mx-auto max-w-content px-5 pb-24 pt-10 md:pb-12">
-      <ArticleJsonLd article={article} />
+      <ArticleJsonLd article={article} category={category} />
+      <Breadcrumbs items={[
+        { name: "홈", href: "/" },
+        ...(category ? [{ name: category.name, href: `/category/${category.slug}` }] : []),
+        { name: article.title, href: `/${article.slug}` },
+      ]} />
       <RecordView slug={slug} title={article.title} />
 
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-start lg:gap-10">
@@ -97,6 +103,14 @@ export default async function ArticlePage({
           </p>
           <p className="mt-2 text-xs text-faint">
             {article.updated} 기준{providers.length > 0 && " · 제휴 링크 포함"}
+          </p>
+          <p className="mt-2 text-xs text-faint">
+            작성: {SITE_NAME}
+            {parseUpdated(article.modifiedAt) && (
+              <> · 페이지 수정일: <time dateTime={article.modifiedAt}>
+                {new Date(article.modifiedAt!).toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul" })}
+              </time></>
+            )}
           </p>
           {providers.length > 0 && (
             <DisclosureNote providers={providers} className="mt-3 max-w-3xl" />
