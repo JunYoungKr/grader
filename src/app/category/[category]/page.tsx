@@ -9,10 +9,7 @@ import {
 import { GradeBadge } from "@/components/GradeBadge";
 import { DisclosureNote } from "@/components/DisclosureNote";
 import { PopularProductGrid } from "@/components/PopularProductGrid";
-import {
-  getPopularProducts,
-  getPopularProductsGeneratedAt,
-} from "@/lib/popular-products";
+import { getCurrentPopularSnapshot } from "@/lib/popular-products-live";
 import type { Article } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
@@ -51,8 +48,9 @@ export default async function CategoryPage({
   const cat = getCategory(category);
   if (!cat) notFound();
   const articles = await getArticlesByCategory(category);
-  const popularProducts = getPopularProducts(category);
-  const generatedAt = getPopularProductsGeneratedAt();
+  const snapshot = await getCurrentPopularSnapshot();
+  const popularProducts = snapshot.categories[category] ?? [];
+  const generatedAt = snapshot.generatedAt;
   const checkedAt = popularProducts[0]?.priceCheckedAt;
 
   return (
