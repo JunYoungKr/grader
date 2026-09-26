@@ -13,6 +13,7 @@ export interface ArticleRow {
   title: string;
   description: string;
   updated: string;
+  updated_at?: string;
   medical: boolean;
   summary: string[];
   axes: Article["axes"];
@@ -34,6 +35,7 @@ export function rowToArticle(r: ArticleRow): Article {
     title: r.title,
     description: r.description,
     updated: r.updated,
+    modifiedAt: r.updated_at,
     medical: r.medical || undefined,
     summary: r.summary ?? [],
     axes: r.axes ?? undefined,
@@ -55,8 +57,7 @@ export async function getAllArticles(): Promise<Article[]> {
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: true });
   if (error) {
-    console.error("[content] getAllArticles 실패:", error.message);
-    return [];
+    throw new Error(`[content] getAllArticles 실패: ${error.message}`);
   }
   return (data as ArticleRow[]).map(rowToArticle);
 }
@@ -66,8 +67,7 @@ export async function getAllArticleSlugs(): Promise<string[]> {
   if (!sb) return [];
   const { data, error } = await sb.from("articles").select("slug");
   if (error) {
-    console.error("[content] getAllArticleSlugs 실패:", error.message);
-    return [];
+    throw new Error(`[content] getAllArticleSlugs 실패: ${error.message}`);
   }
   return (data as { slug: string }[]).map((r) => r.slug);
 }
@@ -81,8 +81,7 @@ export async function getArticle(slug: string): Promise<Article | undefined> {
     .eq("slug", slug)
     .maybeSingle();
   if (error) {
-    console.error("[content] getArticle 실패:", error.message);
-    return undefined;
+    throw new Error(`[content] getArticle 실패: ${error.message}`);
   }
   return data ? rowToArticle(data as ArticleRow) : undefined;
 }
@@ -99,8 +98,7 @@ export async function getArticlesByCategory(
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: true });
   if (error) {
-    console.error("[content] getArticlesByCategory 실패:", error.message);
-    return [];
+    throw new Error(`[content] getArticlesByCategory 실패: ${error.message}`);
   }
   return (data as ArticleRow[]).map(rowToArticle);
 }

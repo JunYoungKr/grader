@@ -99,6 +99,7 @@ export interface Article {
   title: string;
   description: string;
   updated: string; // "YYYY.MM"
+  modifiedAt?: string; // DB updated_at: 실제 페이지 수정 시각 (ISO 8601)
   summary: string[]; // 한눈에 요약 (모든 타입 공통)
   medical?: boolean; // 의료 면책 표시 여부 (YMYL)
   axes?: Axis[]; // comparison

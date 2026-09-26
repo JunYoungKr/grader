@@ -4,7 +4,9 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@/components/Analytics";
 import { GoogleTag } from "@/components/GoogleTag";
-import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
+import { SOCIAL_IMAGE } from "@/lib/seo";
+import { SiteJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -12,14 +14,24 @@ export const metadata: Metadata = {
     default: `${SITE_NAME} — 제품 등급 비교`,
     template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "생활 제품을 안전성·성능·가격 등 같은 기준으로 등급화해 비교합니다. 광고비와 분리된 객관 평가.",
+  description: SITE_DESCRIPTION,
   openGraph: {
     type: "website",
     locale: "ko_KR",
     siteName: SITE_NAME,
+    images: [SOCIAL_IMAGE],
   },
-  robots: { index: true, follow: true },
+  twitter: { card: "summary_large_image", images: [SOCIAL_IMAGE] },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    other: process.env.NAVER_SITE_VERIFICATION
+      ? { "naver-site-verification": process.env.NAVER_SITE_VERIFICATION }
+      : {},
+  },
+  robots: {
+    index: true, follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 export default function RootLayout({
@@ -38,6 +50,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased">
+        <SiteJsonLd />
         <Analytics />
         <Header />
         <main>{children}</main>
