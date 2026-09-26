@@ -26,6 +26,9 @@ export default async function AdminLayout({
           <Link href="/admin" className="text-sm text-brand hover:opacity-80">
             GA4
           </Link>
+          <Link href="/admin/discovery" className="text-sm text-brand hover:opacity-80">
+            상품 후보
+          </Link>
           <Link href="/" className="text-sm text-brand hover:opacity-80">
             사이트 보기 →
           </Link>
