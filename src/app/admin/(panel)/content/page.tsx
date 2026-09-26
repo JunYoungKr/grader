@@ -49,7 +49,7 @@ export default async function AdminListPage({
         </p>
       )}
 
-      <div className="mt-4 overflow-hidden rounded-lg border border-hairline">
+      <div className="mt-4 overflow-x-auto rounded-lg border border-hairline">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="border-b border-hairline text-left text-xs text-faint">
@@ -64,9 +64,15 @@ export default async function AdminListPage({
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.slug} className="border-b border-hairline last:border-0">
+              <tr
+                key={r.slug}
+                className="border-b border-hairline last:border-0"
+              >
                 <td className="px-4 py-3 font-medium">
-                  <Link href={`/admin/edit/${r.slug}`} className="hover:text-brand">
+                  <Link
+                    href={`/admin/edit/${r.slug}`}
+                    className="hover:text-brand"
+                  >
                     {r.title}
                   </Link>
                 </td>
@@ -74,7 +80,9 @@ export default async function AdminListPage({
                 <td className="px-4 py-3 text-muted">{r.category}</td>
                 <td className="px-4 py-3 text-muted">{r.type}</td>
                 <td className="px-4 py-3">{r.published ? "공개" : "비공개"}</td>
-                <td className="px-4 py-3 tabular-nums text-muted">{r.sort_order}</td>
+                <td className="px-4 py-3 tabular-nums text-muted">
+                  {r.sort_order}
+                </td>
                 <td className="px-4 py-3">
                   <form action={deleteArticle}>
                     <input type="hidden" name="slug" value={r.slug} />
@@ -91,7 +99,8 @@ export default async function AdminListPage({
             {rows.length === 0 && !error && (
               <tr>
                 <td colSpan={7} className="px-4 py-8 text-center text-muted">
-                  글이 없습니다. 시드 스크립트(npm run seed:articles)를 먼저 실행하세요.
+                  글이 없습니다. 시드 스크립트(npm run seed:articles)를 먼저
+                  실행하세요.
                 </td>
               </tr>
             )}

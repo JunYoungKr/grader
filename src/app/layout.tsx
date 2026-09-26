@@ -11,8 +11,8 @@ import { SiteJsonLd } from "@/lib/jsonld";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — 제품 등급 비교`,
-    template: `%s · ${SITE_NAME}`,
+    default: `${SITE_NAME} 살림 가이드`,
+    template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   openGraph: {
@@ -51,9 +51,12 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <SiteJsonLd />
+        <a href="#main-content" className="skip-link">
+          본문으로 바로가기
+        </a>
         <Analytics />
         <Header />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
       </body>
     </html>

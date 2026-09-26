@@ -10,6 +10,7 @@
     "test": "vitest run",
     "build:coupang": "tsx scripts/build-from-coupang.ts",
     "sync:coupang": "tsx scripts/sync-coupang-bestsellers.ts",
+    "audit:coupang": "tsx scripts/audit-coupang-bestsellers.ts",
     "insights": "tsx scripts/analytics-insights.ts",
     "seed:articles": "tsx scripts/seed-supabase.ts"
   },

@@ -57,17 +57,26 @@ function roundRobin<T>(batches: T[][], limit: number): T[] {
 }
 
 function uniqueProducts(products: CoupangProduct[]): CoupangProduct[] {
-  const seen = new Set<string>();
+  const seen = new Set<number>();
   return products.filter((product) => {
-    const key = product.productUrl || `${product.productId}:${product.productPrice}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return Boolean(
+    const valid = Boolean(
       product.productId &&
         product.productName &&
         product.productImage &&
         product.productUrl,
     );
+    if (!valid || seen.has(product.productId)) return false;
+    seen.add(product.productId);
+    return true;
+  });
+}
+
+function uniqueSelections<T extends { product: CoupangProduct }>(items: T[]): T[] {
+  const seen = new Set<number>();
+  return items.filter(({ product }) => {
+    if (seen.has(product.productId)) return false;
+    seen.add(product.productId);
+    return true;
   });
 }
 
@@ -114,7 +123,11 @@ async function main(): Promise<void> {
       );
     }
 
-    const selected = roundRobin(batches, PRODUCTS_PER_CATEGORY);
+    const candidates = roundRobin(
+      batches,
+      batches.reduce((total, batch) => total + batch.length, 0),
+    );
+    const selected = uniqueSelections(candidates).slice(0, PRODUCTS_PER_CATEGORY);
     if (selected.length < PRODUCTS_PER_CATEGORY) {
       throw new Error(
         `${category.name} 상품이 ${selected.length}개뿐입니다 (필요: ${PRODUCTS_PER_CATEGORY}).`,

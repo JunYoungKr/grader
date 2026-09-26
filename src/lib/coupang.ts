@@ -98,6 +98,7 @@ async function requestJson<T>(
 ): Promise<T> {
   const res = await fetch(DOMAIN + urlPath, {
     method,
+    signal: AbortSignal.timeout(5000),
     headers: {
       Authorization: authorization(method, urlPath),
       "Content-Type": "application/json;charset=UTF-8",
