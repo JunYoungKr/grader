@@ -42,6 +42,8 @@ export const lowSugarStarterArticle: Article = {
   products: [
     {
       id: "lss-pepsi-zero-lime",
+      coupangProductId: 8279872054,
+      imageUrl: "https://thumbnail4.coupangcdn.com/thumbnails/remote/512x512ex/image/retail/images/378947857831841-03b75531-8dd7-4d79-aed8-bd089640f638.jpg",
       name: "펩시 제로슈거 라임향",
       type: "제로 탄산음료",
       descriptor: "탄산음료 대체",
@@ -59,6 +61,8 @@ export const lowSugarStarterArticle: Article = {
     },
     {
       id: "lss-harim-chicken",
+      coupangProductId: 8844298106,
+      imageUrl: "https://t1c.coupangcdn.com/thumbnails/remote/512x512ex/image/rs_quotation_api/wbmasagm/a2c1d41a837e4f108a4392e6fba3f7b1.jpg",
       name: "하림 닭가슴살 (냉장)",
       type: "닭가슴살(냉장)",
       descriptor: "단백질 메인",
@@ -75,6 +79,8 @@ export const lowSugarStarterArticle: Article = {
     },
     {
       id: "lss-kellogg-granola",
+      coupangProductId: 7012375223,
+      imageUrl: "https://t3c.coupangcdn.com/thumbnails/remote/512x512ex/image/retail/images/fee7bcb6-4750-4877-b749-420e8b8920e416817196393766070120.png",
       name: "켈로그 리얼 그래놀라 오리지널",
       type: "그래놀라 시리얼",
       descriptor: "아침 식사 베이스",
@@ -90,6 +96,8 @@ export const lowSugarStarterArticle: Article = {
     },
     {
       id: "lss-mynormal-allulose",
+      coupangProductId: 9246341637,
+      imageUrl: "https://t1c.coupangcdn.com/thumbnails/remote/512x512ex/image/retail/images/1377670231344522-f765872e-30cb-48e8-ab6b-fb58e152358d.jpg",
       name: "마이노멀 알룰로스",
       type: "대체 감미료",
       descriptor: "설탕 대체",

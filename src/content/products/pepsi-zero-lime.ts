@@ -26,9 +26,8 @@ export const pepsiZeroLimeArticle: Article = {
     {
       id: "pepsi-zero-lime",
       coupangProductId: 8279872054,
+      imageUrl: "https://thumbnail4.coupangcdn.com/thumbnails/remote/512x512ex/image/retail/images/378947857831841-03b75531-8dd7-4d79-aed8-bd089640f638.jpg",
       name: "펩시 제로슈거 라임향",
-      imageUrl:
-        "https://ads-partners.coupang.com/image1/wsWxGYvnhifXgpKIwn5a0d6vOYI6JfqXjAmKKMzh5A-7TXFDjC9UN0GgpCBcC8Ju0kdG43Rsa92denn0yDGvA9u9xFyCsPvqPzlzeYbQymccDo2JgIxoxS8h2x1hEdPcImJfksbGDTEGEraVLJvi7RlwJdN3eUIGLNCwGm2RDprTSNO_LFbfahI6-6nmHH_2tUSz5fUZbZlbYYxZwM6aCgzz01Hrdg9VEI2Ugb-mirgJ6taCm4pZEIq4weDZQjwvdiPVE63_4hNenKgpfS6k8UokKeQx4l5o4cYD-XEYgeIuIxL8tOsE83ty8jLPh-UHDrglg-AW5I4hN_EyEayhtcJQdenw",
       type: "제로 탄산음료",
       descriptor: "라임향, 210ml 30캔",
       grade: "B", // 잠정값 — 단일 제품 시드, 실측 전
