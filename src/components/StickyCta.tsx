@@ -32,6 +32,7 @@ export function StickyCta({
               productId: product.coupangProductId ?? product.id,
               product: product.name,
               grade: product.grade,
+              category: product.grade ? undefined : product.type,
               price: product.priceExample,
               placement: "sticky_cta",
             }}

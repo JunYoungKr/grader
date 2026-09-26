@@ -115,6 +115,7 @@ export default async function ArticlePage({
                     name: p.name,
                     provider: p.provider,
                     grade: p.grade,
+                    category: p.grade ? undefined : p.type,
                     price: p.priceExample,
                   }))}
                 >

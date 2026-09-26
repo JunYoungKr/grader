@@ -36,11 +36,14 @@ function validate(a: Article & { published: boolean; sort_order: number }): stri
   if (!getCategories().some((c) => c.slug === a.category))
     return `존재하지 않는 카테고리: ${a.category}`;
   if (!["comparison", "guide", "hub"].includes(a.type)) return "잘못된 글 타입.";
-  if (a.type === "comparison") {
-    if (!a.products?.length) return "comparison 글은 제품이 1개 이상 필요합니다.";
+  if (a.type === "comparison" && !a.products?.length)
+    return "comparison 글은 제품이 1개 이상 필요합니다.";
+  if (a.products?.length) {
     for (const p of a.products) {
       if (!p.id || !p.name) return "제품 id, 이름은 필수입니다.";
-      if (!GRADES.includes(p.grade)) return `잘못된 등급: ${p.name}`;
+      if (a.type === "comparison" && (!p.grade || !GRADES.includes(p.grade)))
+        return `비교 글에는 기존 등급이 필요합니다: ${p.name}`;
+      if (p.grade && !GRADES.includes(p.grade)) return `잘못된 등급: ${p.name}`;
       if (!PROVIDERS.includes(p.provider)) return `잘못된 제휴처: ${p.name}`;
       if (!/^https?:\/\//.test(p.affiliateUrl))
         return `제휴 링크는 실제 URL이어야 합니다("#" 금지): ${p.name}`;
