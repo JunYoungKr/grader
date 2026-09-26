@@ -25,6 +25,8 @@ export const ganongEggArticle: Article = {
   products: [
     {
       id: "ganong-vitamin-egg",
+      coupangProductId: 6213104056,
+      imageUrl: "https://t2a.coupangcdn.com/thumbnails/remote/512x512ex/image/retail/images/289921759327885-93ea43e5-ce48-440e-8456-a46d0a55c2d8.jpg",
       name: "가농 비타민 반숙란",
       type: "반숙란(단백질 간식)",
       descriptor: "20구, 개당 약 580원",

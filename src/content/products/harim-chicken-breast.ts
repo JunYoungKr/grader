@@ -25,6 +25,8 @@ export const harimChickenBreastArticle: Article = {
   products: [
     {
       id: "harim-chicken-breast",
+      coupangProductId: 8844298106,
+      imageUrl: "https://t1c.coupangcdn.com/thumbnails/remote/512x512ex/image/rs_quotation_api/wbmasagm/a2c1d41a837e4f108a4392e6fba3f7b1.jpg",
       name: "하림 닭가슴살 (냉장)",
       type: "냉장 닭가슴살",
       descriptor: "1kg, 냉장 손질",
