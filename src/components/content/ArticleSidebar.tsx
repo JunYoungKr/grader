@@ -20,7 +20,7 @@ export function ArticleSidebar({
         {product && (
           <div className="panel space-y-4 p-5">
             <p className="text-caption text-muted">이 글에서 살펴본 제품</p>
-            <ProductPhoto compact src={product.imageUrl} alt={product.name} />
+            {product.imageUrl && <ProductPhoto compact src={product.imageUrl} alt={product.name} />}
             <h2 className="text-body font-semibold">{product.name}</h2>
             <ProductPrice
               price={product.priceExample}

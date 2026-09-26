@@ -17,9 +17,9 @@ export function ProductCard({
 }) {
   return (
     <div className="panel flex h-full flex-col overflow-hidden">
-      <div className="relative p-4">
-        <ProductPhoto src={product.imageUrl} alt={product.name} />
-        <div className="absolute right-6 top-6">
+      <div className={product.imageUrl ? "relative p-4" : "flex justify-end p-4"}>
+        {product.imageUrl && <ProductPhoto src={product.imageUrl} alt={product.name} />}
+        <div className={product.imageUrl ? "absolute right-6 top-6" : ""}>
           <SaveButton
             item={{
               id: `detail-product:${product.coupangProductId ?? product.id}`,

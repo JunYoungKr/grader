@@ -2,7 +2,6 @@ import type { Article } from "./types";
 import { normalizeContentCopy } from "./display-copy";
 import { categories } from "@/content/categories";
 import { supabasePublic } from "./supabase/server";
-import { normalizeContentCopy } from "./display-copy";
 
 // 콘텐츠 로더 — 글은 Supabase(articles 테이블), 카테고리는 코드(거의 안 바뀜).
 // 어드민(/admin)에서 수정하면 revalidatePath로 즉시 반영된다.

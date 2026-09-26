@@ -10,11 +10,11 @@ const LABELS = {
 export function ArticleCard({ article }: { article: Article }) {
   return (
     <article className="flex h-full flex-col">
-      <div className="relative">
-        <Link href={`/${article.slug}`} tabIndex={-1} aria-hidden="true">
-          <ProductPhoto src={article.products?.[0]?.imageUrl} alt="" />
-        </Link>
-        <div className="absolute right-2 top-2">
+      <div className={article.products?.[0]?.imageUrl ? "relative" : "flex justify-end border-t border-hairline pt-2"}>
+        {article.products?.[0]?.imageUrl && <Link href={`/${article.slug}`} tabIndex={-1} aria-hidden="true">
+          <ProductPhoto src={article.products[0].imageUrl} alt="" />
+        </Link>}
+        <div className={article.products?.[0]?.imageUrl ? "absolute right-2 top-2" : ""}>
           <SaveButton
             item={{
               id: `article:${article.slug}`,
