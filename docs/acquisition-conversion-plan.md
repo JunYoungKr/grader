@@ -6,7 +6,7 @@
 
 주부 고객이 생활, 주방 제품을 고를 때 겪는 질문으로 방문해, 자기 집의 조건을 확인하고, 필요한 제품의 판매처로 이동하도록 만든다. 최종 성과는 제휴사의 실제 주문과 확정 수수료로 판단하고, 사이트의 제휴 링크 클릭은 그에 앞선 행동으로 측정한다.
 
-이번 문서는 구현 전 실행 계획이다. 일정은 착수 후 약 4주의 초기 운영 주기를 가정한다. 자료 확보, 외부 계정 접근, 검색 반영 속도에 따라 달라지며, 4주 안에 검색 순위나 매출 상승을 보장하는 일정은 아니다.
+이번 문서는 실행 계획이며 아래 착수 기록에서 완료 범위와 남은 조건을 구분한다. 일정은 착수 후 약 4주의 초기 운영 주기를 가정한다. 자료 확보, 외부 계정 접근, 검색 반영 속도에 따라 달라지며, 4주 안에 검색 순위나 매출 상승을 보장하는 일정은 아니다.
 
 계획 단계에서 실제 방문, 주문 보고서는 조회하지 않았다. 현재 구매율, 채널별 효과, 개선 폭은 미확정이다. 전환율 목표는 측정을 검증하고 기준 데이터를 확보한 뒤 정한다.
 
@@ -104,3 +104,7 @@
 - [SEO 변경 PR #8](https://github.com/JunYoungKr/grader/pull/8)
 - [Google 리뷰 작성 가이드](https://developers.google.com/search/docs/specialty/ecommerce/write-high-quality-reviews)
 - [GA4 전자상거래 이벤트](https://developers.google.com/analytics/devguides/collection/ga4/ecommerce)
+
+## 2026-09-27 착수 기록
+
+구현과 배포 확인은 `docs/growth/implementation-status.md`에 기록한다. 콘텐츠는 `docs/growth/content-review-pack.md`, 채널별 게시 초안은 `docs/growth/distribution-pack.md`에서 검토한다. 4주 운영 전체가 완료된 상태가 아니며 실제 주문 실적과 개선 효과는 아직 판단하지 않는다.

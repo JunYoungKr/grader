@@ -34,7 +34,7 @@ NEXT_PUBLIC_GA_DEBUG=true
 | `view_item_list` | 비교표/인기 상품 목록이 화면에 노출됨 |
 | `select_item` | 제품 제휴 링크 클릭 |
 | `select_promotion` | 제휴 프로모션 배너 클릭 |
-| `filter_apply` | 예산·기능·월령 필터 적용 |
+| `filter_apply` | 예산, 기능, 월령 필터 적용 |
 | `toc_click` | 목차 클릭 |
 | `search_results_view` | 검색 결과 표시, 검색어 없이 분야와 결과 개수만 기록 |
 | `save_item` / `remove_saved_item` | 로컬 저장 추가와 해제 |
@@ -96,4 +96,4 @@ GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\
 # 또는 GOOGLE_SERVICE_ACCOUNT_JSON={...}
 ```
 
-대시보드는 실시간, 일별 추이, 유입, 페이지, 이벤트, 상품, 지역, 기기 보고서와 해당 속성의 모든 차원·측정항목을 선택하는 자유 탐색기, CSV 내보내기를 제공한다. GA4 Data API는 집계 보고서 API이므로 개별 사용자의 원시 이벤트 덤프는 BigQuery Export가 필요하다.
+대시보드는 실시간, 일별 추이, 유입, 페이지, 이벤트, 상품, 지역, 기기 보고서와 해당 속성의 모든 차원과 측정항목을 선택하는 자유 탐색기, CSV 내보내기를 제공한다. GA4 Data API는 집계 보고서 API이므로 개별 사용자의 원시 이벤트 덤프는 BigQuery Export가 필요하다.

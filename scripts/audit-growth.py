@@ -25,12 +25,16 @@ class Page(HTMLParser):
     def __init__(self, raw):
         super().__init__()
         self.meta, self.canonical, self.ld, self.links = {}, [], [], []
+        self.assets = set()
         self.h1, self.hidden, self.inld = 0, False, False
         self.visible = []
         self.feed(raw)
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        resource = a.get("src") if tag == "script" else a.get("href") if tag == "link" and a.get("rel") == "stylesheet" else None
+        if resource and resource.startswith("/_next/static/"):
+            self.assets.add(resource)
         if tag == "meta":
             self.meta[a.get("name") or a.get("property")] = a.get("content", "")
         if tag == "link" and a.get("rel") == "canonical":
@@ -82,7 +86,7 @@ def check(url):
     if BASE == CANONICAL:
         assert p.meta.get("naver-site-verification") == "32157ad170e0eeeadae236dcea5cf80e108740df", (path, "naver")
         assert "G-5BFCE8KNPS" in raw, (path, "GA")
-    return {"path": path, "schema": types, "affiliate_links": len(p.links)}
+    return {"path": path, "schema": types, "affiliate_links": len(p.links), "assets": sorted(p.assets)}
 
 
 root = ET.fromstring(fetch("/sitemap.xml"))
@@ -93,6 +97,10 @@ assert {CANONICAL + "/browse", CANONICAL + "/about", CANONICAL + "/privacy"} <= 
 assert not any("/saved" in u or "?" in u or "/admin" in u for u in urls)
 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
     results = list(pool.map(check, urls))
+assets = sorted({asset for result in results for asset in result.pop("assets")})
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+    for asset, content in zip(assets, pool.map(fetch, assets)):
+        assert content and not content.lstrip().lower().startswith(b"<!doctype html"), (asset, "static asset")
 for path, canonical in [("/saved", "/saved"), ("/browse?q=audit-no-match-629", "/browse"), ("/browse?category=food", "/browse")]:
     p = Page(fetch(path).decode())
     assert "noindex" in p.meta.get("robots", ""), (path, "noindex")
@@ -107,4 +115,4 @@ headers = subprocess.check_output(["curl", "-sSI", "--max-time", "25", BASE + "/
 assert "x-robots-tag: noindex, nofollow" in headers
 missing = subprocess.check_output(["curl", "-sS", "--max-time", "25", "-o", "/dev/null", "-w", "%{http_code}", BASE + "/growth-audit-nonexistent-page"]).decode()
 assert missing == "404", missing
-print(json.dumps({"status": "passed", "base": BASE, "pages": len(results), "feed_items": len(rss_items), "private_variants": "noindex", "og": "1200x630 PNG", "checks": results}, ensure_ascii=False, indent=2))
+print(json.dumps({"status": "passed", "base": BASE, "pages": len(results), "static_assets": len(assets), "feed_items": len(rss_items), "private_variants": "noindex", "og": "1200x630 PNG", "checks": results}, ensure_ascii=False, indent=2))
