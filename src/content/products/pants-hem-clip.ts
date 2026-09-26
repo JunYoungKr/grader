@@ -26,6 +26,8 @@ export const pantsHemClipArticle: Article = {
   products: [
     {
       id: "hemclip-pixelog",
+      coupangProductId: 9486875684,
+      imageUrl: "https://thumbnail12.coupangcdn.com/thumbnails/remote/512x512ex/image/vendor_inventory/fe7d/20c959369f9c2ba448270423867ffafc3e1cabd6df599c127f4915eed0f1.png",
       name: "픽셀로그 바지 밑단 고정 클립",
       type: "클립형 밑단 고정",
       descriptor: "투명, 10개입, 여러 벌 돌려쓰기",

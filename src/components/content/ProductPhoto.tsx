@@ -11,12 +11,12 @@ export function ProductPhoto({
   alt: string;
   compact?: boolean;
 }) {
-  const [failed, setFailed] = useState(false);
+  const [failedSrc, setFailedSrc] = useState<string>();
   return (
     <div
       className={`photo-frame relative flex aspect-square w-full items-center justify-center rounded-lg ${compact ? "max-w-24" : ""}`}
     >
-      {src && !failed ? (
+      {src && src !== failedSrc ? (
         <Image
           src={src}
           alt={alt}
@@ -27,7 +27,7 @@ export function ProductPhoto({
               : "(min-width: 1024px) 280px, (min-width: 640px) 45vw, 90vw"
           }
           className="object-contain p-5"
-          onError={() => setFailed(true)}
+          onError={() => setFailedSrc(src)}
         />
       ) : (
         <div className="flex flex-col items-center gap-2 text-photo-ink">

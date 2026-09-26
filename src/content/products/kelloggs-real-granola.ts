@@ -25,6 +25,8 @@ export const kelloggsRealGranolaArticle: Article = {
   products: [
     {
       id: "kelloggs-real-granola",
+      coupangProductId: 7012375223,
+      imageUrl: "https://t3c.coupangcdn.com/thumbnails/remote/512x512ex/image/retail/images/fee7bcb6-4750-4877-b749-420e8b8920e416817196393766070120.png",
       name: "켈로그 리얼 그래놀라 오리지널",
       type: "그래놀라 시리얼",
       descriptor: "오리지널, 350g 3개",
