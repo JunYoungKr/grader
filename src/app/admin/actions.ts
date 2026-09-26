@@ -6,6 +6,7 @@ import type { Article, Grade, Provider } from "@/lib/types";
 import { getAdminUser } from "@/lib/supabase/auth";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import { getCategories } from "@/lib/content";
+import { normalizeContentCopy } from "@/lib/display-copy";
 
 export interface ActionState {
   error?: string;
@@ -30,7 +31,7 @@ function revalidateSite(slug: string) {
 }
 
 function validate(a: Article & { published: boolean; sort_order: number }): string | null {
-  if (!/^[a-z0-9-]+$/.test(a.slug)) return "slug는 소문자·숫자·하이픈만 가능합니다.";
+  if (!/^[a-z0-9-]+$/.test(a.slug)) return "slug는 소문자, 숫자, 하이픈만 가능합니다.";
   if (!a.title.trim()) return "제목은 필수입니다.";
   if (!getCategories().some((c) => c.slug === a.category))
     return `존재하지 않는 카테고리: ${a.category}`;
@@ -38,7 +39,7 @@ function validate(a: Article & { published: boolean; sort_order: number }): stri
   if (a.type === "comparison") {
     if (!a.products?.length) return "comparison 글은 제품이 1개 이상 필요합니다.";
     for (const p of a.products) {
-      if (!p.id || !p.name) return "제품 id·이름은 필수입니다.";
+      if (!p.id || !p.name) return "제품 id, 이름은 필수입니다.";
       if (!GRADES.includes(p.grade)) return `잘못된 등급: ${p.name}`;
       if (!PROVIDERS.includes(p.provider)) return `잘못된 제휴처: ${p.name}`;
       if (!/^https?:\/\//.test(p.affiliateUrl))
@@ -57,9 +58,9 @@ export async function saveArticle(
 
   let payload: Article & { published: boolean; sort_order: number; originalSlug?: string };
   try {
-    payload = JSON.parse(String(formData.get("payload")));
+    payload = normalizeContentCopy(JSON.parse(String(formData.get("payload"))));
   } catch {
-    return { error: "폼 데이터 파싱 실패 — JSON 필드를 확인하세요." };
+    return { error: "폼 데이터 파싱 실패, JSON 필드를 확인하세요." };
   }
 
   const invalid = validate(payload);

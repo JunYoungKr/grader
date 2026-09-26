@@ -9,7 +9,7 @@ export function supabasePublic(): SupabaseClient | null {
     if (process.env.VERCEL_ENV === "production") {
       throw new Error("공개 콘텐츠 DB 설정이 없어 배포를 중단합니다. Supabase URL/anon key를 확인하세요.");
     }
-    console.warn("[supabase] NEXT_PUBLIC_SUPABASE_URL/ANON_KEY 미설정 — 콘텐츠 빈 목록 폴백");
+    console.warn("[supabase] NEXT_PUBLIC_SUPABASE_URL/ANON_KEY 미설정, 콘텐츠 빈 목록 폴백");
     return null;
   }
   return createClient(url, key, { auth: { persistSession: false } });
@@ -20,7 +20,7 @@ export function supabaseAdmin(): SupabaseClient {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) {
-    throw new Error("SUPABASE_SERVICE_ROLE_KEY 미설정 — 어드민 쓰기 불가");
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY 미설정, 어드민 쓰기 불가");
   }
   return createClient(url, key, { auth: { persistSession: false } });
 }

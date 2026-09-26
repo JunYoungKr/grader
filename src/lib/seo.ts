@@ -3,7 +3,7 @@ import { absoluteUrl, SITE_DESCRIPTION, SITE_NAME } from "./site";
 
 export const SOCIAL_IMAGE = {
   url: absoluteUrl("/og"), width: 1200, height: 630,
-  alt: "Grader — 제품 등급 비교",
+  alt: "Grader, 제품 등급 비교",
 };
 
 export function pageMetadata({

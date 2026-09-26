@@ -18,7 +18,7 @@ export default async function AdminEditPage({
 
   return (
     <div>
-      <h1 className="text-xl font-medium">글 수정 — {slug}</h1>
+      <h1 className="text-xl font-medium">글 수정, {slug}</h1>
       <div className="mt-6">
         <ArticleForm initial={data as ArticleRow} />
       </div>
