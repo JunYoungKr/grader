@@ -30,4 +30,11 @@ describe("product editor persistence", () => {
     expect(saved).not.toHaveProperty("specsText");
     expect(saved).not.toHaveProperty("attributesJson");
   });
+
+  it("keeps an explanation guide product without an invented grade", () => {
+    const { grade: _grade, ...ungradedProduct } = product;
+    const draft = productToDraft(ungradedProduct);
+    expect(draft.grade).toBeUndefined();
+    expect(productFromDraft(draft)).toEqual(ungradedProduct);
+  });
 });

@@ -25,7 +25,7 @@ const EMPTY_PRODUCT: ProductDraft = {
   name: "",
   type: "",
   descriptor: "",
-  grade: "B",
+  grade: undefined,
   specs: [],
   priceExample: "",
   provider: "coupang",
@@ -114,7 +114,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
         promoBanner: promoJson.trim() ? JSON.parse(promoJson) : undefined,
         checklist: checklistJson.trim() ? JSON.parse(checklistJson) : undefined,
         products:
-          meta.type === "comparison"
+          meta.type === "comparison" || meta.type === "guide"
             ? products.map(productFromDraft)
             : undefined,
       };
@@ -251,8 +251,8 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
         />
       </section>
 
-      {/* 제품 (comparison 전용) */}
-      {meta.type === "comparison" && (
+      {/* 비교 글과 설명형 글에 판매처 상품을 연결한다. */}
+      {(meta.type === "comparison" || meta.type === "guide") && (
         <section>
           <div className="flex items-center justify-between">
             <h2 className="text-base font-medium">제품</h2>
@@ -304,15 +304,16 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
                   </div>
                   <div>
                     <label className={labelCls}>
-                      기존 등급 (공개 화면 미노출)
+                      기존 등급 (비교 글만 필수, 공개 화면 미노출)
                     </label>
                     <select
                       className={inputCls}
-                      value={p.grade}
+                      value={p.grade ?? ""}
                       onChange={(e) =>
-                        setProduct(i, { grade: e.target.value as Grade })
+                        setProduct(i, { grade: (e.target.value || undefined) as Grade | undefined })
                       }
                     >
+                      <option value="">평가하지 않음</option>
                       {GRADES.map((g) => (
                         <option key={g}>{g}</option>
                       ))}
