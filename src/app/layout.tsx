@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image", images: [SOCIAL_IMAGE] },
   verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION,
-    other: process.env.NAVER_SITE_VERIFICATION
-      ? { "naver-site-verification": process.env.NAVER_SITE_VERIFICATION }
+    google: process.env.GOOGLE_SITE_VERIFICATION?.trim(),
+    other: process.env.NAVER_SITE_VERIFICATION?.trim()
+      ? { "naver-site-verification": process.env.NAVER_SITE_VERIFICATION.trim() }
       : {},
   },
   robots: {
