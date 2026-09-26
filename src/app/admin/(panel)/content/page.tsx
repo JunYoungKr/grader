@@ -35,7 +35,7 @@ export default async function AdminListPage({
 
       {saved && (
         <p className="mt-3 rounded-md bg-brand-soft px-3 py-2 text-sm text-brand">
-          저장됨: {saved} — 공개 페이지에 즉시 반영되었습니다.
+          저장됨: {saved} , 공개 페이지에 즉시 반영되었습니다.
         </p>
       )}
       {deleted && (

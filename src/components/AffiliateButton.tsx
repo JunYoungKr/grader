@@ -72,7 +72,7 @@ export function AffiliateButton({
           {label ?? p.cta}
           <ExternalIcon />
         </span>
-        <span className="text-xs opacity-75">{p.label} · 제휴 링크</span>
+        <span className="text-xs opacity-75">{p.label} , 제휴 링크</span>
       </span>
     </a>
   );

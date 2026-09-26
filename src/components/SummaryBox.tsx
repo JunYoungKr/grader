@@ -14,9 +14,6 @@ export function SummaryBox({
       <ul className="mt-3 space-y-2 text-[15px] leading-relaxed text-muted">
         {items.map((t, i) => (
           <li key={i} className="flex gap-2">
-            <span className="text-brand" aria-hidden="true">
-              ·
-            </span>
             {/* 첫 줄 = 핵심 답변 → medium + ink로 강조 (시스템 최대 굵기 500) */}
             <span className={i === 0 ? "font-medium text-ink" : ""}>{t}</span>
           </li>

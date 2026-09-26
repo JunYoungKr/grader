@@ -1,4 +1,5 @@
 import type { Article } from "./types";
+import { normalizeContentCopy } from "./display-copy";
 import { categories } from "@/content/categories";
 import { supabasePublic } from "./supabase/server";
 
@@ -28,7 +29,7 @@ export interface ArticleRow {
 }
 
 export function rowToArticle(r: ArticleRow): Article {
-  return {
+  return normalizeContentCopy({
     slug: r.slug,
     category: r.category,
     type: r.type,
@@ -45,7 +46,7 @@ export function rowToArticle(r: ArticleRow): Article {
     checklist: r.checklist ?? undefined,
     related: r.related ?? undefined,
     sources: r.sources ?? undefined,
-  };
+  });
 }
 
 export async function getAllArticles(): Promise<Article[]> {

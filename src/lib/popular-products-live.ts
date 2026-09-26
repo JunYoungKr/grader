@@ -1,6 +1,7 @@
 import fallback from "../content/coupang-bestsellers.json";
 import { categories } from "../content/categories";
 import type { PopularProductSnapshot } from "./types";
+import { normalizeContentCopy } from "./display-copy";
 
 export function isValidProductSnapshot(
   value: unknown,
@@ -63,7 +64,8 @@ export async function getCurrentPopularSnapshot(): Promise<PopularProductSnapsho
       if (!response.ok)
         throw new Error(`Snapshot read failed: ${response.status}`);
       const rows = await response.json();
-      if (isValidProductSnapshot(rows?.[0]?.payload)) return rows[0].payload;
+      if (isValidProductSnapshot(rows?.[0]?.payload))
+        return normalizeContentCopy(rows[0].payload);
       console.warn(
         "[coupang-products] No valid DB snapshot; using bundled fallback",
       );
@@ -74,7 +76,7 @@ export async function getCurrentPopularSnapshot(): Promise<PopularProductSnapsho
       );
     }
   }
-  return fallback as PopularProductSnapshot;
+  return normalizeContentCopy(fallback as PopularProductSnapshot);
 }
 
 export async function getCurrentPopularProducts(category: string) {
