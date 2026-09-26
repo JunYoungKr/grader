@@ -48,7 +48,7 @@ export function ProductCard({
             {product.specs.map((s) => (
               <div key={s.label} className="flex justify-between gap-4 py-3">
                 <dt className="shrink-0 text-muted">{s.label}</dt>
-                <dd className="text-right">{s.value}</dd>
+                <dd className="min-w-0 break-words text-right">{s.value}</dd>
               </div>
             ))}
           </dl>
