@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import { collectCoupangSnapshot, COUPANG_CACHE_TAG } from "@/lib/coupang-sync";
 import { isCoupangSyncAuthorized } from "@/lib/coupang-sync-auth";
+import { refreshPromoCandidates } from "@/lib/coupang-promo-refresh";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -47,10 +48,22 @@ export async function POST(request: Request) {
     revalidatePath("/browse");
     for (const category of Object.keys(snapshot.categories))
       revalidatePath(`/category/${category}`);
+    let promoCandidates: number | null = null;
+    try {
+      promoCandidates = await refreshPromoCandidates();
+      revalidatePath("/admin/discovery");
+    } catch (error) {
+      // Discovery is separate from the already published product catalog.
+      console.error(
+        "[coupang-promo]",
+        error instanceof Error ? error.message : "Unknown discovery failure",
+      );
+    }
     return NextResponse.json({
       status: "updated",
       generatedAt: snapshot.generatedAt,
       products: Object.values(snapshot.categories).flat().length,
+      promoCandidates,
     });
   } catch (error) {
     const message =
