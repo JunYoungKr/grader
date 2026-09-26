@@ -37,19 +37,23 @@
   --font-body:
     "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
     system-ui, sans-serif;
-  --text-caption: 0.8125rem;
+  --text-caption: 0.875rem;
   --text-small: 0.9375rem;
   --text-body: 1rem;
+  --text-reading: clamp(1.0625rem, 1rem + 0.15vw, 1.125rem);
   --text-lead: 1.125rem;
   --text-title: 1.25rem;
   --text-section: clamp(1.5rem, 2.5vw, 1.875rem);
   --text-heading: clamp(1.875rem, 4vw, 2.625rem);
   --text-display: clamp(2.125rem, 4vw, 3.375rem);
   --leading-body: 1.75;
+  --leading-reading: 1.85;
+  --tracking-reading: -0.015em;
   --leading-heading: 1.35;
   --tracking-heading: -0.045em;
   --font-regular: 400;
   --font-medium: 500;
+  --font-semibold: 600;
   --radius-sm: 0.25rem;
   --radius-md: 0.375rem;
   --radius-lg: 0.5rem;
@@ -58,6 +62,7 @@
   --radius-pill: 9999px;
   --width-content: 76rem;
   --width-reading: 48rem;
+  --width-prose: 42rem;
   --width-sidebar: 18rem;
   --layout-article: minmax(0, 1fr) var(--width-sidebar);
   --layout-hero: 1fr 1.08fr;

@@ -6,6 +6,7 @@ import { ArticleJsonLd } from "@/lib/jsonld";
 import { Container, SectionHeading } from "@/components/ui/Primitives";
 import { ArticleHeader } from "@/components/content/ArticleHeader";
 import { ArticleSidebar } from "@/components/content/ArticleSidebar";
+import { ArticleSection } from "@/components/content/ArticleSection";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 import { SummaryBox } from "@/components/SummaryBox";
 import { TableOfContents } from "@/components/TableOfContents";
@@ -134,28 +135,22 @@ export default async function ArticlePage({
                 <dl className="panel divide-y divide-hairline px-6">
                   {article.axes.map((axis) => (
                     <div key={axis.label} className="py-5">
-                      <dt className="mb-2 text-body font-medium text-brand">
+                      <dt className="mb-2 text-body font-semibold text-ink">
                         {axis.label}
                       </dt>
-                      <dd className="text-body text-muted">{axis.desc}</dd>
+                      <dd className="max-w-prose text-reading text-ink">{axis.desc}</dd>
                     </div>
                   ))}
                 </dl>
               </section>
             )}
             {(article.sections ?? []).map((section, i) => (
-              <section
+              <ArticleSection
                 key={i}
                 id={`sec-${i}`}
-                className="section-block article-copy"
-              >
-                <h2 className="mb-5 text-section font-medium">
-                  {section.heading}
-                </h2>
-                {section.paragraphs.map((p, j) => (
-                  <p key={j}>{p}</p>
-                ))}
-              </section>
+                heading={section.heading}
+                paragraphs={section.paragraphs}
+              />
             ))}
             {!!article.related?.length && (
               <RelatedLinks

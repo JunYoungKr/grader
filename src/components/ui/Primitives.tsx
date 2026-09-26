@@ -40,9 +40,9 @@ export function SectionHeading({
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h2 className="text-section font-medium">{title}</h2>
+        <h2 className="text-section font-semibold">{title}</h2>
         {description && (
-          <p className="mt-2 text-small text-muted">{description}</p>
+          <p className="mt-3 text-body text-muted">{description}</p>
         )}
       </div>
       {href && (

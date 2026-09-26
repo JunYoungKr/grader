@@ -12,7 +12,7 @@ export function RelatedLinks({
 }) {
   return (
     <section id={id} className="mt-12 scroll-mt-20">
-      <h2 className="text-title font-medium">{title}</h2>
+      <h2 className="text-title font-semibold">{title}</h2>
       <ul className="mt-3 divide-y divide-hairline border-y border-hairline">
         {links.map((l) => (
           <li key={l.slug}>

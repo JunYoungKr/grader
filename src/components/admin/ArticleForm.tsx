@@ -291,7 +291,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
 
       {/* 요약 */}
       <section>
-        <label className={labelCls}>한눈에 요약 — 한 줄에 하나</label>
+        <label className={labelCls}>한눈에 요약, 한 줄에 하나</label>
         <textarea
           className={inputCls}
           rows={3}
@@ -409,7 +409,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
                   </div>
                   <div className="sm:col-span-2">
                     <label className={labelCls}>
-                      스펙 — 한 줄에 “라벨 | 값”
+                      스펙, 한 줄에 “라벨 | 값”
                     </label>
                     <textarea
                       className={inputCls}
@@ -422,7 +422,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
                   </div>
                   <div className="sm:col-span-2">
                     <label className={labelCls}>
-                      attributes JSON (선택 — 비교 엔진용{" "}
+                      attributes JSON (선택, 비교 엔진용{" "}
                       {"{ ageMonths, features }"})
                     </label>
                     <textarea
@@ -465,7 +465,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
       {/* 부가 구조 */}
       <section className="space-y-4">
         <div>
-          <label className={labelCls}>평가 축 — 한 줄에 “라벨 | 설명”</label>
+          <label className={labelCls}>평가 축, 한 줄에 “라벨 | 설명”</label>
           <textarea
             className={inputCls}
             rows={3}
@@ -474,7 +474,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
           />
         </div>
         <div>
-          <label className={labelCls}>관련 글 — 한 줄에 “slug | 제목”</label>
+          <label className={labelCls}>관련 글, 한 줄에 “slug | 제목”</label>
           <textarea
             className={inputCls}
             rows={2}
@@ -483,7 +483,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
           />
         </div>
         <div>
-          <label className={labelCls}>출처 — 한 줄에 “라벨 | URL”</label>
+          <label className={labelCls}>출처, 한 줄에 “라벨 | URL”</label>
           <textarea
             className={inputCls}
             rows={2}
@@ -532,7 +532,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
         disabled={Boolean(jsonError)}
         className="inline-flex rounded-lg bg-brand px-5 py-2.5 text-sm font-medium text-on-brand transition-opacity hover:opacity-90 disabled:opacity-50"
       >
-        저장 — 사이트에 즉시 반영
+        저장, 사이트에 즉시 반영
       </button>
     </form>
   );

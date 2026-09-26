@@ -270,7 +270,7 @@ async function main(): Promise<void> {
   const findings = auditSnapshot(snapshot);
 
   if (process.argv.includes("--remote")) {
-    console.log("원격 제휴 링크·이미지 240건 확인 중...");
+    console.log("원격 제휴 링크, 이미지 240건 확인 중...");
     findings.push(...(await auditRemoteUrls(snapshot)));
   }
 

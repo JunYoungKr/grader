@@ -1,4 +1,5 @@
 import type { Provider } from "./types";
+import { normalizeContentCopy } from "./display-copy";
 export type SavedItem = {
   id: string;
   title: string;
@@ -47,7 +48,8 @@ export function parseSaved(raw: string | null): SavedItem[] {
           (v.productId === undefined || typeof v.productId === "string" || typeof v.productId === "number") &&
           (v.article === undefined || typeof v.article === "string"),
       )
-      .slice(0, 100);
+      .slice(0, 100)
+      .map((item) => normalizeContentCopy(item));
   } catch {
     return [];
   }

@@ -30,6 +30,13 @@ const config: Config = {
         caption: ["var(--text-caption)", { lineHeight: "1.6" }],
         small: ["var(--text-small)", { lineHeight: "1.65" }],
         body: ["var(--text-body)", { lineHeight: "var(--leading-body)" }],
+        reading: [
+          "var(--text-reading)",
+          {
+            lineHeight: "var(--leading-reading)",
+            letterSpacing: "var(--tracking-reading)",
+          },
+        ],
         lead: ["var(--text-lead)", { lineHeight: "var(--leading-body)" }],
         title: ["var(--text-title)", { lineHeight: "1.5" }],
         section: [
@@ -57,6 +64,7 @@ const config: Config = {
       fontWeight: {
         normal: "var(--font-regular)",
         medium: "var(--font-medium)",
+        semibold: "var(--font-semibold)",
       },
       spacing: Object.fromEntries(
         [1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24].map((n) => [
@@ -80,6 +88,7 @@ const config: Config = {
       maxWidth: {
         content: "var(--width-content)",
         reading: "var(--width-reading)",
+        prose: "var(--width-prose)",
       },
       gridTemplateColumns: {
         article: "var(--layout-article)",

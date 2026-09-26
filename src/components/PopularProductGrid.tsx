@@ -37,7 +37,7 @@ function PopularProductCard({
       </div>
       <div className="flex flex-1 flex-col gap-3 pt-4">
         <p className="text-caption text-muted">
-          {product.sourceCategoryLabel.replaceAll("·", ", ")}
+          {product.sourceCategoryLabel}
         </p>
         <h3 className="line-clamp-2 text-body font-medium leading-relaxed">
           {product.name}

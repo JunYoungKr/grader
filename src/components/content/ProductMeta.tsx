@@ -8,7 +8,7 @@ export function ProductPrice({
 }) {
   return (
     <div>
-      <p className="text-title font-medium tabular-nums">
+      <p className="text-title font-semibold tabular-nums">
         {formatPrice(price)}
       </p>
       <p className="mt-1 text-caption text-faint">

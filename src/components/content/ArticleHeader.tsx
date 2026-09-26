@@ -38,8 +38,8 @@ export function ArticleHeader({
           }}
         />
       </div>
-      <h1 className="mt-5 text-heading font-medium">{article.title}</h1>
-      <p className="mt-4 text-lead text-muted">{article.description}</p>
+      <h1 className="mt-5 text-heading font-semibold">{article.title}</h1>
+      <p className="mt-5 max-w-prose text-reading text-ink">{article.description}</p>
       <p className="mt-4 flex flex-wrap gap-x-4 text-caption text-faint">
         <span>{article.updated} 기준</span>
         <span>작성: {SITE_NAME}</span>

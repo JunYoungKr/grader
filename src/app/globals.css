@@ -95,10 +95,13 @@
     @apply inline-flex min-h-touch items-center gap-2 text-small font-medium text-brand underline-offset-4 hover:underline;
   }
   .article-copy {
-    @apply text-body leading-relaxed;
+    @apply max-w-prose text-reading text-ink;
   }
   .article-copy p + p {
-    @apply mt-4;
+    @apply mt-5;
+  }
+  .article-copy strong {
+    @apply font-semibold;
   }
   .skip-link {
     @apply fixed left-4 top-4 z-50 -translate-y-24 rounded-lg bg-brand px-5 py-3 text-on-brand focus:translate-y-0;

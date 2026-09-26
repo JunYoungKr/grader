@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { normalizeContentCopy } from "@/lib/display-copy";
 
 type RecentItem = { slug: string; title: string };
 
@@ -15,7 +16,7 @@ function readList(): RecentItem[] {
     return Array.isArray(list)
       ? list.filter(
           (i) => i && typeof i.slug === "string" && typeof i.title === "string",
-        )
+        ).map((item) => normalizeContentCopy(item))
       : [];
   } catch {
     return [];

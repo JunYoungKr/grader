@@ -39,12 +39,12 @@ export function ProductCard({
       <div className="flex flex-1 flex-col gap-4 p-5 pt-0">
         <div>
           <p className="text-caption text-brand">{product.type}</p>
-          <h3 className="mt-1 text-title font-medium">{product.name}</h3>
+          <h3 className="mt-1 text-title font-semibold">{product.name}</h3>
         </div>
         {match && <MatchBadge info={match} />}
-        <p className="text-small text-muted">{product.descriptor}</p>
+        <p className="text-body text-ink">{product.descriptor}</p>
         {product.specs.length > 0 && (
-          <dl className="divide-y divide-hairline border-y border-hairline text-small">
+          <dl className="divide-y divide-hairline border-y border-hairline text-body">
             {product.specs.map((s) => (
               <div key={s.label} className="flex justify-between gap-4 py-3">
                 <dt className="shrink-0 text-muted">{s.label}</dt>
