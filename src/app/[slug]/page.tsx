@@ -25,6 +25,7 @@ import { ArticleJsonLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
 import { parseUpdated, SITE_NAME } from "@/lib/site";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { ArticleSection } from "@/components/content/ArticleSection";
 
 // DB(ISR) — 어드민 저장 시 revalidatePath로 즉시 갱신. 새 slug도 빌드 없이 서빙.
 export const revalidate = 300;
@@ -95,16 +96,16 @@ export default async function ArticlePage({
         <div className="min-w-0">
           <MethodologyStrip />
           {category && <p className="mt-3 text-sm text-muted">{category.name}</p>}
-          <h1 className="mt-1 text-3xl font-medium leading-tight tracking-tight">
+          <h1 className="mt-1 text-heading font-semibold break-keep">
             {article.title}
           </h1>
-          <p className="mt-3 text-[15px] leading-relaxed text-muted">
+          <p className="mt-5 max-w-prose text-reading text-ink break-keep">
             {article.description}
           </p>
-          <p className="mt-2 text-xs text-faint">
+          <p className="mt-3 text-caption text-muted">
             {article.updated} 기준{providers.length > 0 && ", 제휴 링크 포함"}
           </p>
-          <p className="mt-2 text-xs text-faint">
+          <p className="mt-2 text-caption text-muted">
             작성: {SITE_NAME}
             {parseUpdated(article.modifiedAt) && (
               <> , 페이지 수정일: <time dateTime={article.modifiedAt}>
@@ -137,7 +138,7 @@ export default async function ArticlePage({
 
           {article.checklist && (
             <section id="checklist" className="mt-10 scroll-mt-24">
-              <h2 className="text-lg font-medium">품목별 권장 수량</h2>
+              <h2 className="text-section font-semibold">품목별 권장 수량</h2>
               <div className="mt-3">
                 <ChecklistTable items={article.checklist.items} />
               </div>
@@ -176,12 +177,12 @@ export default async function ArticlePage({
 
               {article.axes?.length ? (
                 <section id="axes" className="mt-12 scroll-mt-24">
-                  <h2 className="text-lg font-medium">평가 기준</h2>
+                  <h2 className="text-section font-semibold">평가 기준</h2>
                   <dl className="mt-3 divide-y divide-hairline border-y border-hairline">
                     {article.axes.map((a) => (
-                      <div key={a.label} className="flex gap-4 py-3">
-                        <dt className="w-24 shrink-0 font-medium">{a.label}</dt>
-                        <dd className="text-[15px] leading-relaxed text-muted">
+                      <div key={a.label} className="py-5">
+                        <dt className="mb-2 text-body font-semibold text-ink">{a.label}</dt>
+                        <dd className="max-w-prose text-reading text-ink break-keep">
                           {a.desc}
                         </dd>
                       </div>
@@ -193,14 +194,12 @@ export default async function ArticlePage({
           )}
 
           {(article.sections ?? []).map((s, i) => (
-            <section key={i} id={`sec-${i}`} className="mt-12 scroll-mt-24">
-              <h2 className="text-lg font-medium">{s.heading}</h2>
-              {s.paragraphs.map((p, j) => (
-                <p key={j} className="mt-3 text-[15px] leading-relaxed">
-                  {p}
-                </p>
-              ))}
-            </section>
+            <ArticleSection
+              key={i}
+              id={`sec-${i}`}
+              heading={s.heading}
+              paragraphs={s.paragraphs}
+            />
           ))}
 
           {article.related?.length ? (
@@ -224,11 +223,11 @@ export default async function ArticlePage({
                 </p>
                 <div className="mt-2.5 flex items-center gap-2.5">
                   <GradeBadge grade={recommended.grade} />
-                  <span className="min-w-0 truncate text-sm font-medium">
+                  <span className="min-w-0 text-body font-semibold break-keep">
                     {recommended.name}
                   </span>
                 </div>
-                <p className="mt-2 text-lg font-medium tabular-nums">
+                <p className="mt-2 text-title font-semibold tabular-nums">
                   {formatPrice(recommended.priceExample)}
                 </p>
                 <div className="mt-3">

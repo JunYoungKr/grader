@@ -1,4 +1,5 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import "../styles/tokens.css";
 
 @tailwind base;
 @tailwind components;
@@ -112,6 +113,24 @@ body {
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+@layer components {
+  .section-block {
+    margin-top: var(--section-space);
+    scroll-margin-top: var(--scroll-margin-reading);
+  }
+  .article-copy {
+    @apply max-w-prose text-reading text-ink;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+  .article-copy p + p {
+    @apply mt-5;
+  }
+  .article-copy strong {
+    @apply font-semibold;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

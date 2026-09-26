@@ -39,7 +39,7 @@ export function ProductCard({
               </span>
             )}
           </div>
-          <p className="mt-0.5 text-lg font-medium leading-snug">{product.name}</p>
+          <h3 className="mt-0.5 text-title font-semibold">{product.name}</h3>
         </div>
         {rank !== undefined && (
           <span className="shrink-0 rounded-full bg-ink px-2 py-0.5 text-xs font-medium leading-relaxed text-paper">
@@ -56,21 +56,21 @@ export function ProductCard({
 
       {match && <MatchBadge info={match} />}
 
-      <p className="text-sm leading-relaxed text-muted">{product.descriptor}</p>
+      <p className="text-body text-ink">{product.descriptor}</p>
 
-      <dl className="space-y-1.5 border-t border-hairline pt-2.5 text-xs text-faint">
+      <dl className="space-y-3 border-t border-hairline pt-4 text-body text-muted">
         {product.specs.map((s) => (
           <div key={s.label} className="flex justify-between gap-3">
-            <dt>{s.label}</dt>
-            <dd className="text-right tabular-nums text-muted">{s.value}</dd>
+            <dt className="shrink-0">{s.label}</dt>
+            <dd className="min-w-0 break-words text-right tabular-nums text-ink">{s.value}</dd>
           </div>
         ))}
         <div className="flex justify-between">
           <dt>조회 가격</dt>
           <dd className="text-right tabular-nums">
-            <span>{formatPrice(product.priceExample)}</span>
+            <span className="text-title font-semibold text-ink">{formatPrice(product.priceExample)}</span>
             {priceCheckedLabel && (
-              <span className="block text-[11px] text-faint">
+              <span className="block text-caption text-muted">
                 {priceCheckedLabel}
               </span>
             )}
