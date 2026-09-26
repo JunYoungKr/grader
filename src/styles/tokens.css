@@ -1,0 +1,23 @@
+/* Shared reading typography. Keep these names aligned with the UI redesign. */
+:root {
+  --text-caption: 0.875rem;
+  --text-small: 0.9375rem;
+  --text-body: 1rem;
+  --text-reading: clamp(1.0625rem, 1rem + 0.15vw, 1.125rem);
+  --text-title: 1.25rem;
+  --text-section: clamp(1.5rem, 2.5vw, 1.875rem);
+  --text-heading: clamp(1.875rem, 4vw, 2.625rem);
+  --leading-body: 1.75;
+  --leading-reading: 1.85;
+  --leading-heading: 1.35;
+  --tracking-reading: -0.015em;
+  --tracking-heading: -0.045em;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --width-prose: 42rem;
+  --space-5: 1.25rem;
+  --section-space: clamp(2.5rem, 5vw, 4rem);
+  --scroll-margin-reading: 6rem;
+  --tap-target: 2.75rem;
+}
