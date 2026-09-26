@@ -25,6 +25,8 @@ export const mynormalAlluloseArticle: Article = {
   products: [
     {
       id: "mynormal-allulose",
+      coupangProductId: 9246341637,
+      imageUrl: "https://t1c.coupangcdn.com/thumbnails/remote/512x512ex/image/retail/images/1377670231344522-f765872e-30cb-48e8-ab6b-fb58e152358d.jpg",
       name: "마이노멀 저당 저칼로리 알룰로스",
       type: "알룰로스 감미료",
       descriptor: "500g, 저당 저칼로리",

@@ -4,7 +4,8 @@ import { useActionState, useMemo, useState } from "react";
 import { saveArticle, type ActionState } from "@/app/admin/actions";
 import { categories } from "@/content/categories";
 import type { ArticleRow } from "@/lib/content";
-import type { Grade, Product, Provider } from "@/lib/types";
+import type { Grade, Provider } from "@/lib/types";
+import { parsePairs, productFromDraft, productToDraft, type ProductDraft } from "@/lib/product-form";
 
 // 운영자 1인용 편집 폼 — 자주 만지는 것(제품·가격·링크·등급)은 구조화 입력,
 // 드물게 쓰는 중첩 구조(섹션·배너·체크리스트)는 JSON 입력으로 단순화.
@@ -15,41 +16,8 @@ const PROVIDERS: Provider[] = ["coupang", "iherb", "linkprice", "tenping"];
 const inputCls = "field mt-2";
 const labelCls = "text-small font-medium text-muted";
 
-type ProductDraft = Omit<Product, "priceExample" | "attributes"> & {
-  priceExample: string;
-  attributesJson: string;
-  specsText: string;
-};
-
-function toLines<T>(
-  items: T[] | undefined | null,
-  fmt: (t: T) => string,
-): string {
+function toLines<T>(items: T[] | undefined | null, fmt: (t: T) => string): string {
   return (items ?? []).map(fmt).join("\n");
-}
-
-function parsePairs(text: string): [string, string][] {
-  return text
-    .split("\n")
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .map((l) => {
-      const i = l.indexOf("|");
-      return i === -1
-        ? ([l, ""] as [string, string])
-        : ([l.slice(0, i).trim(), l.slice(i + 1).trim()] as [string, string]);
-    });
-}
-
-function productToDraft(p: Product): ProductDraft {
-  const { priceExample, attributes, specs, ...rest } = p;
-  return {
-    ...rest,
-    specs,
-    priceExample: String(priceExample),
-    attributesJson: attributes ? JSON.stringify(attributes, null, 2) : "",
-    specsText: toLines(specs, (s) => `${s.label} | ${s.value}`),
-  };
 }
 
 const EMPTY_PRODUCT: ProductDraft = {
@@ -147,24 +115,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
         checklist: checklistJson.trim() ? JSON.parse(checklistJson) : undefined,
         products:
           meta.type === "comparison"
-            ? products.map((d) => ({
-                id: d.id.trim(),
-                name: d.name.trim(),
-                type: d.type.trim(),
-                descriptor: d.descriptor.trim(),
-                grade: d.grade,
-                provider: d.provider,
-                affiliateUrl: d.affiliateUrl.trim(),
-                recommended: d.recommended || undefined,
-                priceExample: Number(d.priceExample),
-                specs: parsePairs(d.specsText).map(([label, value]) => ({
-                  label,
-                  value,
-                })),
-                attributes: d.attributesJson.trim()
-                  ? JSON.parse(d.attributesJson)
-                  : undefined,
-              }))
+            ? products.map(productFromDraft)
             : undefined,
       };
       setJsonError(null);
@@ -408,9 +359,20 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className={labelCls}>
-                      스펙, 한 줄에 “라벨 | 값”
+                    <label className={labelCls} htmlFor={`product-image-${i}`}>
+                      상품 이미지 주소
                     </label>
+                    <input
+                      id={`product-image-${i}`}
+                      type="url"
+                      className={inputCls}
+                      value={p.imageUrl ?? ""}
+                      onChange={(e) => setProduct(i, { imageUrl: e.target.value })}
+                      placeholder="https://thumbnail.coupangcdn.com/..."
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className={labelCls}>스펙, 한 줄에 “라벨 | 값”</label>
                     <textarea
                       className={inputCls}
                       rows={3}
