@@ -2,6 +2,7 @@ import Link from "next/link";
 import { refreshDiscovery } from "./actions";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import { PromoCandidateCard, type PromoCandidateRow } from "@/components/admin/PromoCandidateCard";
+import { comparePriorityCandidates, isPriorityCandidate } from "@/lib/coupang-promo-priority";
 
 export const dynamic = "force-dynamic";
 
@@ -11,22 +12,30 @@ export default async function DiscoveryPage({
   searchParams: Promise<{ view?: string; updated?: string; error?: string }>;
 }) {
   const params = await searchParams;
-  const view = ["new", "saved", "dismissed"].includes(params.view ?? "")
+  const view = ["priority", "all", "saved", "dismissed"].includes(params.view ?? "")
     ? params.view!
-    : "new";
+    : "priority";
   const db = supabaseAdmin();
+  let candidatesQuery = db.from("coupang_promo_candidates")
+    .select("*")
+    .eq("review_status", view === "saved" || view === "dismissed" ? view : "new");
+  if (view === "priority" || view === "all") {
+    candidatesQuery = candidatesQuery.eq("is_current", true);
+  }
   const [{ data, error }, state] = await Promise.all([
-    db.from("coupang_promo_candidates")
-      .select("*")
-      .eq("review_status", view)
+    candidatesQuery
       .order("last_seen_at", { ascending: false })
-      .limit(100),
+      .limit(200),
     db.from("coupang_promo_sync_state")
       .select("last_success_at, candidate_count")
       .eq("name", "promo-candidates")
       .maybeSingle(),
   ]);
-  const candidates = (data ?? []) as PromoCandidateRow[];
+  const candidates = view === "priority"
+    ? ((data ?? []) as PromoCandidateRow[])
+      .filter(isPriorityCandidate)
+      .sort(comparePriorityCandidates)
+    : (data ?? []) as PromoCandidateRow[];
   const syncedAt = state.data?.last_success_at
     ? new Intl.DateTimeFormat("ko-KR", {
       timeZone: "Asia/Seoul", dateStyle: "medium", timeStyle: "short",
@@ -39,7 +48,8 @@ export default async function DiscoveryPage({
         <div>
           <h1 className="text-2xl font-semibold text-ink">상품 후보</h1>
           <p className="mt-2 text-sm text-muted">
-            골드박스와 살림 검색어에서 모은 실제 상품입니다. 게시 전 현재 가격과 사용 조건을 확인하세요.
+            구체적인 살림 문제와 맞는 상품, 이전 조회보다 가격이 낮아진 상품을 먼저 보여줍니다.
+            게시 전 판매 옵션과 현재 가격을 확인하세요.
           </p>
           <p className="mt-1 text-sm text-muted">
             {syncedAt ? `최근 수집 ${syncedAt}, ${state.data?.candidate_count ?? 0}개` : "아직 수집한 상품이 없습니다."}
@@ -68,7 +78,8 @@ export default async function DiscoveryPage({
       )}
       <nav className="mt-6 flex flex-wrap gap-3 border-b border-hairline pb-3 text-sm">
         {([
-          ["new", "새 후보"], ["saved", "관심 상품"], ["dismissed", "제외한 상품"],
+          ["priority", "우선 검토"], ["all", "전체 새 후보"],
+          ["saved", "관심 상품"], ["dismissed", "제외한 상품"],
         ] as const).map(([value, label]) => (
           <Link
             key={value}
@@ -85,7 +96,9 @@ export default async function DiscoveryPage({
         ))}
         {candidates.length === 0 && !error && (
           <p className="rounded-md border border-hairline bg-card p-8 text-center text-muted">
-            {view === "new" ? "새 후보가 없습니다. 지금 후보 수집을 눌러 시작하세요." : "이 목록에는 아직 상품이 없습니다."}
+            {view === "priority" ? "우선 검토할 후보가 없습니다. 전체 새 후보를 확인해 주세요." :
+              view === "all" ? "새 후보가 없습니다. 지금 후보 수집을 눌러 시작하세요." :
+              "이 목록에는 아직 상품이 없습니다."}
           </p>
         )}
       </div>

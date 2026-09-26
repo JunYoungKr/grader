@@ -30,7 +30,7 @@ export async function setDiscoveryStatus(formData: FormData): Promise<void> {
   await requireAdmin();
   const productKey = String(formData.get("productKey") ?? "");
   const status = String(formData.get("status") ?? "");
-  const view = String(formData.get("view") ?? "new");
+  const view = String(formData.get("view") ?? "priority");
   if (!/^\d+:(?:\d+|base)$/.test(productKey) ||
     !["new", "saved", "dismissed"].includes(status)) {
     throw new Error("잘못된 후보 변경 요청입니다.");
@@ -41,5 +41,5 @@ export async function setDiscoveryStatus(formData: FormData): Promise<void> {
     .eq("product_key", productKey);
   if (error) throw new Error("후보 상태를 저장하지 못했습니다.");
   revalidatePath("/admin/discovery");
-  redirect(`/admin/discovery?view=${["new", "saved", "dismissed"].includes(view) ? view : "new"}`);
+  redirect(`/admin/discovery?view=${["priority", "all", "saved", "dismissed"].includes(view) ? view : "priority"}`);
 }

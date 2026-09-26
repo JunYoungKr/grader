@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { setDiscoveryStatus } from "@/app/admin/(panel)/discovery/actions";
+import { observedPriceDrop } from "@/lib/coupang-promo-priority";
 
 export type PromoCandidateRow = {
   product_key: string;
@@ -17,6 +18,7 @@ export type PromoCandidateRow = {
   sources: string[];
   review_status: "new" | "saved" | "dismissed";
   last_seen_at: string;
+  is_current: boolean;
 };
 
 function koreanTime(value: string): string {
@@ -43,6 +45,7 @@ export function PromoCandidateCard({
   const lowerThanPrevious = candidate.previous_price !== null &&
     candidate.previous_price > candidate.price &&
     candidate.previous_price_checked_at !== null;
+  const priceDrop = observedPriceDrop(candidate);
   return (
     <article className="flex flex-col gap-5 rounded-lg border border-hairline bg-card p-5 sm:flex-row">
       <div className="shrink-0 overflow-hidden rounded-md bg-paper sm:h-40 sm:w-40">
@@ -57,6 +60,11 @@ export function PromoCandidateCard({
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap gap-2 text-sm text-muted">
+          {priceDrop > 0 && (
+            <span className="rounded-sm bg-brand-soft px-2 py-0.5 font-medium text-brand">
+              이전 조회보다 {priceDrop.toLocaleString("ko-KR")}원 낮음
+            </span>
+          )}
           <span>{candidate.category_name}</span>
           {candidate.sources.map((source) => (
             <span key={source} className="rounded-sm bg-brand-soft px-2 py-0.5 text-brand">
@@ -80,6 +88,11 @@ export function PromoCandidateCard({
           </p>
         )}
         <p className="mt-1 text-xs text-faint">마지막 수집 {koreanTime(candidate.last_seen_at)}</p>
+        {!candidate.is_current && (
+          <p className="mt-2 text-sm text-muted">
+            이번 수집에는 나오지 않았습니다. 판매 여부와 가격을 다시 확인하세요.
+          </p>
+        )}
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <a
             href={candidate.affiliate_url}

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { collectPromoCandidates, toPromoCandidate } from "./coupang-promo";
 import type { CoupangProduct } from "./coupang";
 
-function product(id: number, name = "서랍 칸막이 정리함"): CoupangProduct {
+function product(id: number, name = "길이조절 서랍 칸막이 정리함"): CoupangProduct {
   return {
     productId: id,
     productName: name,
@@ -18,12 +18,12 @@ describe("promotion candidate collection", () => {
   it("keeps the exact affiliate option and merges discovery sources", async () => {
     const candidates = await collectPromoCandidates(
       async () => [product(12)],
-      async (keyword) => keyword === "서랍 칸막이" ? [product(12)] : [],
+      async (keyword) => keyword === "길이조절 서랍 칸막이" ? [product(12)] : [],
       new Date("2026-09-27T00:00:00Z"),
     );
     expect(candidates).toHaveLength(1);
     expect(candidates[0].productKey).toBe("12:301");
-    expect(candidates[0].sources).toEqual(["goldbox", "search:서랍 칸막이"]);
+    expect(candidates[0].sources).toEqual(["goldbox", "search:길이조절 서랍 칸막이"]);
     expect(candidates[0].checkedAt).toBe("2026-09-27T00:00:00.000Z");
   });
 
@@ -33,8 +33,9 @@ describe("promotion candidate collection", () => {
         { ...product(12), productPrice: -1 },
         { ...product(13), productUrl: "https://example.com/product" },
       ],
-      async (keyword) => keyword === "서랍 칸막이" ? [
+      async (keyword) => keyword === "길이조절 서랍 칸막이" ? [
         product(14, "브랜드 식기세척기"),
+        product(16, "평범한 서랍 칸막이"),
         product(15),
       ] : [],
     );
@@ -54,9 +55,20 @@ describe("promotion candidate collection", () => {
     };
     const candidates = await collectPromoCandidates(
       async () => [],
-      async (keyword) => keyword === "서랍 칸막이" ? [first, second] : [],
+      async (keyword) => keyword === "길이조절 서랍 칸막이" ? [first, second] : [],
     );
     expect(candidates).toHaveLength(1);
     expect(candidates[0].productKey).toBe("20:301");
+  });
+
+  it("keeps only products with the specific household feature in a search topic", async () => {
+    const candidates = await collectPromoCandidates(
+      async () => [],
+      async (keyword) => keyword === "벽걸이 접이식 빨래 바구니" ? [
+        product(30, "접이식 빨래 바구니"),
+        product(31, "벽걸이 접이식 빨래 바구니"),
+      ] : [],
+    );
+    expect(candidates.map((candidate) => candidate.productId)).toEqual([31]);
   });
 });
