@@ -1,41 +1,87 @@
+"use client";
 import Link from "next/link";
-import { getCategories } from "@/lib/content";
-import { SITE_NAME } from "@/lib/site";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Icon } from "./ui/Icon";
+import { SearchForm } from "./ui/SearchForm";
 import { ThemeToggle } from "./ThemeToggle";
-
-// sticky 헤더 — 반투명 paper + blur(시스템에서 유일한 블러), 하단 헤어라인.
+const navigation = [
+  { href: "/", label: "홈" },
+  { href: "/browse", label: "살림 둘러보기" },
+  { href: "/about", label: "Grader의 기준" },
+];
 export function Header() {
-  const categories = getCategories();
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
   return (
-    <header
-      className="sticky top-0 z-20 border-b border-hairline backdrop-blur-[8px]"
-      style={{ background: "color-mix(in srgb, var(--paper) 88%, transparent)" }}
-    >
-      <div className="mx-auto flex max-w-content items-center justify-between px-5 py-3">
-        <Link href="/" className="inline-flex items-center gap-2">
-          <span
-            aria-hidden="true"
-            className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-ink text-base font-medium leading-none text-paper"
-          >
-            G
-          </span>
-          <span className="text-lg font-medium tracking-tight">{SITE_NAME}</span>
+    <header className="sticky top-0 z-20 border-b border-hairline bg-paper">
+      <div className="page-shell flex h-header items-center gap-8">
+        <Link
+          href="/"
+          aria-label="Grader 홈"
+          onClick={() => setOpen(false)}
+          className="flex shrink-0 items-center gap-2 text-brand"
+        >
+          <span className="text-2xl font-medium tracking-tight">Grader</span>
         </Link>
-        <div className="flex min-w-0 items-center gap-4">
-          <nav className="flex gap-1 overflow-x-auto whitespace-nowrap text-sm text-muted">
-            {categories.map((c) => (
+        <nav aria-label="주 메뉴" className="hidden items-center gap-6 md:flex">
+          {navigation.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={pathname === item.href ? "page" : undefined}
+              className={`inline-flex min-h-touch items-center whitespace-nowrap text-small ${pathname === item.href ? "font-medium text-brand" : "text-muted hover:text-brand"}`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="ml-auto hidden w-64 xl:block">
+          <SearchForm compact />
+        </div>
+        <div className="ml-auto flex items-center gap-1 xl:ml-0">
+          <Link
+            href="/saved"
+            className="icon-button"
+            aria-label="저장한 살림"
+            aria-current={pathname === "/saved" ? "page" : undefined}
+          >
+            <Icon name="bookmark" />
+          </Link>
+          <ThemeToggle />
+          <button
+            type="button"
+            className="icon-button md:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
+            onClick={() => setOpen(!open)}
+          >
+            <Icon name={open ? "close" : "menu"} />
+          </button>
+        </div>
+      </div>
+      {open && (
+        <div
+          id="mobile-menu"
+          className="page-shell border-t border-hairline pb-5 pt-3 md:hidden"
+        >
+          <nav aria-label="모바일 메뉴" className="mb-4 flex flex-wrap gap-4">
+            {navigation.map((item) => (
               <Link
-                key={c.slug}
-                href={`/category/${c.slug}`}
-                className="rounded-md px-2.5 py-1.5 transition-colors hover:bg-brand-soft hover:text-brand"
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="text-link"
+                aria-current={pathname === item.href ? "page" : undefined}
               >
-                {c.name}
+                {item.label}
               </Link>
             ))}
           </nav>
-          <ThemeToggle />
+          <SearchForm />
         </div>
-      </div>
+      )}
     </header>
   );
 }

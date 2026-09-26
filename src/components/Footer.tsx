@@ -1,24 +1,36 @@
 import Link from "next/link";
-import { SITE_NAME, CONTACT_EMAIL } from "@/lib/site";
+import { CONTACT_EMAIL } from "@/lib/site";
 import { DisclosureNote } from "./DisclosureNote";
-
 export function Footer() {
   return (
-    <footer className="mt-16 border-t border-hairline">
-      <div className="mx-auto max-w-content space-y-3 px-5 py-8">
-        <nav className="flex gap-4 text-sm text-muted">
-          <Link href="/about" className="hover:text-ink">
-            소개
-          </Link>
-          <Link href="/privacy" className="hover:text-ink">
-            개인정보
-          </Link>
-          <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-ink">
-            문의
-          </a>
-        </nav>
+    <footer className="section-block footer-space border-t border-hairline pt-8 md:pb-10">
+      <div className="page-shell">
+        <div className="mb-8 flex flex-col justify-between gap-6 sm:flex-row">
+          <div>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-2xl font-medium text-brand"
+            >
+              Grader
+            </Link>
+          </div>
+          <nav
+            aria-label="사이트 안내"
+            className="flex flex-wrap items-start gap-x-6 gap-y-2 text-small text-muted"
+          >
+            <Link className="text-link" href="/about">
+              Grader 소개
+            </Link>
+            <Link className="text-link" href="/privacy">
+              개인정보처리방침
+            </Link>
+            <a className="text-link" href={`mailto:${CONTACT_EMAIL}`}>
+              문의하기
+            </a>
+          </nav>
+        </div>
         <DisclosureNote />
-        <p className="text-xs text-faint">© 2026 {SITE_NAME}</p>
+        <p className="mt-4 text-caption text-faint">© 2026 Grader</p>
       </div>
     </footer>
   );

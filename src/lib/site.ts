@@ -8,7 +8,7 @@ export const SITE_NAME = "Grader";
 export const OPERATOR_NAME = process.env.SITE_OPERATOR_NAME || SITE_NAME;
 export const CONTACT_EMAIL = "kop981020@naver.com";
 export const SITE_DESCRIPTION =
-  "생활 제품을 안전성, 성능, 성분, 가격으로 비교합니다. 제품별 특징과 평가 기준, 가격 조회 시점을 확인하고 나에게 맞는 제품을 선택하세요.";
+  "주방 정리부터 생활용품까지, 우리 집에 맞는 살림 방법과 제품을 찾아보세요. 구매 전 확인할 조건과 정보를 함께 안내합니다.";
 
 export function absoluteUrl(path = "/"): string {
   return new URL(path, `${SITE_URL}/`).toString();

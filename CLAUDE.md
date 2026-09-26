@@ -2,11 +2,24 @@
 
 Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저 읽고, 아래 원칙, 규칙을 지킬 것.
 
-## 글 가독성
+## 문구 작성 최우선 규칙
 
-아래의 기존 400/500 한정 규칙보다 우선한다. 제목, 상품명, 가격은 semibold(600), 긴 본문과 요약은 17~18px와 행간 1.85를 사용한다. 본문 최대 폭은 42rem, 문단 간격은 20px, 메타 정보는 14px다. `src/styles/tokens.css`와 공통 `ArticleSection` 컴포넌트에서 관리하며 상세 기준은 `docs/design/article-readability.md`를 참고한다.
+`AGENTS.md`의 문구 작성 규칙을 따른다. 단어 사이 가운데 점과 긴 대시, 구분자 하이픈을 절대 사용하지 않는다. 제목, 본문, 메타데이터, 관리자 화면, 생성 초안, 답변에 모두 적용한다. 쉼표나 조사로 연결하거나 문장을 나눈다. 기존 게시글과 외부 데이터, 브라우저 저장 목록에도 적용하며 URL과 상품 ID, 모델 번호, 날짜는 보존한다. 공통 처리는 `src/lib/display-copy.ts`에서 관리한다.
 
-## 한 줄 요약
+## 2026-09-27 공개 화면 개편 (이전 디자인, 등급 UI 규칙보다 우선)
+
+- 주요 고객: 주부. 우리 집 조건에 맞는 살림 방법, 제품을 찾는 서비스.
+- 공개 화면의 등급 배지를 제거하고 사용 조건, 사양, 조회 가격을 표시한다. DB grade는 호환 유지.
+- 디자인은 반드시 컴포넌트 단위. 토큰은 `src/styles/tokens.css`가 원천이며 Tailwind에서 참조한다.
+- 아이보리/올리브, 16px 본문, 44px 이상 터치, 다크 모드 지원.
+- 글 가독성: 긴 본문과 요약은 17~18px, 행간 1.85, 최대 폭 42rem. 제목, 상품명, 가격은 semibold(600) 토큰, 본문 400, 조작, 라벨 500. 메타 정보 14px. 아래의 이전 400/500 한정 규칙보다 이 기준을 우선한다.
+- 공개 UI 문구에 가운데 점과 긴 대시를 구분자로 쓰지 않는다. 장식용 영문 소제목, 감성적인 장문 카피, 잎사귀/반짝이 아이콘, 연출 이미지와 겹친 카드, 과도한 알약 모양 버튼을 추가하지 않는다. 짧은 한국어 제목과 실제 콘텐츠를 우선한다.
+- 상세 기준, 컴포넌트 맵: `docs/design/homemaking-design-system.md`.
+- `/browse` 검색, 분야 필터, `/saved` 로컬 저장 화면 추가. 인스타 DM은 아직 연결하지 않음.
+- 상품 정보는 기존 DB/스냅샷을 사용하며 실측, 후기, 가격, 콘텐츠를 만들어 내지 않는다.
+- 상품 목록은 `popular-products-live.ts`에서 Supabase 스냅샷을 읽는다. Supabase Cron이 한국 시간 매일 오전 9시에 `/api/cron/coupang`을 호출해 120개 목록을 교체한다. 설정과 운영은 `docs/coupang-daily-sync.md`, 가이드 기획은 `docs/homemaking-guide-plan.md` 참고. 번들 JSON은 DB 읽기 실패 시 폴백이다.
+
+## 초기 기획 한 줄 요약
 
 여러 카테고리의 생활 제품을 **안전성, 성능, 성분, 가격 등으로 등급화(S/A/B/C)해 비교**하고,
 쿠팡 파트너스 등 **제휴 링크로 수익**을 내는 콘텐츠 사이트. 브랜드명은 **Grader**, 도메인은 **grader.co.kr**.
@@ -21,11 +34,11 @@ Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저
 - `npm run build:coupang` / `npm run sync:coupang`, 쿠팡 초안 생성, 인기 상품 스냅샷 갱신
 - 폰트: Pretendard (런타임에 jsDelivr CDN 로드, `app/globals.css`의 @import)
 - 환경변수: `.env.local` (예시는 `.env.local.example`)
-, `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`, 콘텐츠 읽기(RLS: published만)
-, `SUPABASE_SERVICE_ROLE_KEY`, 어드민 쓰기, 시드 (서버 전용, NEXT_PUBLIC 금지)
-, `ADMIN_EMAILS`, `/admin/content` 허용 이메일(콤마 구분, Supabase Auth 계정 필요)
-, `NEXT_PUBLIC_SITE_URL`, 배포 도메인 (미설정 시 https://grader.co.kr)
-, `COUPANG_ACCESS_KEY` / `COUPANG_SECRET_KEY`, 쿠팡 파트너스 API
+  - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`, 콘텐츠 읽기(RLS: published만)
+  - `SUPABASE_SERVICE_ROLE_KEY`, 어드민 쓰기, 시드 (서버 전용, NEXT_PUBLIC 금지)
+  - `ADMIN_EMAILS`, `/admin/content` 허용 이메일(콤마 구분, Supabase Auth 계정 필요)
+  - `NEXT_PUBLIC_SITE_URL`, 배포 도메인 (미설정 시 https://grader.co.kr)
+  - `COUPANG_ACCESS_KEY` / `COUPANG_SECRET_KEY`, 쿠팡 파트너스 API
 
 ## 콘텐츠 아키텍처 (2026-06 전환)
 
@@ -49,8 +62,8 @@ Claude Code용 프로젝트 컨텍스트. 작업 시작 전 이 파일을 먼저
 4. **제휴 고지 유지.** 글에 쓰인 제휴처에 맞는 공정위 고지 자동 노출(`DisclosureNote`).
    모든 제휴 링크는 `rel="sponsored nofollow noopener"` (`AffiliateButton`이 처리).
 5. **디자인 토큰 일원화.** 색은 `app/globals.css`의 CSS 변수(시맨틱 9색 + 등급 `--grade-*`, 라이트/다크 두 벌)
-   + `tailwind.config.ts` 토큰. `lib/grade.ts`는 등급 토큰 참조, 라벨만, 제휴처 설정은 `lib/providers.ts`. 하드코딩 금지.
-   (2026.06 Claude Design 핸드오프 기준, 브랜드 네이비, 폰트 굵기 400/500만, 그림자는 고정 CTA 전용)
+   - `tailwind.config.ts` 토큰. `lib/grade.ts`는 등급 토큰 참조, 라벨만, 제휴처 설정은 `lib/providers.ts`. 하드코딩 금지.
+     (2026.06 Claude Design 핸드오프 기준, 브랜드 네이비, 폰트 굵기 400/500만, 그림자는 고정 CTA 전용)
 6. **답-우선 레이아웃 유지.** 글 상단 요약(SummaryBox) → 목차(TOC) → 등급표, 상세는 아래로.
    모바일 하단 고정 CTA(StickyCta) 유지.
 
@@ -114,9 +127,9 @@ docs/superpowers/          설계 스펙, 구현 플랜 아카이브 (비교 엔
 ## 데이터 모델 (lib/types.ts)
 
 - `Article.type = "comparison" | "guide" | "hub"`
-, comparison: `products` + `axes` (등급표)
-, guide: `sections` (설명형, 예: 인증 안내)
-, hub: `sections` + `related` (토픽 클러스터 허브, 스포크로 내부링크)
+  - comparison: `products` + `axes` (등급표)
+  - guide: `sections` (설명형, 예: 인증 안내)
+  - hub: `sections` + `related` (토픽 클러스터 허브, 스포크로 내부링크)
 - 공통: `summary`(요약), `sources`(출처), `related`(관련 글), `medical`(의료 면책),
   `promoBanner`(제휴처 공식 배너, 선택), `checklist`(품목, 권장 수량 표, guide에서 비교글로 퍼널, 선택)
 - `Product`: `provider` + `affiliateUrl` (제휴처 분리), `grade`, `specs`, `priceExample`, `recommended`,

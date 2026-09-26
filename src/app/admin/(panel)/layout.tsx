@@ -14,10 +14,13 @@ export default async function AdminLayout({
   if (!user) redirect("/admin/login");
 
   return (
-    <div className="mx-auto max-w-content px-5 py-8">
-      <div className="flex items-center justify-between border-b border-hairline pb-4">
-        <div className="flex items-center gap-3">
-          <Link href="/admin/content" className="text-lg font-medium tracking-tight">
+    <div className="page-shell py-8">
+      <div className="panel flex flex-wrap items-center justify-between gap-4 p-5">
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href="/admin/content"
+            className="text-lg font-medium tracking-tight"
+          >
             Grader 어드민
           </Link>
           <Link href="/admin" className="text-sm text-brand hover:opacity-80">
@@ -27,7 +30,7 @@ export default async function AdminLayout({
             사이트 보기 →
           </Link>
         </div>
-        <div className="flex items-center gap-3 text-sm text-muted">
+        <div className="flex flex-wrap items-center gap-3 text-small text-muted">
           <span>{user.email}</span>
           <SignOutButton />
         </div>

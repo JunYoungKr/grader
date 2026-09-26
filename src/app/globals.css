@@ -1,129 +1,101 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 @import "../styles/tokens.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================================
-   디자인 토큰 — Claude Design 핸드오프(2026.06) 기준
-   시맨틱 9색(라이트/다크) + 등급 시그니처 + 모션/그림자.
-   구조는 1px 헤어라인 보더로, 그림자는 고정 CTA 등 오버레이 전용.
-   ============================================================ */
-
-:root {
-  --paper: #ffffff;
-  --surface: #f6f6f4;
-  --ink: #19202b;
-  --muted: #555e68;
-  --faint: #8a929b;
-  --hairline: #e6e8eb;
-  --brand: #1e3a5f;
-  --brand-soft: #eaeff6;
-  --on-brand: #ffffff;
-
-  --link: var(--brand);
-  --focus-ring: color-mix(in srgb, var(--brand) 55%, transparent);
-
-  /* 등급 시그니처 — S만 그라데이션 허용(시스템 유일) */
-  --grade-s-from: #f3d27e;
-  --grade-s-to: #c79a3c;
-  --grade-s: #d4ab51;
-  --grade-s-fg: #3a2c08;
-  --grade-s-soft: #faf1d9;
-  --grade-s-ink: #8a6717;
-  --grade-a: #2e7d57;
-  --grade-a-fg: #ffffff;
-  --grade-a-soft: #e5f1ea;
-  --grade-a-ink: #246b49;
-  --grade-b: #2f6fb0;
-  --grade-b-fg: #ffffff;
-  --grade-b-soft: #e7eff8;
-  --grade-b-ink: #2a64a0;
-  --grade-c: #6b7480;
-  --grade-c-fg: #ffffff;
-  --grade-c-soft: #eef0f2;
-  --grade-c-ink: #5b636e;
-  --grade-s-gradient: linear-gradient(135deg, var(--grade-s-from), var(--grade-s-to));
-
-  /* 그림자 — 절제. 위쪽 그림자는 모바일 고정 CTA 전용 */
-  --shadow-sm: 0 1px 2px rgba(16, 24, 32, 0.06);
-  --shadow-md: 0 4px 16px rgba(16, 24, 32, 0.08);
-  --shadow-lg: 0 -2px 16px rgba(16, 24, 32, 0.08);
-
-  /* 모션 */
-  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --duration-fast: 120ms;
-  --duration-base: 200ms;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--sticky-offset);
+  }
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    text-rendering: optimizeLegibility;
+  }
+  * {
+    border-color: var(--hairline);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    word-break: keep-all;
+  }
+  p {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+  button,
+  input[type="range"] {
+    min-height: var(--tap-target);
+  }
+  input:not([type="checkbox"]):not([type="range"]):not([type="hidden"]),
+  select {
+    min-height: var(--tap-target);
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 4px;
+  }
+  ::selection {
+    background: var(--brand-soft);
+    color: var(--ink);
+  }
 }
-
-.dark {
-  --paper: #0f141a;
-  --surface: #161d26;
-  --ink: #e8eaed;
-  --muted: #a2aab4;
-  --faint: #6b7480;
-  --hairline: #28313b;
-  --brand: #6aa2db;
-  --brand-soft: #1a2a3c;
-  --on-brand: #0b1117;
-
-  --focus-ring: color-mix(in srgb, var(--brand) 60%, transparent);
-
-  --grade-s-from: #f0cf7d;
-  --grade-s-to: #b88a30;
-  --grade-s: #d9b35c;
-  --grade-s-fg: #2a1f04;
-  --grade-s-soft: #2c2613;
-  --grade-s-ink: #e0bd6b;
-  --grade-a: #4fa37c;
-  --grade-a-fg: #07140d;
-  --grade-a-soft: #16271f;
-  --grade-a-ink: #6cbf97;
-  --grade-b: #5a96d6;
-  --grade-b-fg: #06121f;
-  --grade-b-soft: #16263a;
-  --grade-b-ink: #79ade2;
-  --grade-c: #828b97;
-  --grade-c-fg: #0a0e13;
-  --grade-c-soft: #1f262f;
-  --grade-c-ink: #98a1ad;
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 -2px 16px rgba(0, 0, 0, 0.5);
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
-  scroll-behavior: smooth;
-}
-
-body {
-  background: var(--paper);
-  color: var(--ink);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-* {
-  border-color: var(--hairline);
-}
-
-:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
 @layer components {
+  .page-shell {
+    @apply mx-auto w-full max-w-content;
+    padding-inline: var(--page-gutter);
+  }
   .section-block {
     margin-top: var(--section-space);
-    scroll-margin-top: var(--scroll-margin-reading);
+  }
+  .panel {
+    @apply rounded-xl border border-hairline bg-card;
+  }
+  .button {
+    @apply inline-flex min-h-button items-center justify-center gap-2 rounded-md px-6 text-small font-medium;
+    transition:
+      background-color var(--duration-base),
+      color var(--duration-base);
+  }
+  .button-primary {
+    @apply bg-brand text-on-brand hover:bg-brand-hover;
+  }
+  .button-secondary {
+    @apply border border-hairline bg-card text-ink hover:bg-surface;
+  }
+  .icon-button {
+    @apply inline-flex h-touch w-touch shrink-0 items-center justify-center rounded-md text-muted hover:bg-surface hover:text-brand;
+  }
+  .field {
+    @apply w-full rounded-lg border border-hairline bg-card px-4 py-3 text-body text-ink placeholder:text-faint;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1.5 text-caption font-medium text-brand;
+  }
+  .text-link {
+    @apply inline-flex min-h-touch items-center gap-2 text-small font-medium text-brand underline-offset-4 hover:underline;
   }
   .article-copy {
     @apply max-w-prose text-reading text-ink;
-    word-break: keep-all;
-    overflow-wrap: anywhere;
   }
   .article-copy p + p {
     @apply mt-5;
@@ -131,13 +103,23 @@ body {
   .article-copy strong {
     @apply font-semibold;
   }
+  .skip-link {
+    @apply fixed left-4 top-4 z-50 -translate-y-24 rounded-lg bg-brand px-5 py-3 text-on-brand focus:translate-y-0;
+  }
+  .photo-frame {
+    @apply overflow-hidden bg-photo-surface;
+  }
+  .footer-space {
+    padding-bottom: calc(var(--space-24) + env(safe-area-inset-bottom));
+  }
 }
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }

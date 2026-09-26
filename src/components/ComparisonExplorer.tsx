@@ -22,6 +22,7 @@ export function ComparisonExplorer({
     features: [],
     month: null,
   });
+  const [showAll, setShowAll] = useState(false);
 
   const hasActive =
     state.budgetMax !== null ||
@@ -35,8 +36,8 @@ export function ComparisonExplorer({
 
   const sorted = ranked.map((r) => r.product);
   const stickyProduct = hasActive
-    ? sorted[0]
-    : products.find((product) => product.recommended) ?? products[0];
+    ? ranked.find((entry) => entry.match.missed.length === 0)?.product
+    : products[0];
   const matchMap = hasActive
     ? Object.fromEntries(ranked.map((r) => [r.product.id, r.match]))
     : undefined;
@@ -60,16 +61,38 @@ export function ComparisonExplorer({
     <div>
       <FilterPanel filters={filters} state={state} onChange={setState} />
       {hasActive && (
-        <p role="status" aria-live="polite" className="mt-3 text-[13px] text-muted">
-          조건에 가까운 순서로 정렬했습니다. 맨 위가 지금 조건에 가장 맞는 제품입니다.
+        <p
+          role="status"
+          aria-live="polite"
+          className="mt-3 text-caption text-muted"
+        >
+          선택한 조건의 충족 수, 조회 가격 순으로 정렬했어요. 미충족 조건도 함께
+          확인해 주세요.
         </p>
       )}
-      <div className="mt-4 hidden md:block">
-        <ComparisonTable products={sorted} article={article} matchMap={matchMap} />
+      <div className="mt-5">
+        <ComparisonCards
+          products={showAll ? sorted : sorted.slice(0, 3)}
+          article={article}
+          matchMap={matchMap}
+        />
+        {sorted.length > 3 && (
+          <button type="button" className="button button-secondary mt-5 w-full" aria-expanded={showAll} onClick={() => setShowAll((value) => !value)}>
+            {showAll ? "처음 3개만 보기" : `나머지 상품 ${sorted.length - 3}개 보기`}
+          </button>
+        )}
       </div>
-      <div className="mt-4 md:hidden">
-        <ComparisonCards products={sorted} article={article} matchMap={matchMap} />
-      </div>
+      <details className="mt-6 rounded-lg border border-hairline bg-card p-4">
+        <summary className="min-h-touch cursor-pointer text-small font-medium text-brand">
+          사양을 표로 비교하기
+        </summary>
+        <ComparisonTable
+          products={sorted}
+          article={article}
+          matchMap={matchMap}
+        />
+      </details>
+      {hasActive && !stickyProduct && <p role="status" className="mt-4 text-small text-muted">모든 조건을 충족하는 상품이 없습니다. 미충족 조건을 확인하거나 조건을 바꿔 주세요.</p>}
       {stickyProduct && <StickyCta product={stickyProduct} article={article} />}
     </div>
   );

@@ -15,7 +15,7 @@ export function PromoBanner({
   const provider = PROVIDERS[banner.provider];
   return (
     <aside className="mt-8 rounded-lg border border-hairline bg-surface p-5">
-      <p className="text-sm font-medium text-ink">{provider.cta}</p>
+      <p className="text-small font-medium text-ink">{provider.cta}</p>
       <div className="mt-3 flex justify-center">
         <a
           href={banner.href}
@@ -36,8 +36,9 @@ export function PromoBanner({
           />
         </a>
       </div>
-      <p className="mt-4 text-xs leading-relaxed text-faint">
-        이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
+      <p className="mt-4 text-caption leading-relaxed text-faint">
+        이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를
+        제공받습니다.
       </p>
     </aside>
   );

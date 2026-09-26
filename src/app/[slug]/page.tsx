@@ -2,16 +2,15 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getArticle, getAllArticleSlugs, getCategory } from "@/lib/content";
 import { uniqueProviders } from "@/lib/providers";
-import { formatPrice } from "@/lib/grade";
-import { GradeBadge } from "@/components/GradeBadge";
-import { AffiliateButton } from "@/components/AffiliateButton";
-import { MethodologyStrip } from "@/components/MethodologyStrip";
+import { ArticleJsonLd } from "@/lib/jsonld";
+import { Container, SectionHeading } from "@/components/ui/Primitives";
+import { ArticleHeader } from "@/components/content/ArticleHeader";
+import { ArticleSidebar } from "@/components/content/ArticleSidebar";
+import { ArticleSection } from "@/components/content/ArticleSection";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 import { SummaryBox } from "@/components/SummaryBox";
 import { TableOfContents } from "@/components/TableOfContents";
-import { MetricCard } from "@/components/MetricCard";
 import { ComparisonCards } from "@/components/ComparisonCards";
-import { ComparisonTable } from "@/components/ComparisonTable";
 import { ComparisonExplorer } from "@/components/ComparisonExplorer";
 import { PromoBanner } from "@/components/PromoBanner";
 import { ChecklistTable } from "@/components/ChecklistTable";
@@ -19,40 +18,30 @@ import { ViewItemList } from "@/components/ViewItemList";
 import { StickyCta } from "@/components/StickyCta";
 import { SourceList } from "@/components/SourceList";
 import { RelatedLinks } from "@/components/RelatedLinks";
-import { DisclosureNote } from "@/components/DisclosureNote";
-import { RecordView, RecentlyViewed } from "@/components/RecentlyViewed";
-import { ArticleJsonLd } from "@/lib/jsonld";
+import { RecordView } from "@/components/RecentlyViewed";
 import { pageMetadata } from "@/lib/seo";
-import { parseUpdated, SITE_NAME } from "@/lib/site";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { ArticleSection } from "@/components/content/ArticleSection";
-
-// DB(ISR) — 어드민 저장 시 revalidatePath로 즉시 갱신. 새 slug도 빌드 없이 서빙.
+import { parseUpdated } from "@/lib/site";
 export const revalidate = 300;
 export const dynamicParams = true;
-
 export async function generateStaticParams() {
-  const slugs = await getAllArticleSlugs();
-  return slugs.map((slug) => ({ slug }));
+  return (await getAllArticleSlugs()).map((slug) => ({ slug }));
 }
-
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const article = await getArticle(slug);
-  if (!article) return {};
-  return pageMetadata({
-    title: article.title,
-    description: article.description,
-    path: `/${article.slug}`,
-    type: "article",
-    modifiedTime: parseUpdated(article.modifiedAt)?.toISOString(),
-  });
+  const article = await getArticle((await params).slug);
+  return article
+    ? pageMetadata({
+        title: article.title,
+        description: article.description,
+        path: `/${article.slug}`,
+        type: "article",
+        modifiedTime: parseUpdated(article.modifiedAt)?.toISOString(),
+      })
+    : {};
 }
-
 export default async function ArticlePage({
   params,
 }: {
@@ -61,94 +50,65 @@ export default async function ArticlePage({
   const { slug } = await params;
   const article = await getArticle(slug);
   if (!article) notFound();
-
-  const category = getCategory(article.category);
   const products = article.products ?? [];
-  const providers = uniqueProviders(products.map((p) => p.provider));
-  const recommended = products.find((p) => p.recommended) ?? products[0];
-  const hasAttributes = products.some((p) => p.attributes);
-
-  const toc: { id: string; label: string }[] = [
-    { id: "summary", label: "한눈에 요약" },
+  const providers = uniqueProviders([
+    ...products.map((p) => p.provider),
+    ...(article.promoBanner ? [article.promoBanner.provider] : []),
+  ]);
+  const featured = products.find((p) => p.recommended) ?? products[0];
+  const hasFilters = products.length > 1;
+  const toc = [
+    { id: "summary", label: "먼저 읽어보세요" },
+    ...(article.checklist ? [{ id: "checklist", label: "준비할 것" }] : []),
+    ...(products.length ? [{ id: "compare", label: "제품 살펴보기" }] : []),
+    ...(article.axes?.length
+      ? [{ id: "axes", label: "비교할 때 볼 기준" }]
+      : []),
+    ...(article.sections ?? []).map((s, i) => ({
+      id: `sec-${i}`,
+      label: s.heading,
+    })),
+    ...(article.related?.length ? [{ id: "related", label: "함께 읽기" }] : []),
+    ...(article.sources?.length
+      ? [{ id: "sources", label: "참고한 자료" }]
+      : []),
   ];
-  if (article.checklist) toc.push({ id: "checklist", label: "품목별 수량" });
-  if (article.type === "comparison") {
-    toc.push({ id: "compare", label: "제품 비교" });
-    if (article.axes?.length) toc.push({ id: "axes", label: "평가 기준" });
-  }
-  (article.sections ?? []).forEach((s, i) =>
-    toc.push({ id: `sec-${i}`, label: s.heading }),
-  );
-  if (article.related?.length) toc.push({ id: "related", label: "관련 글" });
-  if (article.sources?.length) toc.push({ id: "sources", label: "출처" });
-
   return (
-    <article className="mx-auto max-w-content px-5 pb-24 pt-10 md:pb-12">
-      <ArticleJsonLd article={article} category={category} />
-      <Breadcrumbs items={[
-        { name: "홈", href: "/" },
-        ...(category ? [{ name: category.name, href: `/category/${category.slug}` }] : []),
-        { name: article.title, href: `/${article.slug}` },
-      ]} />
-      <RecordView slug={slug} title={article.title} />
-
-      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_15rem] lg:items-start lg:gap-10">
-        <div className="min-w-0">
-          <MethodologyStrip />
-          {category && <p className="mt-3 text-sm text-muted">{category.name}</p>}
-          <h1 className="mt-1 text-heading font-semibold break-keep">
-            {article.title}
-          </h1>
-          <p className="mt-5 max-w-prose text-reading text-ink break-keep">
-            {article.description}
-          </p>
-          <p className="mt-3 text-caption text-muted">
-            {article.updated} 기준{providers.length > 0 && ", 제휴 링크 포함"}
-          </p>
-          <p className="mt-2 text-caption text-muted">
-            작성: {SITE_NAME}
-            {parseUpdated(article.modifiedAt) && (
-              <> , 페이지 수정일: <time dateTime={article.modifiedAt}>
-                {new Date(article.modifiedAt!).toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul" })}
-              </time></>
-            )}
-          </p>
-          {providers.length > 0 && (
-            <DisclosureNote providers={providers} className="mt-3 max-w-3xl" />
-          )}
-
-          {article.type === "comparison" && (
-            <div className="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-hairline bg-hairline">
-              <MetricCard label="비교 제품" value={`${products.length}종`} />
-              <MetricCard label="평가 축" value={`${article.axes?.length ?? 0}개`} />
-              <MetricCard label="갱신" value={article.updated} />
+    <Container className={`pt-8 md:py-12 ${products.length ? "pb-40" : "pb-8"}`}>
+      <article>
+        <ArticleJsonLd article={article} category={getCategory(article.category)} />
+        <RecordView slug={slug} title={article.title} />
+        <div className="grid items-start gap-10 lg:grid-cols-article">
+          <div className="min-w-0">
+            <ArticleHeader
+              article={article}
+              category={getCategory(article.category)}
+              providers={providers}
+            />
+            {article.medical && <MedicalDisclaimer className="mt-6" />}
+            <div className="mt-8">
+              <SummaryBox items={article.summary} />
             </div>
-          )}
-
-          {article.medical && <MedicalDisclaimer className="mt-6" />}
-
-          <div className="mt-6">
-            <SummaryBox items={article.summary} />
-          </div>
-
-          {/* 모바일: 인라인 목차 (데스크톱은 우측 sticky 사이드바) */}
-          <div className="mt-4 lg:hidden">
-            <TableOfContents items={toc} article={slug} />
-          </div>
-
-          {article.checklist && (
-            <section id="checklist" className="mt-10 scroll-mt-24">
-              <h2 className="text-section font-semibold">품목별 권장 수량</h2>
-              <div className="mt-3">
+            <div className="mt-5 lg:hidden">
+              <TableOfContents items={toc} article={slug} />
+            </div>
+            {article.checklist && (
+              <section id="checklist" className="section-block">
+                <SectionHeading
+                  title="시작하기 전에 준비해요"
+                  description={article.checklist.caption}
+                />
                 <ChecklistTable items={article.checklist.items} />
-              </div>
-            </section>
-          )}
-
-          {article.type === "comparison" && (
-            <>
-              <section id="compare" className="mt-10 scroll-mt-24">
+              </section>
+            )}
+            {products.length > 0 && (
+              <section id="compare" className="section-block">
+                <SectionHeading
+                  title="우리 집에 맞는지 살펴보세요"
+                  description="상품별 조건과 조회 가격을 함께 확인해 주세요."
+                />
                 <ViewItemList
+                  key={slug}
                   article={slug}
                   items={products.map((p) => ({
                     id: String(p.coupangProductId ?? p.id),
@@ -157,102 +117,57 @@ export default async function ArticlePage({
                     grade: p.grade,
                     price: p.priceExample,
                   }))}
-                />
-                {hasAttributes ? (
+                >
+                {hasFilters ? (
                   <ComparisonExplorer products={products} article={slug} />
                 ) : (
-                  <>
-                    <div className="hidden md:block">
-                      <ComparisonTable products={products} article={slug} />
-                    </div>
-                    <div className="md:hidden">
-                      <ComparisonCards products={products} article={slug} />
-                    </div>
-                  </>
+                  <ComparisonCards products={products} article={slug} />
                 )}
+                </ViewItemList>
                 {article.promoBanner && (
                   <PromoBanner banner={article.promoBanner} article={slug} />
                 )}
               </section>
-
-              {article.axes?.length ? (
-                <section id="axes" className="mt-12 scroll-mt-24">
-                  <h2 className="text-section font-semibold">평가 기준</h2>
-                  <dl className="mt-3 divide-y divide-hairline border-y border-hairline">
-                    {article.axes.map((a) => (
-                      <div key={a.label} className="py-5">
-                        <dt className="mb-2 text-body font-semibold text-ink">{a.label}</dt>
-                        <dd className="max-w-prose text-reading text-ink break-keep">
-                          {a.desc}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </section>
-              ) : null}
-            </>
-          )}
-
-          {(article.sections ?? []).map((s, i) => (
-            <ArticleSection
-              key={i}
-              id={`sec-${i}`}
-              heading={s.heading}
-              paragraphs={s.paragraphs}
-            />
-          ))}
-
-          {article.related?.length ? (
-            <RelatedLinks links={article.related} />
-          ) : null}
-
-          {article.sources?.length ? (
-            <SourceList sources={article.sources} />
-          ) : null}
-
-        </div>
-
-        {/* 데스크톱: 우측 sticky 사이드바 — 목차 + 1순위 추천 + 최근 본 제품 */}
-        <aside className="hidden lg:block">
-          <div className="sticky top-[76px] space-y-4">
-            <TableOfContents items={toc} article={slug} />
-            {article.type === "comparison" && recommended && (
-              <div className="rounded-lg border border-hairline bg-paper p-4">
-                <p className="text-xs font-medium tracking-[0.04em] text-faint">
-                  1순위 추천
-                </p>
-                <div className="mt-2.5 flex items-center gap-2.5">
-                  <GradeBadge grade={recommended.grade} />
-                  <span className="min-w-0 text-body font-semibold break-keep">
-                    {recommended.name}
-                  </span>
-                </div>
-                <p className="mt-2 text-title font-semibold tabular-nums">
-                  {formatPrice(recommended.priceExample)}
-                </p>
-                <div className="mt-3">
-                  <AffiliateButton
-                    href={recommended.affiliateUrl}
-                    provider={recommended.provider}
-                    track={{
-                      article: slug,
-                      product: recommended.name,
-                      grade: recommended.grade,
-                      placement: "sidebar_cta",
-                      recommended: true,
-                    }}
-                  />
-                </div>
-              </div>
             )}
-            <RecentlyViewed currentSlug={slug} />
+            {!!article.axes?.length && (
+              <section id="axes" className="section-block">
+                <SectionHeading title="비교할 때 이런 점을 살펴봐요" />
+                <dl className="panel divide-y divide-hairline px-6">
+                  {article.axes.map((axis) => (
+                    <div key={axis.label} className="py-5">
+                      <dt className="mb-2 text-body font-semibold text-ink">
+                        {axis.label}
+                      </dt>
+                      <dd className="max-w-prose text-reading text-ink">{axis.desc}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            )}
+            {(article.sections ?? []).map((section, i) => (
+              <ArticleSection
+                key={i}
+                id={`sec-${i}`}
+                heading={section.heading}
+                paragraphs={section.paragraphs}
+              />
+            ))}
+            {!!article.related?.length && (
+              <RelatedLinks
+                links={article.related}
+                title="함께 읽으면 좋은 이야기"
+              />
+            )}
+            {!!article.sources?.length && (
+              <SourceList sources={article.sources} />
+            )}
           </div>
-        </aside>
-      </div>
-
-      {article.type === "comparison" && recommended && !hasAttributes && (
-        <StickyCta product={recommended} article={slug} />
-      )}
-    </article>
+          <ArticleSidebar toc={toc} product={featured} slug={slug} />
+        </div>
+        {featured && !hasFilters && (
+          <StickyCta product={featured} article={slug} />
+        )}
+      </article>
+    </Container>
   );
 }

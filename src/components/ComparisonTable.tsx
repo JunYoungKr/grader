@@ -1,12 +1,8 @@
 import type { Product } from "@/lib/types";
 import type { MatchInfo } from "@/lib/explorer";
 import { formatPrice } from "@/lib/grade";
-import { GradeBadge } from "./GradeBadge";
 import { AffiliateButton } from "./AffiliateButton";
-import { ProviderTag } from "./ProviderTag";
 import { MatchBadge } from "./MatchBadge";
-import { ProductImage } from "./ProductImage";
-
 export function ComparisonTable({
   products,
   article,
@@ -16,93 +12,79 @@ export function ComparisonTable({
   article?: string;
   matchMap?: Record<string, MatchInfo>;
 }) {
-  const specLabels = products[0]?.specs.map((s) => s.label) ?? [];
+  const labels = Array.from(
+    new Set(products.flatMap((p) => p.specs.map((s) => s.label))),
+  );
   return (
-    <div className="overflow-hidden rounded-lg border border-hairline">
-      <table className="w-full border-collapse text-sm">
+    <div
+      className="overflow-x-auto rounded-lg border border-hairline"
+      role="region"
+      aria-label="상품 사양 비교표"
+      tabIndex={0}
+    >
+      <table className="w-full border-collapse bg-card text-small">
+        <caption className="sr-only">제품별 사양과 조회 가격 비교</caption>
         <thead>
-          <tr className="border-b border-hairline text-left text-xs text-faint">
-            <th className="px-4 py-3 font-medium">종합</th>
-            <th className="px-4 py-3 font-medium">제품</th>
-            {specLabels.map((l) => (
-              <th key={l} className="px-4 py-3 font-medium">
+          <tr className="border-b border-hairline bg-surface text-left text-muted">
+            <th scope="col" className="min-w-52 px-5 py-4 font-medium">
+              제품
+            </th>
+            {labels.map((l) => (
+              <th
+                scope="col"
+                key={l}
+                className="min-w-28 px-5 py-4 font-medium"
+              >
                 {l}
               </th>
             ))}
-            <th className="px-4 py-3 font-medium">조회 가격</th>
-            <th className="px-4 py-3 font-medium"></th>
+            <th scope="col" className="min-w-36 px-5 py-4 font-medium">
+              조회 가격
+            </th>
+            <th scope="col" className="px-5 py-4 font-medium">
+              판매처
+            </th>
           </tr>
         </thead>
         <tbody>
-          {products.map((p) => {
-            const match = matchMap?.[p.id];
-            return (
-              <tr
-                key={p.id}
-                className="border-b border-hairline align-middle last:border-0"
-              >
-                <td className="px-4 py-3">
-                  <GradeBadge grade={p.grade} size="sm" />
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex min-w-52 items-center gap-3">
-                    {p.imageUrl && (
-                      <ProductImage product={p} size={72} className="shrink-0" />
-                    )}
-                    <div>
-                      <div className={p.recommended ? "font-semibold" : "font-medium"}>
-                        {p.name}
-                      </div>
-                      <div className="text-[13px] text-muted">{p.descriptor}</div>
-                      <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
-                        <ProviderTag provider={p.provider} />
-                        {p.isRocket && (
-                          <span className="text-[11px] font-medium text-brand">로켓배송</span>
-                        )}
-                      </div>
-                      {match && (
-                        <div className="mt-1">
-                          <MatchBadge info={match} />
-                        </div>
-                      )}
-                    </div>
+          {products.map((p) => (
+            <tr key={p.id} className="border-b border-hairline last:border-0">
+              <th scope="row" className="px-5 py-5 text-left font-medium">
+                {p.name}
+                {matchMap?.[p.id] && (
+                  <div className="mt-2">
+                    <MatchBadge info={matchMap[p.id]} />
                   </div>
+                )}
+              </th>
+              {labels.map((l) => (
+                <td key={l} className="px-5 py-5 text-muted">
+                  {p.specs.find((s) => s.label === l)?.value ?? "정보 없음"}
                 </td>
-                {p.specs.map((s) => (
-                  <td key={s.label} className="px-4 py-3 tabular-nums text-muted">
-                    {s.value}
-                  </td>
-                ))}
-                <td className="px-4 py-3 tabular-nums">
-                  <div>{formatPrice(p.priceExample)}</div>
-                  {p.priceCheckedAt && (
-                    <div className="mt-0.5 whitespace-nowrap text-[11px] text-faint">
-                      {p.priceCheckedAt} 확인
-                    </div>
-                  )}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="w-24">
-                    <AffiliateButton
-                      href={p.affiliateUrl}
-                      provider={p.provider}
-                      label="현재가 확인"
-                      size="sm"
-                      track={{
-                        article,
-                        productId: p.coupangProductId ?? p.id,
-                        product: p.name,
-                        grade: p.grade,
-                        price: p.priceExample,
-                        placement: "comparison_table",
-                        recommended: p.recommended,
-                      }}
-                    />
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
+              ))}
+              <td className="px-5 py-5 tabular-nums">
+                {formatPrice(p.priceExample)}
+                <span className="block text-caption text-faint">
+                  {p.priceCheckedAt ?? "조회일 미등록"}
+                </span>
+              </td>
+              <td className="min-w-40 px-5 py-5">
+                <AffiliateButton
+                  href={p.affiliateUrl}
+                  provider={p.provider}
+                  size="sm"
+                  label="현재가 확인"
+                  track={{
+                    article,
+                    productId: p.coupangProductId ?? p.id,
+                    product: p.name,
+                    price: p.priceExample,
+                    placement: "comparison_table",
+                  }}
+                />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

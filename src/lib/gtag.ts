@@ -20,7 +20,7 @@ function send(event: string, params: GtagParams = {}): void {
   window.gtag("event", event, params);
 }
 
-// 제휴 링크 클릭 = 이 사이트의 전환(북극성). GA4 표준 select_item으로 전송.
+// 제휴 링크 클릭은 구매 전 관심 신호이며 실제 주문은 제휴사 리포트에서 확인한다.
 // item_brand/item_category/item_list_id는 GA4 표준 측정기준이라 별도 등록 없이 리포트에 잡힘.
 // placement는 커스텀 → 필요 시 GA4에서 맞춤 측정기준으로 등록.
 export interface AffiliateItem {
@@ -117,5 +117,30 @@ export function trackFilter(d: FilterEvent): void {
       d.features && d.features.length > 0 ? d.features.join(",") : undefined,
     filter_month: d.month ?? undefined,
     top_item: d.topProduct,
+  });
+}
+
+// 자유 입력 검색어와 저장한 URL은 전송하지 않는다.
+export function trackSearchResults(d: {
+  category: string;
+  articleCount: number;
+  productCount: number;
+}): void {
+  send("search_results_view", {
+    category: d.category,
+    article_count: d.articleCount,
+    product_count: d.productCount,
+    has_results: d.articleCount + d.productCount > 0,
+  });
+}
+
+export function trackSavedItem(d: {
+  id: string;
+  kind: "article" | "product";
+  action: "save" | "remove";
+}): void {
+  send(d.action === "save" ? "save_item" : "remove_saved_item", {
+    content_id: d.id,
+    content_type: d.kind,
   });
 }
