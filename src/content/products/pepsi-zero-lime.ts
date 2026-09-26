@@ -8,19 +8,19 @@ export const pepsiZeroLimeArticle: Article = {
   slug: "pepsi-zero-lime",
   category: "food",
   type: "comparison",
-  title: "펩시 제로슈거 라임향 — 칼로리 제로 탄산",
+  title: "펩시 제로슈거 라임향, 칼로리 제로 탄산",
   description:
-    "설탕·칼로리 0의 라임향 제로 콜라. 210ml 슬림캔 30개입을 개당 단가와 맛으로 봅니다.",
+    "설탕, 칼로리 0의 라임향 제로 콜라. 210ml 슬림캔 30개입을 개당 단가와 맛으로 봅니다.",
   updated: "2026.07",
   summary: [
     "설탕을 뺀 제로 탄산음료로, 라임향을 더해 단맛 없이 청량감을 원하는 분께 맞습니다.",
-    "210ml 슬림캔 30개입 묶음이라 개당 단가가 낮은 편 — 자주 마신다면 가성비가 좋습니다.",
-    "비교 대상이 1종이라 등급은 잠정값입니다 — 다른 제로 음료가 모이면 맛·가성비로 재평가합니다.",
+    "210ml 슬림캔 30개입 묶음이라 개당 단가가 낮은 편, 자주 마신다면 가성비가 좋습니다.",
+    "비교 대상이 1종이라 등급은 잠정값입니다, 다른 제로 음료가 모이면 맛, 가성비로 재평가합니다.",
   ],
   axes: [
-    { label: "당·칼로리", desc: "설탕·열량 함량. 제로 제품은 0kcal 표기 여부를 봅니다." },
-    { label: "맛", desc: "단맛·청량감과 인공감미료 특유의 뒷맛 정도." },
-    { label: "가성비", desc: "개당 단가(세트가 ÷ 캔 수) 대비 용량·맛." },
+    { label: "당, 칼로리", desc: "설탕, 열량 함량. 제로 제품은 0kcal 표기 여부를 봅니다." },
+    { label: "맛", desc: "단맛, 청량감과 인공감미료 특유의 뒷맛 정도." },
+    { label: "가성비", desc: "개당 단가(세트가 ÷ 캔 수) 대비 용량, 맛." },
   ],
   products: [
     {
@@ -30,7 +30,7 @@ export const pepsiZeroLimeArticle: Article = {
       imageUrl:
         "https://ads-partners.coupang.com/image1/wsWxGYvnhifXgpKIwn5a0d6vOYI6JfqXjAmKKMzh5A-7TXFDjC9UN0GgpCBcC8Ju0kdG43Rsa92denn0yDGvA9u9xFyCsPvqPzlzeYbQymccDo2JgIxoxS8h2x1hEdPcImJfksbGDTEGEraVLJvi7RlwJdN3eUIGLNCwGm2RDprTSNO_LFbfahI6-6nmHH_2tUSz5fUZbZlbYYxZwM6aCgzz01Hrdg9VEI2Ugb-mirgJ6taCm4pZEIq4weDZQjwvdiPVE63_4hNenKgpfS6k8UokKeQx4l5o4cYD-XEYgeIuIxL8tOsE83ty8jLPh-UHDrglg-AW5I4hN_EyEayhtcJQdenw",
       type: "제로 탄산음료",
-      descriptor: "라임향 · 210ml 30캔",
+      descriptor: "라임향, 210ml 30캔",
       grade: "B", // 잠정값 — 단일 제품 시드, 실측 전
       priceExample: 14450,
       priceCheckedAt: "2026-07-18",
@@ -42,7 +42,7 @@ export const pepsiZeroLimeArticle: Article = {
       recommended: true,
       specs: [
         { label: "용량", value: "210ml × 30캔" },
-        { label: "당·칼로리", value: "제로" },
+        { label: "당, 칼로리", value: "제로" },
         { label: "기준", value: "세트가(30캔)" },
       ],
     },

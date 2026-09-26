@@ -5,11 +5,13 @@ import type { ChecklistItem } from "@/lib/types";
 export function ChecklistTable({ items }: { items: ChecklistItem[] }) {
   return (
     <div className="overflow-hidden rounded-lg border border-hairline">
-      <table className="w-full border-collapse text-sm">
+      <table className="w-full border-collapse text-small">
         <thead>
-          <tr className="border-b border-hairline bg-surface text-left text-[13px] text-muted">
+          <tr className="border-b border-hairline bg-surface text-left text-small text-muted">
             <th className="px-4 py-3 font-medium">품목</th>
-            <th className="px-4 py-3 font-medium whitespace-nowrap">권장 수량</th>
+            <th className="px-4 py-3 font-medium whitespace-nowrap">
+              권장 수량
+            </th>
             <th className="px-4 py-3 font-medium">메모</th>
           </tr>
         </thead>
@@ -32,7 +34,9 @@ export function ChecklistTable({ items }: { items: ChecklistItem[] }) {
                 )}
               </td>
               <td className="px-4 py-3 tabular-nums">{it.quantity}</td>
-              <td className="px-4 py-3 leading-relaxed text-muted">{it.note}</td>
+              <td className="px-4 py-3 leading-relaxed text-muted">
+                {it.note}
+              </td>
             </tr>
           ))}
         </tbody>

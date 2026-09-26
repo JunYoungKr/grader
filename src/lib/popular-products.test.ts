@@ -22,6 +22,12 @@ describe("쿠팡 카테고리 인기 상품 스냅샷", () => {
     );
     expect(products).toHaveLength(120);
     expect(new Set(products.map((product) => product.id)).size).toBe(120);
+    expect(new Set(products.map((product) => product.coupangProductId)).size).toBe(120);
+
+    const normalizedNames = products.map((product) =>
+      product.name.toLowerCase().replace(/[^0-9a-z가-힣]/g, ""),
+    );
+    expect(new Set(normalizedNames).size).toBe(120);
 
     for (const product of products) {
       expect(product.coupangProductId).toBeGreaterThan(0);

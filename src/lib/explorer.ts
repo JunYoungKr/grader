@@ -1,4 +1,4 @@
-import type { Grade, Product } from "./types";
+import type { Product } from "./types";
 
 export interface FilterState {
   budgetMax: number | null;
@@ -22,9 +22,6 @@ export interface RankedProduct {
   product: Product;
   match: MatchInfo;
 }
-
-// 등급 정렬 가중치 (낮을수록 상위)
-const GRADE_RANK: Record<Grade, number> = { S: 0, A: 1, B: 2, C: 3 };
 
 export function deriveFilters(products: Product[]): DerivedFilters {
   // 예산: 제품이 있으면 항상. priceExample의 min~max.
@@ -87,23 +84,20 @@ export function rankProducts(
     return { satisfied: total - missed.length, total, missed };
   };
 
-  const ranked = products.map((product) => ({ product, match: evaluate(product) }));
+  const ranked = products.map((product) => ({
+    product,
+    match: evaluate(product),
+  }));
 
   // 조건 0개 → 원본 순서 그대로(현재 화면과 동일).
   if (total === 0) return ranked;
 
-  // 충족 수 ↓ → 등급 → 추천 → 가격 ↑, 동점은 원본 순서 유지.
+  // 충족 수 ↓ → 조회 가격 ↑, 동점은 원본 순서 유지. 기존 등급은 정렬에 쓰지 않는다.
   return ranked
     .map((r, i) => ({ r, i }))
     .sort((a, b) => {
       if (b.r.match.satisfied !== a.r.match.satisfied)
         return b.r.match.satisfied - a.r.match.satisfied;
-      const ga = GRADE_RANK[a.r.product.grade] ?? 99;
-      const gb = GRADE_RANK[b.r.product.grade] ?? 99;
-      if (ga !== gb) return ga - gb;
-      const ra = a.r.product.recommended ? 0 : 1;
-      const rb = b.r.product.recommended ? 0 : 1;
-      if (ra !== rb) return ra - rb;
       if (a.r.product.priceExample !== b.r.product.priceExample)
         return a.r.product.priceExample - b.r.product.priceExample;
       return a.i - b.i;

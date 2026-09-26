@@ -12,13 +12,13 @@ export function RelatedLinks({
 }) {
   return (
     <section id={id} className="mt-12 scroll-mt-20">
-      <h2 className="text-lg font-medium">{title}</h2>
+      <h2 className="text-title font-semibold">{title}</h2>
       <ul className="mt-3 divide-y divide-hairline border-y border-hairline">
         {links.map((l) => (
           <li key={l.slug}>
             <Link
               href={`/${l.slug}`}
-              className="block py-3 text-[15px] transition-colors hover:text-brand"
+              className="block py-3 text-body transition-colors hover:text-brand"
             >
               {l.title}
             </Link>

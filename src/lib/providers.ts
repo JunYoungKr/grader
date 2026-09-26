@@ -16,12 +16,12 @@ export const PROVIDERS: Record<
   },
   linkprice: {
     label: "링크프라이스",
-    cta: "최저가 보기",
+    cta: "판매처에서 확인",
     disclosure: "링크프라이스 제휴",
   },
   tenping: {
     label: "텐핑",
-    cta: "최저가 보기",
+    cta: "판매처에서 확인",
     disclosure: "텐핑 제휴",
   },
 };
@@ -35,6 +35,6 @@ export function uniqueProviders(list: Provider[]): Provider[] {
 export function buildDisclosure(providers: Provider[]): string {
   const names = uniqueProviders(providers)
     .map((p) => PROVIDERS[p].disclosure)
-    .join(" · ");
-  return `이 페이지는 ${names} 활동의 일환으로 일정액의 수수료를 제공받습니다. 등급은 수수료와 무관하게 평가됩니다.`;
+    .join(" 및 ");
+  return `이 페이지는 ${names} 활동의 일환으로 일정액의 수수료를 제공받습니다. 구매 전 판매처에서 최신 가격과 옵션을 확인해 주세요.`;
 }

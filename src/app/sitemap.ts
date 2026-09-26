@@ -5,6 +5,8 @@ import { SITE_URL, parseUpdated } from "@/lib/site";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const home: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "daily", priority: 1 },
+    { url: `${SITE_URL}/browse`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.4 },
   ];
 
   const categoryUrls: MetadataRoute.Sitemap = getCategories().map((c) => ({

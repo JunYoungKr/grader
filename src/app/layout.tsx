@@ -9,11 +9,11 @@ import { SITE_URL, SITE_NAME } from "@/lib/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — 제품 등급 비교`,
-    template: `%s · ${SITE_NAME}`,
+    default: `${SITE_NAME} 살림 가이드`,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
-    "생활 제품을 안전성·성능·가격 등 같은 기준으로 등급화해 비교합니다. 광고비와 분리된 객관 평가.",
+    "주방 정리부터 생활용품까지, 우리 집에 맞는 살림 방법과 제품을 찾아보세요. 구매 전 확인할 조건과 정보를 함께 안내합니다.",
   openGraph: {
     type: "website",
     locale: "ko_KR",
@@ -38,9 +38,12 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased">
+        <a href="#main-content" className="skip-link">
+          본문으로 바로가기
+        </a>
         <Analytics />
         <Header />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
       </body>
     </html>

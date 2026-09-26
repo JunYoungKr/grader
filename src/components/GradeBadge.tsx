@@ -27,7 +27,7 @@ export function GradeBadge({
     <span
       className={`inline-flex shrink-0 items-center justify-center font-medium leading-none ${dim}`}
       style={style}
-      aria-label={`등급 ${grade} · ${s.label}`}
+      aria-label={`등급 ${grade}, ${s.label}`}
     >
       {grade}
     </span>

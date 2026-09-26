@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { normalizeContentCopy } from "@/lib/display-copy";
 
 type RecentItem = { slug: string; title: string };
 
@@ -12,7 +13,11 @@ function readList(): RecentItem[] {
   try {
     const raw = localStorage.getItem(KEY);
     const list = raw ? (JSON.parse(raw) as RecentItem[]) : [];
-    return Array.isArray(list) ? list : [];
+    return Array.isArray(list)
+      ? list.filter(
+          (i) => i && typeof i.slug === "string" && typeof i.title === "string",
+        ).map((item) => normalizeContentCopy(item))
+      : [];
   } catch {
     return [];
   }
@@ -34,7 +39,7 @@ export function RecordView({ slug, title }: RecentItem) {
   return null;
 }
 
-// 최근 본 제품 최대 5개 — 클릭 시 해당 글로 이동
+// 최근 본 가이드 최대 5개 — 클릭 시 해당 글로 이동
 export function RecentlyViewed({
   currentSlug,
   className = "",
@@ -45,25 +50,29 @@ export function RecentlyViewed({
   const [items, setItems] = useState<RecentItem[]>([]);
 
   useEffect(() => {
-    setItems(readList().filter((i) => i.slug !== currentSlug).slice(0, MAX));
+    setItems(
+      readList()
+        .filter((i) => i.slug !== currentSlug)
+        .slice(0, MAX),
+    );
   }, [currentSlug]);
 
   if (items.length === 0) return null;
 
   return (
     <nav
-      aria-label="최근 본 제품"
-      className={`rounded-lg border border-hairline bg-paper p-4 text-sm ${className}`}
+      aria-label="최근 본 가이드"
+      className={`rounded-lg border border-hairline bg-card p-4 text-small ${className}`}
     >
-      <p className="mb-2.5 text-xs font-medium tracking-[0.04em] text-faint">
-        최근 본 제품
+      <p className="mb-2.5 text-caption font-medium tracking-[0.04em] text-faint">
+        최근 본 가이드
       </p>
       <ul className="space-y-1.5">
         {items.map((i) => (
           <li key={i.slug}>
             <Link
               href={`/${i.slug}`}
-              className="block truncate text-muted transition-colors hover:text-ink"
+              className="flex min-h-touch items-center truncate text-muted transition-colors hover:text-ink"
             >
               {i.title}
             </Link>

@@ -12,9 +12,8 @@ import type { Grade, Product, Provider } from "@/lib/types";
 const GRADES: Grade[] = ["S", "A", "B", "C"];
 const PROVIDERS: Provider[] = ["coupang", "iherb", "linkprice", "tenping"];
 
-const inputCls =
-  "mt-1 block w-full rounded-md border border-hairline bg-paper px-3 py-2 text-sm";
-const labelCls = "text-xs font-medium text-muted";
+const inputCls = "field mt-2";
+const labelCls = "text-small font-medium text-muted";
 
 type ProductDraft = Omit<Product, "priceExample" | "attributes"> & {
   priceExample: string;
@@ -22,7 +21,10 @@ type ProductDraft = Omit<Product, "priceExample" | "attributes"> & {
   specsText: string;
 };
 
-function toLines<T>(items: T[] | undefined | null, fmt: (t: T) => string): string {
+function toLines<T>(
+  items: T[] | undefined | null,
+  fmt: (t: T) => string,
+): string {
   return (items ?? []).map(fmt).join("\n");
 }
 
@@ -109,7 +111,9 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
   const [jsonError, setJsonError] = useState<string | null>(null);
 
   function setProduct(i: number, patch: Partial<ProductDraft>) {
-    setProducts((prev) => prev.map((p, j) => (j === i ? { ...p, ...patch } : p)));
+    setProducts((prev) =>
+      prev.map((p, j) => (j === i ? { ...p, ...patch } : p)),
+    );
   }
 
   const payload = useMemo(() => {
@@ -125,7 +129,10 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
         medical: meta.medical,
         published: meta.published,
         sort_order: Number(meta.sort_order) || 100,
-        summary: summaryText.split("\n").map((l) => l.trim()).filter(Boolean),
+        summary: summaryText
+          .split("\n")
+          .map((l) => l.trim())
+          .filter(Boolean),
         axes: axesText.trim()
           ? parsePairs(axesText).map(([label, desc]) => ({ label, desc }))
           : undefined,
@@ -219,7 +226,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
               setMeta({ ...meta, type: e.target.value as ArticleRow["type"] })
             }
           >
-            <option value="comparison">comparison (등급표)</option>
+            <option value="comparison">comparison (구매 가이드)</option>
             <option value="guide">guide (설명형)</option>
             <option value="hub">hub (토픽 허브)</option>
           </select>
@@ -256,7 +263,9 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
             <input
               type="checkbox"
               checked={meta.published}
-              onChange={(e) => setMeta({ ...meta, published: e.target.checked })}
+              onChange={(e) =>
+                setMeta({ ...meta, published: e.target.checked })
+              }
             />
             공개
           </label>
@@ -282,7 +291,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
 
       {/* 요약 */}
       <section>
-        <label className={labelCls}>한눈에 요약 — 한 줄에 하나</label>
+        <label className={labelCls}>한눈에 요약, 한 줄에 하나</label>
         <textarea
           className={inputCls}
           rows={3}
@@ -343,7 +352,9 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
                     />
                   </div>
                   <div>
-                    <label className={labelCls}>등급</label>
+                    <label className={labelCls}>
+                      기존 등급 (공개 화면 미노출)
+                    </label>
                     <select
                       className={inputCls}
                       value={p.grade}
@@ -357,7 +368,9 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
                     </select>
                   </div>
                   <div>
-                    <label className={labelCls}>가격 (원, 조회 시점 실측만)</label>
+                    <label className={labelCls}>
+                      가격 (원, 조회 시점 실측만)
+                    </label>
                     <input
                       className={inputCls}
                       type="number"
@@ -382,7 +395,9 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
                     </select>
                   </div>
                   <div>
-                    <label className={labelCls}>제휴 링크 (실링크만, # 금지)</label>
+                    <label className={labelCls}>
+                      제휴 링크 (실링크만, # 금지)
+                    </label>
                     <input
                       className={inputCls}
                       value={p.affiliateUrl}
@@ -393,7 +408,9 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className={labelCls}>스펙 — 한 줄에 “라벨 | 값”</label>
+                    <label className={labelCls}>
+                      스펙, 한 줄에 “라벨 | 값”
+                    </label>
                     <textarea
                       className={inputCls}
                       rows={3}
@@ -405,7 +422,8 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
                   </div>
                   <div className="sm:col-span-2">
                     <label className={labelCls}>
-                      attributes JSON (선택 — 비교 엔진용 {"{ ageMonths, features }"})
+                      attributes JSON (선택, 비교 엔진용{" "}
+                      {"{ ageMonths, features }"})
                     </label>
                     <textarea
                       className={`${inputCls} font-mono text-xs`}
@@ -447,7 +465,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
       {/* 부가 구조 */}
       <section className="space-y-4">
         <div>
-          <label className={labelCls}>평가 축 — 한 줄에 “라벨 | 설명”</label>
+          <label className={labelCls}>평가 축, 한 줄에 “라벨 | 설명”</label>
           <textarea
             className={inputCls}
             rows={3}
@@ -456,7 +474,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
           />
         </div>
         <div>
-          <label className={labelCls}>관련 글 — 한 줄에 “slug | 제목”</label>
+          <label className={labelCls}>관련 글, 한 줄에 “slug | 제목”</label>
           <textarea
             className={inputCls}
             rows={2}
@@ -465,7 +483,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
           />
         </div>
         <div>
-          <label className={labelCls}>출처 — 한 줄에 “라벨 | URL”</label>
+          <label className={labelCls}>출처, 한 줄에 “라벨 | URL”</label>
           <textarea
             className={inputCls}
             rows={2}
@@ -514,7 +532,7 @@ export function ArticleForm({ initial }: { initial?: ArticleRow }) {
         disabled={Boolean(jsonError)}
         className="inline-flex rounded-lg bg-brand px-5 py-2.5 text-sm font-medium text-on-brand transition-opacity hover:opacity-90 disabled:opacity-50"
       >
-        저장 — 사이트에 즉시 반영
+        저장, 사이트에 즉시 반영
       </button>
     </form>
   );

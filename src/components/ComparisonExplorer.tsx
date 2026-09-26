@@ -36,7 +36,7 @@ export function ComparisonExplorer({
   const sorted = ranked.map((r) => r.product);
   const stickyProduct = hasActive
     ? sorted[0]
-    : products.find((product) => product.recommended) ?? products[0];
+    : (products.find((product) => product.recommended) ?? products[0]);
   const matchMap = hasActive
     ? Object.fromEntries(ranked.map((r) => [r.product.id, r.match]))
     : undefined;
@@ -60,16 +60,32 @@ export function ComparisonExplorer({
     <div>
       <FilterPanel filters={filters} state={state} onChange={setState} />
       {hasActive && (
-        <p role="status" aria-live="polite" className="mt-3 text-[13px] text-muted">
-          조건에 가까운 순서로 정렬했습니다. 맨 위가 지금 조건에 가장 맞는 제품입니다.
+        <p
+          role="status"
+          aria-live="polite"
+          className="mt-3 text-caption text-muted"
+        >
+          선택한 조건의 충족 수, 조회 가격 순으로 정렬했어요. 미충족 조건도 함께
+          확인해 주세요.
         </p>
       )}
-      <div className="mt-4 hidden md:block">
-        <ComparisonTable products={sorted} article={article} matchMap={matchMap} />
+      <div className="mt-5">
+        <ComparisonCards
+          products={sorted}
+          article={article}
+          matchMap={matchMap}
+        />
       </div>
-      <div className="mt-4 md:hidden">
-        <ComparisonCards products={sorted} article={article} matchMap={matchMap} />
-      </div>
+      <details className="mt-6 rounded-lg border border-hairline bg-card p-4">
+        <summary className="min-h-touch cursor-pointer text-small font-medium text-brand">
+          사양을 표로 비교하기
+        </summary>
+        <ComparisonTable
+          products={sorted}
+          article={article}
+          matchMap={matchMap}
+        />
+      </details>
       {stickyProduct && <StickyCta product={stickyProduct} article={article} />}
     </div>
   );
