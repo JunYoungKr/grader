@@ -62,7 +62,7 @@ export default async function CategoryPage({
       <DisclosureNote providers={["coupang"]} className="mt-3 max-w-3xl" />
 
       <section className="mt-10">
-        <h2 className="text-lg font-semibold">검수된 비교·가이드</h2>
+        <h2 className="text-lg font-semibold">검수된 비교, 가이드</h2>
         {articles.length === 0 ? (
           <p className="mt-4 text-[15px] text-muted">
             아직 검수가 끝난 글이 없습니다. 아래 인기 상품을 바탕으로 비교 글을 준비 중입니다.
@@ -105,12 +105,12 @@ export default async function CategoryPage({
               </h2>
               <p className="mt-1 max-w-3xl text-[13px] leading-relaxed text-muted">
                 쿠팡 카테고리 베스트 API 응답에서 다른 카테고리 상품을 제외한 목록입니다.
-                판매량 수치나 Grader 등급을 뜻하지 않으며, 옵션·가격은 구매 전에 확인하세요.
+                판매량 수치나 Grader 등급을 뜻하지 않으며, 옵션, 가격은 구매 전에 확인하세요.
               </p>
             </div>
             <p className="shrink-0 text-xs text-faint">
               {checkedAt ? `${checkedAt} 가격 조회` : "가격 조회일 없음"}
-              {generatedAt ? " · API 스냅샷" : ""}
+              {generatedAt ? ", API 스냅샷" : ""}
             </p>
           </div>
           <PopularProductGrid products={popularProducts} category={category} />

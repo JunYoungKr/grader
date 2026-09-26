@@ -7,8 +7,8 @@ export function MedicalDisclaimer({ className = "" }: { className?: string }) {
       <p className="mb-1 text-xs font-medium tracking-[0.04em] text-muted">
         의료 정보 고지
       </p>
-      이 글은 일반 정보 제공을 위한 것으로 의학적 진단·처방을 대체하지 않습니다. 아기의
-      건강·안전과 관련된 결정은 소아과 전문의 등 전문가와 상담하세요.
+      이 글은 일반 정보 제공을 위한 것으로 의학적 진단, 처방을 대체하지 않습니다. 아기의
+      건강, 안전과 관련된 결정은 소아과 전문의 등 전문가와 상담하세요.
     </aside>
   );
 }

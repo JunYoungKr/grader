@@ -10,8 +10,8 @@ import type { Grade } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "소개 · 평가 방법론",
-  description: `${SITE_NAME}는 제품을 안전성·성능·성분·가격으로 등급화해 비교합니다. 평가 방법, 객관성 원칙, 운영자 정보를 안내합니다.`,
+  title: "소개, 평가 방법론",
+  description: `${SITE_NAME}는 제품을 안전성, 성능, 성분, 가격으로 등급화해 비교합니다. 평가 방법, 객관성 원칙, 운영자 정보를 안내합니다.`,
   path: "/about",
 });
 
@@ -20,7 +20,7 @@ const GRADES: Grade[] = ["S", "A", "B", "C"];
 const PRINCIPLES = [
   {
     title: "광고비와 분리된 평가",
-    body: "등급은 제휴 수수료·광고비와 무관하게 매깁니다. 수수료를 더 준다고 등급이 오르지 않습니다.",
+    body: "등급은 제휴 수수료, 광고비와 무관하게 매깁니다. 수수료를 더 준다고 등급이 오르지 않습니다.",
   },
   {
     title: "1차 출처 기반",
@@ -33,9 +33,9 @@ const PRINCIPLES = [
 ];
 
 const SOURCES = [
-  { label: "국가기술표준원 — 어린이제품·전기·생활용품 안전인증 정보", url: "https://www.kats.go.kr/" },
-  { label: "한국소비자원 — 품목별 비교시험 자료", url: "https://www.kca.go.kr/" },
-  { label: "식품의약품안전처 — 화장품·성분 안전 기준", url: "https://www.mfds.go.kr/" },
+  { label: "국가기술표준원, 어린이제품, 전기, 생활용품 안전인증 정보", url: "https://www.kats.go.kr/" },
+  { label: "한국소비자원, 품목별 비교시험 자료", url: "https://www.kca.go.kr/" },
+  { label: "식품의약품안전처, 화장품, 성분 안전 기준", url: "https://www.mfds.go.kr/" },
 ];
 
 export default function AboutPage() {
@@ -46,10 +46,10 @@ export default function AboutPage() {
         {SITE_NAME} 소개
       </h1>
       <p className="mt-3 text-[15px] leading-relaxed text-muted">
-        {SITE_NAME}는 사야 할지 망설여지는 제품을 <strong className="font-medium text-ink">안전성·성능·성분·가격</strong>으로
+        {SITE_NAME}는 사야 할지 망설여지는 제품을 <strong className="font-medium text-ink">안전성, 성능, 성분, 가격</strong>으로
         등급화(S/A/B/C)해 비교하는 사이트입니다. 처음 사는 제품처럼 한 번에 여러 개를 골라야 하는
-        순간, 광고가 아닌 근거로 빠르게 결정하도록 돕는 것을 목표로 합니다. 육아·출산을
-        시작점으로 생활·주방, 가전·디지털, 식품·건강, 뷰티 등 생활 전반의 제품으로 넓혀가고
+        순간, 광고가 아닌 근거로 빠르게 결정하도록 돕는 것을 목표로 합니다. 육아, 출산을
+        시작점으로 생활, 주방, 가전, 디지털, 식품, 건강, 뷰티 등 생활 전반의 제품으로 넓혀가고
         있습니다.
       </p>
 
@@ -65,14 +65,14 @@ export default function AboutPage() {
                 <span className="font-medium">{GRADE_STYLES[g].label}</span>
                 <span className="text-muted">
                   {" "}
-                  — {GRADE_DESC[g]}
+                  , {GRADE_DESC[g]}
                 </span>
               </dd>
             </div>
           ))}
         </dl>
         <p className="mt-3 text-[13px] leading-relaxed text-muted">
-          축(안전성·성분·휴대성·가성비 등)은 카테고리마다 다르며, 각 비교 글의 “평가 기준”
+          축(안전성, 성분, 휴대성, 가성비 등)은 카테고리마다 다르며, 각 비교 글의 “평가 기준”
           섹션에 무엇을 어떻게 봤는지 공개합니다.
         </p>
       </section>
@@ -92,13 +92,13 @@ export default function AboutPage() {
       <section className="mt-12">
         <h2 className="text-lg font-medium">운영자</h2>
         <p className="mt-3 text-[15px] leading-relaxed text-muted">
-          운영자: <span className="text-ink">{OPERATOR_NAME}</span> · 문의:{" "}
+          운영자: <span className="text-ink">{OPERATOR_NAME}</span> , 문의:{" "}
           <a href={`mailto:${CONTACT_EMAIL}`} className="text-brand hover:underline">
             {CONTACT_EMAIL}
           </a>
         </p>
         <p className="mt-2 text-[15px] leading-relaxed text-muted">
-          오류·이의 제기나 정정 요청을 보내주시면 출처와 함께 검토해 반영합니다.
+          오류, 이의 제기나 정정 요청을 보내주시면 출처와 함께 검토해 반영합니다.
         </p>
       </section>
 
@@ -113,7 +113,7 @@ export default function AboutPage() {
 
 const GRADE_DESC: Record<Grade, string> = {
   S: "안전인증을 모두 충족하고 핵심 축에서 약점이 없는 최상위. 우선 추천합니다.",
-  A: "필수 요건을 갖춘 우수 등급. 가격·특정 용도에서 합리적인 선택입니다.",
+  A: "필수 요건을 갖춘 우수 등급. 가격, 특정 용도에서 합리적인 선택입니다.",
   B: "기본은 갖췄으나 일부 축에서 타협이 있는 보통 등급. 용도가 맞으면 무난합니다.",
   C: "최소 요건 위주의 입문 등급. 예산이 우선일 때만 권합니다.",
 };

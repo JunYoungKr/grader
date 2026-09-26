@@ -13,7 +13,7 @@ export function MatchBadge({ info }: { info: MatchInfo }) {
     >
       조건 {info.total}개 중 {info.satisfied}개 충족
       {info.missed.length > 0 && (
-        <span className="text-faint">· {info.missed.join(" · ")} 미충족</span>
+        <span className="text-faint">, {info.missed.join(", ")} 미충족</span>
       )}
     </span>
   );

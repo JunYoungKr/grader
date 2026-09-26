@@ -11,8 +11,8 @@ import { SiteJsonLd } from "@/lib/jsonld";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — 제품 등급 비교`,
-    template: `%s · ${SITE_NAME}`,
+    default: `${SITE_NAME}, 제품 등급 비교`,
+    template: `%s, ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   openGraph: {

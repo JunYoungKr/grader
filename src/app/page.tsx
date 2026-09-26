@@ -7,8 +7,8 @@ import type { Article } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = {
-  ...pageMetadata({ title: "Grader — 제품 등급 비교", path: "/" }),
-  title: { absolute: "Grader — 제품 등급 비교" },
+  ...pageMetadata({ title: "Grader, 제품 등급 비교", path: "/" }),
+  title: { absolute: "Grader, 제품 등급 비교" },
 };
 
 const TYPE_LABEL: Record<Article["type"], string> = {
@@ -35,7 +35,7 @@ function ArticleRow({ article }: { article: Article }) {
       <div className="min-w-0">
         <div className="truncate font-medium">{article.title}</div>
         <div className="text-[13px] text-muted">
-          {cat?.name} · {article.updated}
+          {cat?.name} , {article.updated}
         </div>
       </div>
     </Link>
@@ -56,7 +56,7 @@ export default async function HomePage() {
           사야 할 제품, 등급으로 빠르게 비교하세요
         </h1>
         <p className="mt-3 text-[15px] leading-relaxed text-muted">
-          안전성·성능·성분·가격을 카테고리별 기준으로 평가해 S/A/B/C 등급을
+          안전성, 성능, 성분, 가격을 카테고리별 기준으로 평가해 S/A/B/C 등급을
           매깁니다. 리뷰 데이터와 1차 출처로 검증하고, 등급은 광고비와 분리합니다.
         </p>
       </section>

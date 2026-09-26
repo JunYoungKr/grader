@@ -13,6 +13,7 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import type { Article } from "../src/lib/types";
+import { normalizeContentCopy } from "../src/lib/display-copy";
 import { lowSugarStarterArticle } from "../src/content/products/low-sugar-starter";
 import { pantsHemClipArticle } from "../src/content/products/pants-hem-clip";
 import { pepsiZeroLimeArticle } from "../src/content/products/pepsi-zero-lime";
@@ -40,7 +41,7 @@ const articles: Article[] = [
   ganongEggArticle,
 ];
 
-const rows = articles.map((a, i) => ({
+const rows = articles.map((a, i) => normalizeContentCopy({
   slug: a.slug,
   category: a.category,
   type: a.type,
@@ -117,8 +118,8 @@ on conflict (slug) do update set
     console.error("시드 실패:", error.message);
     process.exit(1);
   }
-  console.log(`시드 완료 — ${rows.length}개 글 업서트:`);
-  for (const r of rows) console.log(`  - ${r.slug} (${r.category})`);
+  console.log(`시드 완료, ${rows.length}개 글 업서트:`);
+  for (const r of rows) console.log(`, ${r.slug} (${r.category})`);
 }
 
 main();

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { normalizeContentCopy } from "@/lib/display-copy";
 
 type RecentItem = { slug: string; title: string };
 
@@ -12,7 +13,9 @@ function readList(): RecentItem[] {
   try {
     const raw = localStorage.getItem(KEY);
     const list = raw ? (JSON.parse(raw) as RecentItem[]) : [];
-    return Array.isArray(list) ? list : [];
+    return Array.isArray(list)
+      ? list.filter((item) => item && typeof item.slug === "string" && typeof item.title === "string").map((item) => normalizeContentCopy(item))
+      : [];
   } catch {
     return [];
   }

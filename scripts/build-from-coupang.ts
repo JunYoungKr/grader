@@ -9,6 +9,7 @@ import { access, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { loadEnvConfig } from "@next/env";
 import { categories } from "../src/content/categories";
+import { normalizeDisplayText } from "../src/lib/display-copy";
 import {
   searchProducts,
   type CoupangProduct,
@@ -71,7 +72,7 @@ function parseArgs(argv: string[]): Options {
   const limit = Number(values.get("limit") ?? 5);
 
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
-    throw new Error("--slug는 영문 소문자·숫자·하이픈 형식이어야 합니다.");
+    throw new Error("--slug는 영문 소문자, 숫자, 하이픈 형식이어야 합니다.");
   }
   if (!categories.some((item) => item.slug === category)) {
     throw new Error(
@@ -135,7 +136,7 @@ function renderDraft(options: Options, products: CoupangProduct[]): string {
       (product, index) => `    {
       id: ${q(`${options.slug}-${product.productId}-${index + 1}`)},
       coupangProductId: ${product.productId},
-      name: ${q(product.productName)},
+      name: ${q(normalizeDisplayText(product.productName))},
       imageUrl: ${q(normalizeImageUrl(product.productImage))},
       type: "", // TODO: 제품 유형 검수
       descriptor: "", // TODO: 핵심 차이 한 줄
@@ -146,7 +147,7 @@ function renderDraft(options: Options, products: CoupangProduct[]): string {
       affiliateUrl: ${q(product.productUrl)},
       isRocket: ${Boolean(product.isRocket)},
       isFreeShipping: ${Boolean(product.isFreeShipping)},
-      ${index === 0 ? "// recommended: true, // TODO: 사람 검수 후 1개만 지정\n      " : ""}specs: [], // TODO: 공식 스펙·성분·인증 정보
+      ${index === 0 ? "// recommended: true, // TODO: 사람 검수 후 1개만 지정\n      " : ""}specs: [], // TODO: 공식 스펙, 성분, 인증 정보
     }`,
     )
     .join(",\n");
@@ -156,14 +157,14 @@ function renderDraft(options: Options, products: CoupangProduct[]): string {
 // AUTO-GENERATED REVIEW DRAFT
 // 검색어: ${options.keyword}
 // 생성일: ${checkedAt}
-// 주의: 쿠팡 검색 결과의 이름·가격·이미지·링크만 자동 반영했습니다.
-// 등급·추천·평가축·스펙은 반드시 사람이 1차 출처를 확인한 뒤 작성하세요.
+// 주의: 쿠팡 검색 결과의 이름, 가격, 이미지, 링크만 자동 반영했습니다.
+// 등급, 추천, 평가축, 스펙은 반드시 사람이 1차 출처를 확인한 뒤 작성하세요.
 // 검수가 끝날 때까지 content.ts에 등록하지 마세요.
 export const draftArticle: Article = {
   slug: ${q(options.slug)},
   category: ${q(options.category)},
   type: "comparison",
-  title: ${q(`${options.keyword} 비교 — 검수 필요`)},
+  title: ${q(`${normalizeDisplayText(options.keyword)} 비교 (검수 필요)`)},
   description: "", // TODO: 누구의 어떤 구매 결정을 돕는지 작성
   updated: ${q(updated)},
   summary: [
@@ -175,7 +176,7 @@ export const draftArticle: Article = {
   products: [
 ${productBlocks}
   ],
-  sources: [], // TODO: 제조사·공공기관·전문기관 1차 출처
+  sources: [], // TODO: 제조사, 공공기관, 전문기관 1차 출처
 };
 `;
 }
@@ -231,7 +232,7 @@ async function main(): Promise<void> {
   await mkdir(outputDir, { recursive: true });
   await writeFile(outputPath, draft, "utf8");
   console.log(`✓ 검수용 초안 생성: ${outputPath}`);
-  console.log("  다음 단계: 공식 스펙·출처·평가축·등급 검수 → .draft 제거 → content.ts 수동 등록");
+  console.log("  다음 단계: 공식 스펙, 출처, 평가축, 등급 검수 → .draft 제거 → content.ts 수동 등록");
 }
 
 main().catch((error) => {

@@ -9,17 +9,17 @@ export const COUPANG_CATEGORY_SOURCES: Record<
   string,
   CoupangCategorySource[]
 > = {
-  baby: [{ id: 1011, label: "출산·유아동" }],
+  baby: [{ id: 1011, label: "출산, 유아동" }],
   "daily-life": [
     { id: 1013, label: "주방용품" },
     { id: 1014, label: "생활용품" },
   ],
-  digital: [{ id: 1016, label: "가전·디지털" }],
+  digital: [{ id: 1016, label: "가전, 디지털" }],
   food: [
     { id: 1012, label: "식품" },
   ],
   beauty: [{ id: 1010, label: "뷰티" }],
-  sports: [{ id: 1017, label: "스포츠·레저" }],
+  sports: [{ id: 1017, label: "스포츠, 레저" }],
 };
 
 // 베스트 API에는 교차 카테고리 광고 상품이 섞일 수 있어 응답 categoryName도 검증한다.

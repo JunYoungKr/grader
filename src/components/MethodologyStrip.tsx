@@ -22,7 +22,7 @@ export function MethodologyStrip() {
   return (
     <p className="flex items-center gap-1.5 text-xs text-muted">
       <ShieldIcon />
-      <span>광고비와 분리된 평가 · KC안전인증·소비자원 비교시험 등 1차 출처 기반</span>
+      <span>광고비와 분리된 평가, KC안전인증, 소비자원 비교시험 등 1차 출처 기반</span>
     </p>
   );
 }

@@ -21,7 +21,7 @@ export default function AdminLoginPage() {
     });
     setBusy(false);
     if (error) {
-      setError("로그인 실패 — 이메일/비밀번호를 확인하세요.");
+      setError("로그인 실패, 이메일/비밀번호를 확인하세요.");
       return;
     }
     router.push("/admin/content");

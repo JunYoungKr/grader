@@ -5,6 +5,7 @@ import {
 } from "./coupang-categories";
 import { getBestCategoryProducts, type CoupangProduct } from "./coupang";
 import type { PopularProductSnapshot } from "./types";
+import { normalizeContentCopy } from "./display-copy";
 
 type FetchProducts = typeof getBestCategoryProducts;
 export const COUPANG_SYNC_JOB = "coupang-products-daily-0900-kst";
@@ -108,5 +109,5 @@ export async function collectCoupangSnapshot(
       }),
     );
   }
-  return snapshot;
+  return normalizeContentCopy(snapshot);
 }

@@ -73,7 +73,7 @@ export function PopularProductGrid({
                 {formatPrice(product.price)}
               </p>
               <p className="mt-0.5 text-[11px] text-faint">
-                {product.priceCheckedAt} 조회 · 가격 변동 가능
+                {product.priceCheckedAt} 조회, 가격 변동 가능
               </p>
               <div className="mt-3">
                 <AffiliateButton

@@ -35,6 +35,6 @@ export function uniqueProviders(list: Provider[]): Provider[] {
 export function buildDisclosure(providers: Provider[]): string {
   const names = uniqueProviders(providers)
     .map((p) => PROVIDERS[p].disclosure)
-    .join(" · ");
+    .join(", ");
   return `이 페이지는 ${names} 활동의 일환으로 일정액의 수수료를 제공받습니다. 등급은 수수료와 무관하게 평가됩니다.`;
 }

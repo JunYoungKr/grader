@@ -72,7 +72,7 @@ function label(name: string): string {
 }
 
 function formatValue(column: Ga4Column, value: string): string {
-  if (!value || value === "(not set)") return "—";
+  if (!value || value === "(not set)") return "정보 없음";
   if (column.name === "date" && /^\d{8}$/.test(value)) {
     return `${value.slice(0, 4)}.${value.slice(4, 6)}.${value.slice(6, 8)}`;
   }
@@ -331,7 +331,7 @@ function Explorer({
               <optgroup key={category} label={category}>
                 {items.map((item) => (
                   <option key={item.apiName} value={item.apiName} title={item.description}>
-                    {item.uiName} · {item.apiName}{item.customDefinition ? " (맞춤)" : ""}
+                    {item.uiName} , {item.apiName}{item.customDefinition ? " (맞춤)" : ""}
                   </option>
                 ))}
               </optgroup>
@@ -352,7 +352,7 @@ function Explorer({
               <optgroup key={category} label={category}>
                 {items.map((item) => (
                   <option key={item.apiName} value={item.apiName} title={item.description}>
-                    {item.uiName} · {item.apiName}{item.customDefinition ? " (맞춤)" : ""}
+                    {item.uiName} , {item.apiName}{item.customDefinition ? " (맞춤)" : ""}
                   </option>
                 ))}
               </optgroup>
@@ -403,7 +403,7 @@ function Dashboard({
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">GA4 Analytics</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">Grader 데이터 센터</h1>
           <p className="mt-2 text-sm text-muted">
-            속성 {data.propertyId} · {data.startDate} ~ {data.endDate} · 갱신 {new Date(data.generatedAt).toLocaleString("ko-KR")}
+            속성 {data.propertyId} , {data.startDate} ~ {data.endDate} , 갱신 {new Date(data.generatedAt).toLocaleString("ko-KR")}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -450,7 +450,7 @@ function Dashboard({
         <MetricCards table={reports.overview} />
         <ReportSection
           id="realtime"
-          title="실시간 · 최근 30분"
+          title="실시간, 최근 30분"
           description="이벤트별 현재 활성 사용자와 발생 횟수"
           table={reports.realtime}
         />
@@ -461,13 +461,13 @@ function Dashboard({
         </div>
         <ReportSection id="pages" title="페이지 성과" description="콘텐츠별 트래픽, 체류, 이벤트 성과" table={reports.pages} />
         <ReportSection id="events" title="전체 이벤트" description="page_view, select_item 등 수집된 모든 이벤트" table={reports.events} />
-        <ReportSection id="items" title="상품·제휴 퍼널" description="상품 목록 노출에서 제휴 링크 클릭까지" table={reports.items} />
+        <ReportSection id="items" title="상품, 제휴 퍼널" description="상품 목록 노출에서 제휴 링크 클릭까지" table={reports.items} />
         {reports.placements && (
           <ReportSection id="placements" title="클릭 위치" description="등록된 placement 맞춤 측정기준별 이벤트" table={reports.placements} />
         )}
         <div className="grid gap-6 xl:grid-cols-2">
-          <ReportSection id="geography" title="지역" description="국가·지역·도시별 사용자와 참여" table={reports.geography} />
-          <ReportSection id="technology" title="기기·브라우저" description="접속 환경별 사용 패턴" table={reports.technology} />
+          <ReportSection id="geography" title="지역" description="국가, 지역, 도시별 사용자와 참여" table={reports.geography} />
+          <ReportSection id="technology" title="기기, 브라우저" description="접속 환경별 사용 패턴" table={reports.technology} />
         </div>
         <Explorer
           data={data}

@@ -102,12 +102,12 @@ export default async function ArticlePage({
             {article.description}
           </p>
           <p className="mt-2 text-xs text-faint">
-            {article.updated} 기준{providers.length > 0 && " · 제휴 링크 포함"}
+            {article.updated} 기준{providers.length > 0 && ", 제휴 링크 포함"}
           </p>
           <p className="mt-2 text-xs text-faint">
             작성: {SITE_NAME}
             {parseUpdated(article.modifiedAt) && (
-              <> · 페이지 수정일: <time dateTime={article.modifiedAt}>
+              <> , 페이지 수정일: <time dateTime={article.modifiedAt}>
                 {new Date(article.modifiedAt!).toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul" })}
               </time></>
             )}

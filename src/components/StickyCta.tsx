@@ -22,7 +22,7 @@ export function StickyCta({
         <GradeBadge grade={product.grade} />
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm text-muted">
-            1순위 추천 · <span className="font-medium text-ink">{product.name}</span>
+            1순위 추천, <span className="font-medium text-ink">{product.name}</span>
           </div>
           <div className="text-lg font-medium tabular-nums leading-tight">
             {formatPrice(product.priceExample)}
