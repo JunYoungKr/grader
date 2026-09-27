@@ -16,7 +16,7 @@ export const metadata = {
   title: { absolute: "Grader 살림 가이드" },
 };
 export const revalidate = 300;
-const featuredGuideSlug = "magnetic-gap-shelf-checklist-2026";
+const featuredGuideSlug = "washer-door-stopper-checklist-2026";
 
 export default async function HomePage() {
   const [recentArticles, featuredGuide] = await Promise.all([
