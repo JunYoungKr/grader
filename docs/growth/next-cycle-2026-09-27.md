@@ -6,11 +6,12 @@
 
 | 출처 | 확인 결과 | 다음 확인 |
 | --- | --- | --- |
-| [Google 사이트맵](https://search.google.com/search-console/sitemaps?resource_id=sc-domain%3Agrader.co.kr) | 2026-09-27 마지막 읽기, 성공, 발견된 페이지 16개. 현재 공개 사이트맵에는 19개 URL이 있다. | 새 글 2개의 발견 및 색인 상태를 다시 확인한다. |
+| [Google 사이트맵](https://search.google.com/search-console/sitemaps?resource_id=sc-domain%3Agrader.co.kr) | 2026-09-27 마지막 읽기, 성공, 발견된 페이지 16개. 발행 후 공개 사이트맵에는 22개 URL이 있다. | 새 글의 발견 및 색인 상태를 다시 확인한다. |
+| [Google URL 검사](https://search.google.com/search-console/inspect?resource_id=sc-domain%3Agrader.co.kr&id=TtikKFOr3LjTz_bd1vqAlA) | 식기세척기 가이드는 발행 직후 아직 알려지지 않은 URL이었다. 2026-09-27 색인 생성 요청을 한 번 제출했고 우선순위 크롤링 대기열에 추가됐다는 메시지를 확인했다. | 실제 크롤링과 색인 여부를 나중에 확인한다. |
 | [Google 검색 실적](https://search.google.com/search-console/performance/search-analytics?resource_id=sc-domain%3Agrader.co.kr&num_of_days=28) | 2026-08-28부터 2026-09-24까지 노출 10회, 클릭 0회. 표에 보인 검색어는 `제품 비교` 4회뿐이다. | 검색어 수가 늘기 전에는 특정 주제의 사이트 내 검색 수요를 단정하지 않는다. |
-| [네이버 웹 페이지 수집](https://searchadvisor.naver.com/console/site/request/crawl?site=https%3A%2F%2Fgrader.co.kr) | 매직캔과 수납함 가이드의 수집 요청이 각각 등록됐다. | 수집 성공과 검색 노출을 별도로 확인한다. |
+| [네이버 웹 페이지 수집](https://searchadvisor.naver.com/console/site/request/crawl?site=https%3A%2F%2Fgrader.co.kr) | 매직캔과 수납함 가이드에 이어 식기세척기 가이드도 2026-09-27 16:17:32에 수집 요청으로 등록됐다. | 수집 성공과 검색 노출을 별도로 확인한다. |
 
-Google과 네이버에 새 글의 요청을 반복해서 보내지 않는다. [Google 검색 센터](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl)와 [네이버 서치어드바이저](https://searchadvisor.naver.com/guide/request-crawl)는 처리에 시간이 걸리고 반복 요청이 속도를 높이지 않는다고 안내한다.
+Google과 네이버에 같은 글의 요청을 반복해서 보내지 않는다. [Google 검색 센터](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl)와 [네이버 서치어드바이저](https://searchadvisor.naver.com/guide/request-crawl)는 처리에 시간이 걸리고 반복 요청이 속도를 높이지 않는다고 안내한다.
 
 ## 다음 주제 선택
 
