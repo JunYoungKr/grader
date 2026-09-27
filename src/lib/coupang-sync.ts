@@ -65,6 +65,7 @@ export async function collectCoupangSnapshot(
     for (const source of sources) {
       const products = await fetchProducts(source.id, 100, {
         imageSize: "512x512",
+        subId: process.env.COUPANG_SUB_ID?.trim() || undefined,
       });
       batches.push(
         products

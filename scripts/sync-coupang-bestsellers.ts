@@ -108,7 +108,10 @@ async function main(): Promise<void> {
       const products = await getBestCategoryProducts(
         source.id,
         API_FETCH_LIMIT,
-        { imageSize: "512x512" },
+        {
+          imageSize: "512x512",
+          subId: process.env.COUPANG_SUB_ID?.trim() || undefined,
+        },
       );
       batches.push(
         uniqueProducts(products)

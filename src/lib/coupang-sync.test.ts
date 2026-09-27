@@ -5,7 +5,7 @@ import {
   getCurrentPopularSnapshot,
   isValidProductSnapshot,
 } from "./popular-products-live";
-import type { CoupangProduct } from "./coupang";
+import type { CoupangProduct, CoupangProductQuery } from "./coupang";
 
 const names: Record<number, string> = {
   1011: "출산/유아",
@@ -37,6 +37,21 @@ afterEach(() => {
 });
 
 describe("daily Coupang refresh", () => {
+  it("uses the registered channel ID for every product link request", async () => {
+    vi.stubEnv("COUPANG_SUB_ID", "graderco2026");
+    const fetch = vi.fn(
+      async (
+        category: number,
+        _limit = 20,
+        _options: CoupangProductQuery = {},
+      ) =>
+        products(category),
+    );
+    await collectCoupangSnapshot(fetch);
+    expect(fetch).toHaveBeenCalled();
+    expect(fetch.mock.calls.every((call) => call[2]?.subId === "graderco2026")).toBe(true);
+  });
+
   it("keeps 20 unique validated products per category and uses Korean dates", async () => {
     const snapshot = await collectCoupangSnapshot(async (category) => {
       const list = products(category);
