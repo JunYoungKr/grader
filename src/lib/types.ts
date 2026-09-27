@@ -22,7 +22,7 @@ export interface Product {
   imageUrl?: string; // 쿠팡 API 상품 이미지
   type: string;
   descriptor: string;
-  grade: Grade;
+  grade?: Grade; // 기존 비교 글에만 필요하며 설명형 글은 등급을 매기지 않는다.
   specs: Spec[];
   priceExample: number;
   provider: Provider;
