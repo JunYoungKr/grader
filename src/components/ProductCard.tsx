@@ -65,6 +65,7 @@ export function ProductCard({
             productId: product.coupangProductId ?? product.id,
             product: product.name,
             grade: product.grade,
+            category: product.grade ? undefined : product.type,
             price: product.priceExample,
             placement: "product_card",
             recommended: product.recommended,
