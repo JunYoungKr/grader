@@ -4,7 +4,9 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@/components/Analytics";
 import { GoogleTag } from "@/components/GoogleTag";
-import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, absoluteUrl } from "@/lib/site";
+import { SOCIAL_IMAGE } from "@/lib/seo";
+import { SiteJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -12,14 +14,28 @@ export const metadata: Metadata = {
     default: `${SITE_NAME} 살림 가이드`,
     template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "주방 정리부터 생활용품까지, 우리 집에 맞는 살림 방법과 제품을 찾아보세요. 구매 전 확인할 조건과 정보를 함께 안내합니다.",
+  description: SITE_DESCRIPTION,
+  alternates: {
+    types: { "application/rss+xml": absoluteUrl("/feed.xml") },
+  },
   openGraph: {
     type: "website",
     locale: "ko_KR",
     siteName: SITE_NAME,
+    images: [SOCIAL_IMAGE],
   },
-  robots: { index: true, follow: true },
+  twitter: { card: "summary_large_image", images: [SOCIAL_IMAGE] },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION?.trim(),
+    other: process.env.NAVER_SITE_VERIFICATION?.trim()
+      ? { "naver-site-verification": process.env.NAVER_SITE_VERIFICATION.trim() }
+      : {},
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 export default function RootLayout({
@@ -38,6 +54,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased">
+        <SiteJsonLd />
         <a href="#main-content" className="skip-link">
           본문으로 바로가기
         </a>

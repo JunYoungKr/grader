@@ -14,6 +14,7 @@ export interface ArticleRow {
   title: string;
   description: string;
   updated: string;
+  updated_at?: string;
   medical: boolean;
   summary: string[];
   axes: Article["axes"];
@@ -35,6 +36,7 @@ export function rowToArticle(r: ArticleRow): Article {
     title: r.title,
     description: r.description,
     updated: r.updated,
+    modifiedAt: r.updated_at,
     medical: r.medical || undefined,
     summary: r.summary ?? [],
     axes: r.axes ?? undefined,

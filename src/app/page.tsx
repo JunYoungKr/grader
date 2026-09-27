@@ -1,4 +1,5 @@
 import { getAllArticles } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 import { getCurrentPopularProducts } from "@/lib/popular-products-live";
 import { Container, SectionHeading } from "@/components/ui/Primitives";
 import { HomeHero } from "@/components/home/HomeHero";
@@ -11,6 +12,10 @@ import {
 import { PopularProductGrid } from "@/components/PopularProductGrid";
 import { DisclosureNote } from "@/components/DisclosureNote";
 export const revalidate = 300;
+export const metadata = pageMetadata({
+  title: "우리 집에 맞는 살림 가이드",
+  path: "/",
+});
 export default async function HomePage() {
   const articles = await getAllArticles();
   const products = (await getCurrentPopularProducts("daily-life"))

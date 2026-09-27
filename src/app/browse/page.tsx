@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getAllArticles, getCategories } from "@/lib/content";
 import { getCurrentPopularSnapshot } from "@/lib/popular-products-live";
 import {
@@ -13,11 +14,11 @@ import { CategoryTabs } from "@/components/content/CategoryTabs";
 import { ArticleCard } from "@/components/content/ArticleCard";
 import { PopularProductGrid } from "@/components/PopularProductGrid";
 import { DisclosureNote } from "@/components/DisclosureNote";
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "살림 둘러보기",
-  description:
-    "살림 가이드와 생활용품을 분야별로 찾고, 우리 집에 필요한 정보를 검색하세요.",
-};
+  description: "살림 가이드와 생활용품을 분야별로 찾고, 우리 집에 필요한 정보를 검색하세요.",
+  path: "/browse",
+});
 export const revalidate = 300;
 export default async function BrowsePage({
   searchParams,
