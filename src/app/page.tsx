@@ -1,4 +1,4 @@
-import { getAllArticles } from "@/lib/content";
+import { getArticle, getRecentArticles } from "@/lib/content";
 import { getCurrentPopularProducts } from "@/lib/popular-products-live";
 import { Container, SectionHeading } from "@/components/ui/Primitives";
 import { HomeHero } from "@/components/home/HomeHero";
@@ -16,8 +16,19 @@ export const metadata = {
   title: { absolute: "Grader 살림 가이드" },
 };
 export const revalidate = 300;
+const featuredGuideSlug = "magnetic-gap-shelf-checklist-2026";
+
 export default async function HomePage() {
-  const articles = await getAllArticles();
+  const [recentArticles, featuredGuide] = await Promise.all([
+    getRecentArticles(),
+    getArticle(featuredGuideSlug),
+  ]);
+  const articles = featuredGuide
+    ? [
+        featuredGuide,
+        ...recentArticles.filter((article) => article.slug !== featuredGuide.slug),
+      ].slice(0, 3)
+    : recentArticles;
   const products = (await getCurrentPopularProducts("daily-life"))
     .filter(
       (p, i, list) =>

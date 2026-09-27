@@ -63,6 +63,21 @@ export async function getAllArticles(): Promise<Article[]> {
   return (data as ArticleRow[]).map(rowToArticle);
 }
 
+export async function getRecentArticles(limit = 3): Promise<Article[]> {
+  const sb = supabasePublic();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from("articles")
+    .select("*")
+    .eq("published", true)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) {
+    throw new Error(`[content] getRecentArticles 실패: ${error.message}`);
+  }
+  return (data as ArticleRow[]).map(rowToArticle);
+}
+
 export async function getAllArticleSlugs(): Promise<string[]> {
   const sb = supabasePublic();
   if (!sb) return [];
