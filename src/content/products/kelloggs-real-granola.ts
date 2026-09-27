@@ -34,7 +34,7 @@ export const kelloggsRealGranolaArticle: Article = {
       priceExample: 15000, // 350g 3개 세트가(조회 시점)
       provider: "coupang",
       // 켈로그 리얼 그래놀라 오리지널 350g 3개 — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
-      affiliateUrl: "https://link.coupang.com/a/etn3N43F7s",
+      affiliateUrl: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=7012375223&itemId=27838147219&traceid=V0-183-1641ec33a2dede3b",
       specs: [
         { label: "용량", value: "350g × 3개" },
         { label: "종류", value: "오리지널" },
@@ -45,7 +45,7 @@ export const kelloggsRealGranolaArticle: Article = {
   // 쿠팡 파트너스 공식 배너 — 실제 추적 링크/creative
   promoBanner: {
     provider: "coupang",
-    href: "https://link.coupang.com/a/etn3N43F7s",
+    href: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=7012375223&itemId=27838147219&traceid=V0-183-1641ec33a2dede3b",
     imageUrl:
       "https://image4.coupangcdn.com/image/affiliate/banner/6a6a4816c5837c4c5fe80ed811ebb6e5@2x.jpg",
     imageAlt: "켈로그 리얼 그래놀라 오리지널 시리얼, 350g, 3개",

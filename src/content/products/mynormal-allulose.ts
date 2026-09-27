@@ -34,7 +34,7 @@ export const mynormalAlluloseArticle: Article = {
       priceExample: 12800, // 500g 1팩 조회 시점가
       provider: "coupang",
       // 마이노멀 저당 저칼로리 알룰로스 500g — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
-      affiliateUrl: "https://link.coupang.com/a/etn5rUeb4m",
+      affiliateUrl: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=9246341637&itemId=27948466734&traceid=V0-183-30025a90f8b15b28",
       specs: [
         { label: "용량", value: "500g" },
         { label: "특징", value: "저당, 저칼로리" },
@@ -45,7 +45,7 @@ export const mynormalAlluloseArticle: Article = {
   // 쿠팡 파트너스 공식 배너 — 실제 추적 링크/creative
   promoBanner: {
     provider: "coupang",
-    href: "https://link.coupang.com/a/etn5rUeb4m",
+    href: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=9246341637&itemId=27948466734&traceid=V0-183-30025a90f8b15b28",
     imageUrl:
       "https://image4.coupangcdn.com/image/affiliate/banner/7822702b7e6a5788d065f0d9bd9b7a28@2x.jpg",
     imageAlt: "마이노멀 저당 저칼로리 알룰로스, 500g, 1개",

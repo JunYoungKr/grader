@@ -35,7 +35,7 @@ export const pepsiZeroLimeArticle: Article = {
       priceCheckedAt: "2026-07-18",
       provider: "coupang",
       affiliateUrl:
-        "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&pageKey=8279872054&itemId=23665748009&vendorItemId=74157319832&traceid=V0-153-106b39a48805de27&requestid=20260718222733227316986244&token=31850C%7CMIXED",
+        "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=8279872054&itemId=23665748009&traceid=V0-183-106b39a48805de27",
       isRocket: true,
       isFreeShipping: false,
       recommended: true,
@@ -50,7 +50,7 @@ export const pepsiZeroLimeArticle: Article = {
   promoBanner: {
     provider: "coupang",
     href:
-      "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&pageKey=8279872054&itemId=23665748009&vendorItemId=74157319832&traceid=V0-153-106b39a48805de27&requestid=20260718222733227316986244&token=31850C%7CMIXED",
+      "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=8279872054&itemId=23665748009&traceid=V0-183-106b39a48805de27",
     imageUrl:
       "https://image4.coupangcdn.com/image/affiliate/banner/0a8c5f969a1287853cae92cff6ccf7e7@2x.jpg",
     imageAlt: "펩시 제로슈거 라임향, 210ml, 30개",

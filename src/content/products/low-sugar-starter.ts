@@ -51,8 +51,8 @@ export const lowSugarStarterArticle: Article = {
       recommended: true,
       priceExample: 14440,
       provider: "coupang",
-      // 배너형 링크(보관용): https://link.coupang.com/a/etnVlEmlRk
-      affiliateUrl: "https://link.coupang.com/a/etnKywDH76",
+      // 배너형 링크(보관용): https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=8279872054&itemId=23665748009&traceid=V0-183-106b39a48805de27
+      affiliateUrl: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=8279872054&itemId=23665748009&traceid=V0-183-106b39a48805de27",
       specs: [
         { label: "구성", value: "210ml × 30캔" },
         { label: "표기", value: "제로 슈거" },
@@ -69,8 +69,8 @@ export const lowSugarStarterArticle: Article = {
       grade: "A",
       priceExample: 11400,
       provider: "coupang",
-      // 배너형 링크(보관용): https://link.coupang.com/a/etn1VURuMu
-      affiliateUrl: "https://link.coupang.com/a/etn1pPPchE",
+      // 배너형 링크(보관용): https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=8844298106&itemId=25778574523&traceid=V0-183-6b5d8de5aa1f64a7
+      affiliateUrl: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=8844298106&itemId=25778574523&traceid=V0-183-6b5d8de5aa1f64a7",
       specs: [
         { label: "구성", value: "1kg × 1개" },
         { label: "보관", value: "냉장" },
@@ -87,8 +87,8 @@ export const lowSugarStarterArticle: Article = {
       grade: "A",
       priceExample: 15000,
       provider: "coupang",
-      // 배너형 링크(보관용): https://link.coupang.com/a/etn3N43F7s
-      affiliateUrl: "https://link.coupang.com/a/etn3wfr4ua",
+      // 배너형 링크(보관용): https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=7012375223&itemId=27838147219&traceid=V0-183-1641ec33a2dede3b
+      affiliateUrl: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=7012375223&itemId=27838147219&traceid=V0-183-1641ec33a2dede3b",
       specs: [
         { label: "구성", value: "350g × 3개(총 1.05kg)" },
         { label: "100g당", value: "약 1,429원(조회 시점)" },
@@ -104,8 +104,8 @@ export const lowSugarStarterArticle: Article = {
       grade: "A",
       priceExample: 12800,
       provider: "coupang",
-      // 배너형 링크(보관용): https://link.coupang.com/a/etn5rUeb4m
-      affiliateUrl: "https://link.coupang.com/a/etn4SXNark",
+      // 배너형 링크(보관용): https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=9246341637&itemId=27948466734&traceid=V0-183-30025a90f8b15b28
+      affiliateUrl: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=9246341637&itemId=27948466734&traceid=V0-183-30025a90f8b15b28",
       specs: [
         { label: "구성", value: "500g × 1개" },
         { label: "표기", value: "저당, 저칼로리" },

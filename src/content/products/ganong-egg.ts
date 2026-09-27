@@ -34,8 +34,7 @@ export const ganongEggArticle: Article = {
       priceExample: 11600, // 20구 세트가(조회 시점)
       provider: "coupang",
       // 가농 비타민 반숙란 20구 — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
-      // 텍스트형 링크(보관용): https://link.coupang.com/a/eukXirCzQa
-      affiliateUrl: "https://link.coupang.com/a/eukYpYc27U",
+      affiliateUrl: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=6213104056&itemId=12394793899&traceid=V0-183-b818cdba88334d38",
       specs: [
         { label: "구성", value: "반숙란 20구 × 1개" },
         { label: "개당", value: "약 580원(조회 시점)" },
@@ -46,7 +45,7 @@ export const ganongEggArticle: Article = {
   // 쿠팡 파트너스 공식 배너 — 실제 추적 링크/creative
   promoBanner: {
     provider: "coupang",
-    href: "https://link.coupang.com/a/eukYpYc27U",
+    href: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=6213104056&itemId=12394793899&traceid=V0-183-b818cdba88334d38",
     imageUrl:
       "https://img5c.coupangcdn.com/image/affiliate/banner/a7b383eaa6a4af8307863e0fbc2181bd@2x.jpg",
     imageAlt: "가농 비타민 반숙란, 20구, 1개",

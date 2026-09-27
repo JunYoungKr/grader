@@ -34,7 +34,7 @@ export const harimChickenBreastArticle: Article = {
       priceExample: 11400, // 1kg 1팩 조회 시점가
       provider: "coupang",
       // 하림 닭가슴살(냉장) 1kg — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
-      affiliateUrl: "https://link.coupang.com/a/etn1VURuMu",
+      affiliateUrl: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=8844298106&itemId=25778574523&traceid=V0-183-6b5d8de5aa1f64a7",
       specs: [
         { label: "중량", value: "1kg" },
         { label: "보관", value: "냉장" },
@@ -45,7 +45,7 @@ export const harimChickenBreastArticle: Article = {
   // 쿠팡 파트너스 공식 배너 — 실제 추적 링크/creative
   promoBanner: {
     provider: "coupang",
-    href: "https://link.coupang.com/a/etn1VURuMu",
+    href: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=8844298106&itemId=25778574523&traceid=V0-183-6b5d8de5aa1f64a7",
     imageUrl:
       "https://img4c.coupangcdn.com/image/affiliate/banner/abd7926074fd9297a3b9109d47c012bb@2x.jpg",
     imageAlt: "하림 닭가슴살 (냉장), 1개, 1kg",

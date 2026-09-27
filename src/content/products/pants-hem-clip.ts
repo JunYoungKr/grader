@@ -36,7 +36,7 @@ export const pantsHemClipArticle: Article = {
       priceExample: 8000, // 10개입 세트가(조회 시점)
       provider: "coupang",
       // 픽셀로그 바지 밑단 고정 클립 10개(투명) — 쿠팡 파트너스 추적링크(배너 '쿠팡 최저가 보기'와 동일)
-      affiliateUrl: "https://link.coupang.com/a/etoClK2QeW",
+      affiliateUrl: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=9486875684&itemId=28250733338&traceid=V0-183-f198de13593231fc",
       specs: [
         { label: "구성", value: "10개입" },
         { label: "색상", value: "투명" },
@@ -47,7 +47,7 @@ export const pantsHemClipArticle: Article = {
   // 쿠팡 파트너스 공식 배너(픽셀로그 바지 밑단 고정 클립 10개, 투명) — 실제 추적 링크/creative
   promoBanner: {
     provider: "coupang",
-    href: "https://link.coupang.com/a/etoClK2QeW",
+    href: "https://link.coupang.com/re/AFFSDP?lptag=AF7440212&subid=graderco2026&pageKey=9486875684&itemId=28250733338&traceid=V0-183-f198de13593231fc",
     imageUrl:
       "https://image5.coupangcdn.com/image/affiliate/banner/8a3706c5504226113a3cd30c7327a8da@2x.jpg",
     imageAlt: "픽셀로그 바지 밑단 고정 클립 10개, 투명",
