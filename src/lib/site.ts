@@ -4,9 +4,9 @@ export const SITE_URL =
 
 export const SITE_NAME = "Grader";
 
-// 교체해야 할 플레이스홀더 (E-E-A-T·문의 — 한 곳에서 관리)
-export const OPERATOR_NAME = "[운영자 실명]"; // TODO: 실명으로 교체
-export const CONTACT_EMAIL = "hello@grader.co.kr"; // TODO: 실제 문의 메일로 교체
+// 실명은 설정된 경우에만 표시하고, 문의 주소는 확인된 수신 주소를 사용한다.
+export const OPERATOR_NAME = process.env.SITE_OPERATOR_NAME || SITE_NAME;
+export const CONTACT_EMAIL = "kop981020@naver.com";
 
 // "2026.06" → Date (sitemap lastModified용)
 export function parseUpdated(updated: string): Date {
