@@ -19,6 +19,8 @@ import { StickyCta } from "@/components/StickyCta";
 import { SourceList } from "@/components/SourceList";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { RecordView } from "@/components/RecentlyViewed";
+import { pageMetadata } from "@/lib/seo";
+import { parseUpdated } from "@/lib/site";
 export const revalidate = 300;
 export const dynamicParams = true;
 export async function generateStaticParams() {
@@ -31,15 +33,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const article = await getArticle((await params).slug);
   return article
-    ? {
+    ? pageMetadata({
         title: article.title,
         description: article.description,
-        openGraph: {
-          title: article.title,
-          description: article.description,
-          type: "article",
-        },
-      }
+        path: `/${article.slug}`,
+        type: "article",
+        modifiedTime: parseUpdated(article.modifiedAt)?.toISOString(),
+      })
     : {};
 }
 export default async function ArticlePage({
@@ -76,7 +76,7 @@ export default async function ArticlePage({
   return (
     <Container className="py-8 md:py-12">
       <article>
-        <ArticleJsonLd article={article} />
+        <ArticleJsonLd article={article} category={getCategory(article.category)} />
         <RecordView slug={slug} title={article.title} />
         <div className="grid items-start gap-10 lg:grid-cols-article">
           <div className="min-w-0">

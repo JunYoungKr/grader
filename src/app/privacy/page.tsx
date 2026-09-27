@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { SITE_NAME, CONTACT_EMAIL } from "@/lib/site";
 import { ReadingPage } from "@/components/content/ReadingPage";
 import { DisclosureNote } from "@/components/DisclosureNote";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "개인정보처리방침",
   description: `${SITE_NAME}의 개인정보 처리와 제휴 링크 안내.`,
-};
+  path: "/privacy",
+});
 
 const SECTIONS = [
   {

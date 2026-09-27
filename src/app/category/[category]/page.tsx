@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import {
   getCategory,
   getCategories,
@@ -27,7 +28,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const cat = getCategory((await params).category);
   return cat
-    ? { title: `${cat.name} 살림 가이드`, description: cat.blurb }
+    ? pageMetadata({ title: `${cat.name} 살림 가이드`, description: cat.blurb, path: `/category/${cat.slug}` })
     : {};
 }
 export default async function CategoryPage({

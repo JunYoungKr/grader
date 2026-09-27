@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { CONTACT_EMAIL, OPERATOR_NAME } from "@/lib/site";
 import {
   Container,
@@ -8,11 +9,12 @@ import {
 } from "@/components/ui/Primitives";
 import { BuyingChecklist } from "@/components/content/BuyingChecklist";
 import { DisclosureNote } from "@/components/DisclosureNote";
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Grader의 기준",
   description:
     "주부의 매일을 생각하는 살림 가이드. 우리 집에 맞는 제품을 고르는 기준과 콘텐츠 작성 원칙을 소개합니다.",
-};
+  path: "/about",
+});
 const principles = [
   {
     title: "사용 조건",
