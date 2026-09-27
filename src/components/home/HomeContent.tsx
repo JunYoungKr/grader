@@ -9,7 +9,7 @@ export function GuideSection({ articles }: { articles: Article[] }) {
   return (
     <section className="section-block">
       <SectionHeading
-        title="살림 가이드"
+        title="최근 살림 가이드"
         href="/browse#guides"
         linkLabel="글 더 보기"
       />
