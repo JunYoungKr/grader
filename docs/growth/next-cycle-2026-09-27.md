@@ -18,7 +18,9 @@ Google과 네이버에 새 글의 요청을 반복해서 보내지 않는다. [G
 
 다음 원고는 [식기세척기 설치 전 확인 가이드](dishwasher-guide-draft.json)다. [LG전자 2026년 3월 카탈로그](https://www.lge.co.kr/kr/ebook/2026/march/best/catImage/630/20260304_best_catalogue.pdf)의 DEE6BGE 표에서 제품 크기 598×815×567mm와 설치 공간 600×815×600mm를 확인했다. [LG 설치 가이드](https://www.lge.co.kr/story/user-guide/dishwashers-install-guide)에서 걸레받이, 문 열림 공간, 가구 시공에 따른 차이를 확인했다. 원고는 한 모델의 치수를 모든 식기세척기에 적용하지 않는다.
 
-운영 DB에는 비공개 초안으로만 등록한다. 정확한 판매 옵션과 설치 서비스 조건, 제휴 링크, 가격이 검증되지 않아 상품 카드와 가격은 넣지 않는다. `CLAUDE.md`에 따라 사람의 사실 검수 전에 공개하지 않는다.
+2026-09-27에 쿠팡 파트너스 공식 API와 [판매 옵션](https://www.coupang.com/vp/products/7920710414?itemId=21963157422&vendorItemId=91761161241)을 대조했다. 상품 번호 7920710414의 선택 옵션은 DEE6BGE 네이처 베이지 방문 설치이고, 판매 화면과 API의 조회 가격은 1,562,400원이다. 판매 화면은 무료 배송과 무료 기본 설치를 안내하면서 현장 환경에 따라 달라질 수 있다고 표시한다. [LG 공식 제품 페이지](https://www.lge.co.kr/product/dishwashers/dee6bge?modelId=MD10492829&pdpType=PURCHASE)에서도 DEE6BGE가 14인용 빌트인 전용 모델임을 확인했다. 공식 API로 생성한 [제휴 링크](https://link.coupang.com/a/hnIE7q3Ly0)의 이동 주소에 Grader 채널 식별자 `graderco2026`이 포함되는 것도 확인했다. 가격과 설치 조건은 구매 시점에 다시 확인해야 한다.
+
+상품 카드에는 확인된 모델과 가격, 설치 조건만 넣었다. API의 로켓 여부는 참이지만 현재 카드 UI가 이를 일괄적으로 `로켓배송`이라고 표시하므로, 방문 설치 상품에 오해를 줄 수 있는 이 표시는 사용하지 않았다. 운영 DB에도 비공개 초안으로만 등록한다. `CLAUDE.md`의 사람 검수 원칙에 따라 발행 전에 모델 옵션과 출처, 치수, 설치 조건, 제휴 고지 및 문구를 운영자가 읽고 확인해야 한다.
 
 ## 같은 기간에 볼 지표
 

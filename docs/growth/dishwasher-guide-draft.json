@@ -12,7 +12,27 @@
     "기본 설치 범위와 추가 가구 시공은 주문할 판매처와 설치 담당자에게 확인하세요."
   ],
   "axes": null,
-  "products": null,
+  "products": [
+    {
+      "id": "lg-dee6bge-coupang-7920710414",
+      "coupangProductId": 7920710414,
+      "name": "LG전자 디오스 오브제컬렉션 빌트인전용 식기세척기 14인용",
+      "imageUrl": "https://ads-partners.coupang.com/image1/naKgooP-CAczcRsvndDO1xDtF_iiJCWBG8Due_Ty1QoGbyEZF344aTG6RnXjY9FY9SclMhzV19INX9DvhQrUXsRSmC_iTKtPnvGZNih9dQ_Q6Q3q5uX5vPWrz4kKxYCEauPeQXIszEw2lI-KAx1lkMQAgO_C5Ykjd8D_gIFMaTreKm4R0bKHNtjHnuXegcnq82PnI6K9Q0Rf_ZVbymsnA-hMiOXfJymV_6mOfrbAViYldkOCSpInLE4mylctJktPUckMjYgbOVAQVcLg_D2_udzs0ESxdqWoj7-i_ja-HQOLXx2bth6tC0OM9QoHI-l62PXVfrp-2f_KMW1B-oQefRRY6ukdCUqwdIBAslFFy0iIXuwFu7YV-alB3p-h1wIiSYcIuzEMZtiXgYAB0aYBSj2wFNX5RBCBm_HYHOSIxvmrd0gkUDRsab0GJvHwNfuDicL8bhRxM1a7Jspx3JCB34JCEVRFlvu85OwBAjmjXGueiNm2J3vu74iinKCpluLKWcALTSgHLaXuk1MSNSexOymAIP4BSdwYAB6AxQ==",
+      "type": "빌트인 식기세척기",
+      "descriptor": "DEE6BGE 네이처 베이지 방문 설치 옵션입니다. 기본 설치 무료 표기는 현장 환경에 따라 달라집니다.",
+      "specs": [
+        { "label": "모델", "value": "DEE6BGE" },
+        { "label": "설치 방식", "value": "빌트인 전용, 방문 설치" },
+        { "label": "제품 크기", "value": "598 × 815 × 567mm" },
+        { "label": "설치 공간", "value": "600 × 815 × 600mm" }
+      ],
+      "priceExample": 1562400,
+      "provider": "coupang",
+      "affiliateUrl": "https://link.coupang.com/a/hnIE7q3Ly0",
+      "priceCheckedAt": "2026-09-27",
+      "isFreeShipping": true
+    }
+  ],
   "promo_banner": null,
   "sections": [
     {
@@ -33,7 +53,8 @@
       "heading": "연결 위치와 추가 시공을 확인하세요",
       "paragraphs": [
         "급수, 배수, 전원 연결 위치와 하부장 내부를 사진으로 기록하세요. 판매처나 설치 담당자에게 측정값과 사진을 전달하고 실제 설치 가능 여부를 확인하세요.",
-        "기본 설치에 포함되는 작업, 걸레받이 절단과 장 이동 같은 추가 시공, 기존 제품 처리, 설치가 어려울 때의 처리 기준을 주문 전에 확인하세요. LG전자는 싱크대 상태에 따라 추가 비용이 발생하거나 시공이 불가능할 수 있다고 안내합니다."
+        "기본 설치에 포함되는 작업, 걸레받이 절단과 장 이동 같은 추가 시공, 기존 제품 처리, 설치가 어려울 때의 처리 기준을 주문 전에 확인하세요. LG전자는 싱크대 상태에 따라 추가 비용이 발생하거나 시공이 불가능할 수 있다고 안내합니다.",
+        "아래 DEE6BGE 판매 옵션에는 무료 배송과 무료 기본 설치가 표시돼 있지만 현장 환경에 따라 달라진다고 안내합니다. 하부장 사진과 치수를 설치 담당자에게 전달해 추가 비용과 설치 가능 여부를 확인하세요."
       ]
     },
     {
@@ -54,6 +75,14 @@
     {
       "label": "LG 디오스 식기세척기 설치 가이드",
       "url": "https://www.lge.co.kr/story/user-guide/dishwashers-install-guide"
+    },
+    {
+      "label": "LG전자 DEE6BGE 공식 제품 정보",
+      "url": "https://www.lge.co.kr/product/dishwashers/dee6bge?modelId=MD10492829&pdpType=PURCHASE"
+    },
+    {
+      "label": "쿠팡 DEE6BGE 방문 설치 판매 옵션, 2026년 9월 27일 확인",
+      "url": "https://www.coupang.com/vp/products/7920710414?itemId=21963157422&vendorItemId=91761161241"
     }
   ],
   "published": false,
